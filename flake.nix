@@ -20,11 +20,13 @@
       allowUnfree = true;
     };
     overlays = with inputs; [];
+    systems.modules.nixos = with inputs; [
 
-    systems.modules.nixos = with inputs; [];
+    ];
     homes.modules = with inputs; [
-      self.nixosModules.common
-      self.nixosModules.users
+      home-manager.nixosModules.home-manager
+      # self.nixos.common
+      # self.nixos.users
     ];
 
     snowfall = {
