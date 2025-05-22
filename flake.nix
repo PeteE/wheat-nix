@@ -1,5 +1,5 @@
-# vim: ts=4:sw=2:et
-{
+# vim: ts=2:sw=2:et
+{ 
   description = "Pete's NixOS Flake";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -12,29 +12,91 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix.url = "github:Mic92/sops-nix";
+    darwin = { 
+      url = "github:lnl7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Hardware Configuration
+    nixos-hardware.url = "github:nixos/nixos-hardware";
+
+    # Generate System Images
+    nixos-generators.url = "github:nix-community/nixos-generators";
+    nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Snowfall Thaw
+    thaw.url = "github:snowfallorg/thaw?ref=v1.0.4";
+
+    # Comma
+    comma = {
+      url = "github:nix-community/comma";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # System Deployment
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Run unpatched dynamically compiled binaries
+    nix-ld = {
+      url = "github:Mic92/nix-ld";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Vault Integration
+    vault-service = {
+      url = "github:DeterminateSystems/nixos-vault-service";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Flake Hygiene
+    flake-checker = {
+      url = "github:DeterminateSystems/flake-checker";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
   outputs = inputs: inputs.snowfall-lib.mkFlake {
     inherit inputs;
     src = ./.;
-    channels-config = {
-      allowUnfree = true;
-    };
-    overlays = with inputs; [];
-    systems.modules.nixos = with inputs; [
 
-    ];
-    homes.modules = with inputs; [
-      home-manager.nixosModules.home-manager
-      # self.nixos.common
-      # self.nixos.users
-    ];
-
+    # snowfall metadata
     snowfall = {
       namespace = "petee";
       meta = {
-          name = "petee";
+          name = "wheat";
           title = "PeteE's Flake";
       };
     };
+
+    # overlays
+    overlays = with inputs; [
+      # neovim.overlays.default
+      # tmux.overlay
+      # flake.overlays.default
+      thaw.overlays.default
+      # cowsay.overlays.default
+      # icehouse.overlays.default
+      # attic.overlays.default
+      # snowfall-docs.overlay
+    ];
+    channels-config = {
+      allowUnfree = true;
+      permittedInsecurePackages = [
+        # "electron-25.9.0"
+      ];
+    };
+
+    systems.modules.nixos = with inputs; [
+      home-manager.nixosModules.home-manager
+      nix-ld.nixosModules.nix-ld
+      vault-service.nixosModules.nixos-vault-service
+    ];
+
+    systems.hosts.x1.modules = with inputs; [
+      nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
+    ];
   };
 }

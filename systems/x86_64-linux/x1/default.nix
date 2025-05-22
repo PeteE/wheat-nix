@@ -9,11 +9,14 @@
     virtual,
     systems,
     config,
+    modulesPath,
     ...
 }:
 {
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
   networking.hostName = "x1"; # Define your hostname.
-  users.users.petee.extraGroups = [ "networkmanager" "wheel" ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "uas" "usb_storage" "sd_mod" ];
@@ -35,4 +38,21 @@
       device = "/dev/disk/by-uuid/6bacfc99-1805-42fb-9797-3593255c1dff";
     }
   ];
- }
+  networking.useDHCP = true;
+  networking.wireless.enable = true;
+  hardware.cpu.intel.updateMicrocode = true;
+  # hardware.video.hidpi.enable = true;
+  hardware.opengl.enable = true;
+  hardware.bluetooth.enable = true;
+
+  system.stateVersion = "25.11";
+
+  # my specific customizations
+  wheat = {
+    user = {
+      name = "petee";
+      extraGroups = ["wheel" "networkmanager"];
+      extraOptions = { };
+    };
+  };
+}
