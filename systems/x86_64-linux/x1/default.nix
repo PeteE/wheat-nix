@@ -16,6 +16,9 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
+
+  system.stateVersion = "25.11";
+
   networking.hostName = "x1"; # Define your hostname.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -39,20 +42,55 @@
     }
   ];
   networking.useDHCP = true;
-  networking.wireless.enable = true;
+  networking.wireless = {
+    enable = true;
+    networks = {
+      soma20_5g = {
+        pskRaw = "121e447798031c71665a2728c57099b937b3a66b84b0ce21acb6ed7983a823ae";
+      };
+    };
+  };
+
   hardware.cpu.intel.updateMicrocode = true;
-  # hardware.video.hidpi.enable = true;
-  hardware.opengl.enable = true;
+  hardware.graphics.enable = true;
   hardware.bluetooth.enable = true;
 
-  system.stateVersion = "25.11";
+  services.xserver = {
+    enable = true;
+    xkb = {
+      layout = "us";
+      variant = "";
+    };
+    desktopManager.xfce.enable = true;
+  };
+  services.displayManager = {
+    gdm.enable = true;
+  };
+  programs.firefox.enable = true;
+  environment.systemPackages = with pkgs; [
+    dmidecode
+    wget
+    curl
+    vim
+    sops
+    tree
+  ];
+  services.printing.enable = true;
+  security.rtkit.enable = true;
+  security.polkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
+  services.libinput.enable = true;
 
   # my specific customizations
   wheat = {
     user = {
-      name = "petee";
+      hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
       extraGroups = ["wheel" "networkmanager"];
-      extraOptions = { };
     };
   };
 }

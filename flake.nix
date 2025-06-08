@@ -1,5 +1,5 @@
 # vim: ts=2:sw=2:et
-{ 
+{
   description = "Pete's NixOS Flake";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -12,7 +12,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix.url = "github:Mic92/sops-nix";
-    darwin = { 
+    darwin = {
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -76,7 +76,7 @@
       # neovim.overlays.default
       # tmux.overlay
       # flake.overlays.default
-      thaw.overlays.default
+      # thaw.overlays.default
       # cowsay.overlays.default
       # icehouse.overlays.default
       # attic.overlays.default
@@ -89,14 +89,23 @@
       ];
     };
 
-    systems.modules.nixos = with inputs; [
-      home-manager.nixosModules.home-manager
-      nix-ld.nixosModules.nix-ld
-      vault-service.nixosModules.nixos-vault-service
+    homes.modules = with inputs; [
+      sops-nix.homeManagerModules.sops
     ];
 
-    systems.hosts.x1.modules = with inputs; [
-      nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
-    ];
+    systems = {
+      modules.nixos = with inputs; [
+        home-manager.nixosModules.home-manager
+        nix-ld.nixosModules.nix-ld
+      ];
+
+      modules.x1.modules = with inputs; [
+        vault-service.nixosModules.nixos-vault-service
+      ];
+
+      hosts.x1.modules = with inputs; [
+        nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
+      ];
+    };
   };
 }
