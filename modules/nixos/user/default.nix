@@ -39,5 +39,21 @@ in {
       shell = pkgs.zsh;
       uid = 1000;
     };
+
+    security.sudo = {
+      enable = true;
+      wheelNeedsPassword = false;
+      extraRules = [{
+        commands = [
+          # example rule for future reference
+          # {
+          #   command = "${pkgs.systemd}/bin/systemctl suspend";
+          #   options = [ "NOPASSWD" ];
+          # }
+        ];
+        groups = [ "wheel" ];
+      }];
+    };
+
   };
 }

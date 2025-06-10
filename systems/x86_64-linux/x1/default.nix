@@ -48,6 +48,9 @@
       soma20_5g = {
         pskRaw = "121e447798031c71665a2728c57099b937b3a66b84b0ce21acb6ed7983a823ae";
       };
+      AAA_zz = {
+        psk = "1god=all";
+      };
     };
   };
 
@@ -92,5 +95,6 @@
       hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
       extraGroups = ["wheel" "networkmanager"];
     };
+    secrets.enable = true;
   };
 }

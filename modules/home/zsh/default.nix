@@ -1,16 +1,10 @@
 # vim: ts=2:sw=2:et
 { pkgs, config, ... }:
 {
-  sops.secrets.openaiApiKey = { };
-  sops.secrets.assemblyAiApiKey = { };
-  sops.secrets.peteeGptGithubToken = { };
-  sops.secrets.opaqueGithubToken = { };
-  sops.secrets.aws-credentials = { };
-  sops.secrets.jira-api-token = { };
-
   home.packages = with pkgs; [
     fasd
     zoxide
+    # vimPlugins.zsh-histdb
   ];
   programs.zsh = {
     enable = true;
@@ -52,15 +46,19 @@
       nd = "nix develop -c zsh";
     };
     plugins = [
-      {
-        name = "zsh-histdb";
-        src = pkgs.fetchFromGitHub {
-          owner = "larkery";
-          repo = "zsh-histdb";
-          rev = "90a6c104d0fcc0410d665e148fa7da28c49684eb";
-          hash = "sha256-vtG1poaRVbfb/wKPChk1WpPgDq+7udLqLfYfLqap4Vg=";
-        };
-      }
+        # {
+        #   name = "zsh-histdb";
+        # }
+
+      # {
+      #   name = "zsh-histdb";
+      #   # src = pkgs.fetchFromGitHub {
+      #   #   owner = "larkery";
+      #   #   repo = "zsh-histdb";
+      #   #   rev = "90a6c104d0fcc0410d665e148fa7da28c49684eb";
+      #   #   hash = "sha256-vtG1poaRVbfb/wKPChk1WpPgDq+7udLqLfYfLqap4Vg=";
+      #   # };
+      # }
     ];
     enableCompletion = true;
     autocd = true;

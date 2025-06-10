@@ -153,7 +153,6 @@
             }
           )
         '';
-
       }
       {
         plugin = dashboard-nvim;
