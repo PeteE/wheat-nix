@@ -1,0 +1,135 @@
+### Prompt
+# The format layout for the prompt is as follows:
+# left side
+# fill (expands to fill the remaining space between left and right prompts)
+# right side info
+# right side additional tools and versions
+# prompt character
+
+# Commands may be slower in restricted environments, e.g. containers
+command_timeout = 10000
+
+format = """$hostname$directory$git_branch$git_commit$git_state$git_status\
+$fill\
+$jobs$status$cmd_duration\
+$nix_shell$terraform$kubernetes$python$aws$nodejs$docker_context$golang$time$os
+$character"""
+
+# Additional padding between newlines
+add_newline = false
+
+[fill]
+symbol = " "
+
+[character]
+vimcmd_symbol = "[❯](#73cef4)"
+success_symbol = "[❯](green)"
+format = "$symbol "
+
+### Left prompt
+[sudo]
+disabled = true
+
+[username]
+disabled = true
+
+[hostname]
+disabled = true
+ssh_only = true
+style = "#d3b987"
+format = "[@$hostname]($style)[ ❯](#767676)"
+
+[directory]
+read_only = " "
+truncation_length = 3
+truncate_to_repo = false
+repo_root_style = "#0087af"
+fish_style_pwd_dir_length = 2
+style = "#00afff"
+# Repo format
+repo_root_format = "[ $before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "
+# Non repo format
+format = "[ $path]($style)[$read_only]($read_only_style) "
+
+[git_branch]
+symbol = "  "
+style = "green"
+format = "[❯ ](#767676)[$symbol$branch]($style)"
+
+[git_status]
+stashed = "[*${count}](blue) "
+modified = "[!${count}](yellow) "
+staged = "[+${count}](green) "
+untracked = "[?${count}](blue) "
+deleted = "[-${count}](red) "
+format = " ([$stashed$modified$staged$untracked $ahead_behind]($style))"
+#format = " ([$all_status $ahead_behind]($style))"
+
+### Right prompt info
+
+[jobs]
+disabled = false
+format = "[$number]($style)"
+
+[status]
+disabled = false
+map_symbol = false
+format = "[$symbol$status]($style)"
+
+[cmd_duration]
+style = "#a8a8a8"
+format = "([ ❮ ](#767676)[$duration ]($style))"
+
+### Right prompt tools and versions
+
+[terraform]
+# We disable the native tf plugin because it is much slower than tfenv
+disabled = true
+format = "[ ❮ ](#767676)[tf $version]($style)"
+detect_extensions = ["tf"]
+detect_files = ["terragrunt.hcl"]
+
+[kubernetes]
+disabled = false
+style = "blue"
+format = '([ ❮ ](#767676)[$symbol$context (\[$namespace\])]($style))'
+detect_extensions = []
+detect_files = ['Chart.yaml']
+detect_folders = ['*helm*']
+
+[golang]
+symbol = " "
+format = "([ ❮ ](#767676)[$symbol($version)]($style))"
+
+[nodejs]
+format = "([ ❮ ](#767676)[$symbol($version)]($style))"
+
+[python]
+symbol = " "
+format = '([ ❮ ](#767676)[${symbol}${pyenv_prefix}(${version}) ([\($virtualenv\)](#306998))]($style))'
+
+[aws]
+disabled = false
+symbol = " "
+format = '([ ❮ ](#767676)[$symbol$profile(\[$duration\])]($style))'
+
+[docker_context]
+symbol = " "
+format = "([ ❮ ](#767676)[$symbol$context]($style))"
+
+[nix_shell]
+symbol = " "
+format = "[${symbol}nix ${state} ]($style)"
+
+[memory_usage]
+disabled = true
+
+[time]
+disabled = true
+
+[shlvl]
+disabled = false
+
+[os]
+disabled = false
+# format = "[ ❮ ](#767676)[$symbol]($style)"

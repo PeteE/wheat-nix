@@ -6,7 +6,7 @@
     nodePackages.eslint
     lua-language-server
     nixd
-    terraform-ls
+    # terraform-ls
     rust-analyzer
     helm-ls
     yaml-language-server
@@ -125,15 +125,15 @@
       lazy-nvim
       vim-helm
       vim-indentwise
-      {
-        plugin = lazygit-nvim;
-        type = "lua";
-        config = ''
-          require('telescope').load_extension('lazygit')
-          vim.keymap.set('n', '<space>gg', '<cmd>LazyGit<CR>')
-          vim.keymap.set('n', '<space>dw', "<cmd>lua require('telescope').extensions.lazygit.lazygit()<CR>")
-        '';
-      }
+      # {
+      #   plugin = lazygit-nvim;
+      #   type = "lua";
+      #   config = ''
+      #     require('telescope').load_extension('lazygit')
+      #     vim.keymap.set('n', '<space>gg', '<cmd>LazyGit<CR>')
+      #     vim.keymap.set('n', '<space>dw', "<cmd>lua require('telescope').extensions.lazygit.lazygit()<CR>")
+      #   '';
+      # }
       {
         plugin = lualine-nvim;
         type = "lua";
@@ -141,15 +141,6 @@
           require('lualine').setup(
             {
               theme = 'onedark',
-              -- TODO: - needs rework
-              -- sections = {
-              --   lualine_c = {
-              --     'lsp_progress',
-              --   },
-              --   lualine_x = {
-              --     'filename',
-              --   }
-              -- },
             }
           )
         '';

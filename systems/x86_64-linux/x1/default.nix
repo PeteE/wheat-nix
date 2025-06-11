@@ -91,10 +91,19 @@
 
   # my specific customizations
   wheat = {
+    # sets all default valus
+    defaults = {
+      enable = true;
+    };
+
     user = {
       hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
-      extraGroups = ["wheel" "networkmanager"];
+      extraGroups = ["wheel" "NetworkManager"];
+      extraOptions = {
+        secrets = {
+          enable = true;
+        };
+      };
     };
-    secrets.enable = true;
   };
 }

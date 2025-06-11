@@ -3,10 +3,10 @@
 {
   programs.kitty = {
     enable = true;
-    #font = {
-    #  name = "Fira Code";
-    #  size = 10.0;
-    #};
+    font = {
+      name = "Fira Code";
+      size = 14.0;
+    };
     theme = "Catppuccin-Mocha";
     settings = {
       cursor_shape = "underline";
@@ -20,7 +20,8 @@
     };
   };
 
-  home.packages = with pkgs; [
+    home.packages = with pkgs; [
+    kitty
     kitty-themes
   ];
 }

@@ -28,6 +28,12 @@ in {
       description = "Options to pass directly to home-manager.";
       type = attrs;
     };
+    authorizedKeys = mkOption {
+      type = listOf str;
+      default = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ3x/dtivaU+bPMRYzY1O+XQPEGnBahNnh9sBZMrJrIX petee"
+      ];
+    };
   };
   config = {
     programs.zsh.enable = true;
@@ -38,22 +44,12 @@ in {
       home = "/home/${cfg.name}";
       shell = pkgs.zsh;
       uid = 1000;
+      openssh.authorizedKeys.keys = cfg.authorizedKeys;
     };
 
     security.sudo = {
       enable = true;
       wheelNeedsPassword = false;
-      extraRules = [{
-        commands = [
-          # example rule for future reference
-          # {
-          #   command = "${pkgs.systemd}/bin/systemctl suspend";
-          #   options = [ "NOPASSWD" ];
-          # }
-        ];
-        groups = [ "wheel" ];
-      }];
     };
-
   };
 }

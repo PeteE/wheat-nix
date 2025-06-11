@@ -61,7 +61,7 @@
       source = ./tmuxinator;
   };
   programs.zsh.shellAliases.mux = "tmuxinator";
-  programs.zsh.initExtraBeforeCompInit = ''
-    source ${pkgs.tmuxinator}/share/zsh/site-functions/_tmuxinator
-  '';
+  # programs.zsh.initContent = ''
+  #   source ${pkgs.tmuxinator}/share/zsh/site-functions/_tmuxinator
+  # '';
 }
