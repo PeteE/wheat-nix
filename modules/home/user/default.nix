@@ -43,7 +43,7 @@
       # wireshark
     ];
   };
-  services.ssh-agent.enable = true;
+  # services.ssh-agent.enable = true;
   programs.ripgrep = {
     enable = true;
     arguments = [

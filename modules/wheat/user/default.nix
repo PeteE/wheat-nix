@@ -19,7 +19,7 @@ in {
       type = str;
     };
     extraGroups = mkOption {
-      default = ["wheel" "NetworkManager"];
+      default = [];
       description = "Additional groups to add the user to.";
       type = listOf str;
     };

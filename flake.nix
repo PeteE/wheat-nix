@@ -94,14 +94,18 @@
     ];
 
     systems = {
+      modules.darwin = with inputs; [
+        home-manager.darwinModules.home-manager
+      ];
+
       modules.nixos = with inputs; [
         home-manager.nixosModules.home-manager
         nix-ld.nixosModules.nix-ld
       ];
 
-      modules.x1.modules = with inputs; [
-        vault-service.nixosModules.nixos-vault-service
-      ];
+      # modules.x1.modules = with inputs; [
+      #   vault-service.nixosModules.nixos-vault-service
+      # ];
 
       hosts.x1.modules = with inputs; [
         nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
