@@ -56,7 +56,14 @@
       url = "github:DeterminateSystems/flake-checker";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
+    catppuccin = {
+      url = "github:catppuccin/nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # disko = {
+    #   url = "github:nix-community/disko/latest";
+    #   inputs.nixpkgs.follows = "nixpkgs-unstable";
+    # }
   };
   outputs = inputs: inputs.snowfall-lib.mkFlake {
     inherit inputs;
@@ -91,25 +98,27 @@
 
     homes.modules = with inputs; [
       sops-nix.homeManagerModules.sops
+      catppuccin.homeModules.catppuccin
     ];
 
     systems = {
-      modules.darwin = with inputs; [
-        home-manager.darwinModules.home-manager
-      ];
+      modules = {
+        darwin = with inputs; [
+          # home-manager.darwinModules.home-manager
+        ];
 
-      modules.nixos = with inputs; [
-        home-manager.nixosModules.home-manager
-        nix-ld.nixosModules.nix-ld
-      ];
+        nixos = with inputs; [
+          home-manager.nixosModules.home-manager
+          # nix-ld.nixosModules.nix-ld
+          # disko.nixosModules.disko  # disk partitioning
+        ];
+      };
 
-      # modules.x1.modules = with inputs; [
-      #   vault-service.nixosModules.nixos-vault-service
-      # ];
-
-      hosts.x1.modules = with inputs; [
-        nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
-      ];
+      hosts = {
+        x1.modules = with inputs; [
+          nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
+        ];
+      };
     };
   };
 }

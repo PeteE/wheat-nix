@@ -72,11 +72,6 @@
   programs.firefox.enable = true;
   environment.systemPackages = with pkgs; [
     dmidecode
-    wget
-    curl
-    vim
-    sops
-    tree
   ];
   services.printing.enable = true;
   security.rtkit.enable = true;
@@ -89,14 +84,12 @@
   };
   services.libinput.enable = true;
 
-  # my specific customizations
   wheat = {
-    # sets all default valus
-    defaults = {
+    default = {
       enable = true;
     };
-
     user = {
+      enable = true;
       hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
       extraGroups = ["wheel" "NetworkManager"];
       extraOptions = {

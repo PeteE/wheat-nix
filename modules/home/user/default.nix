@@ -27,6 +27,7 @@
       links2
       presenterm
       asciinema
+      mkpasswd
       # thumbs
       # attic-server
       # clusterctl

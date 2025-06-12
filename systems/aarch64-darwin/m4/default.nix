@@ -22,20 +22,20 @@
     "pete"
   ];
 
-  wheat = {
+  wheat = {   # modules/wheat/user
+    defaults = {
+      enable = true;
+    };
     services.podman.enable = true;
-    # defaults = {
-    #   enable = true;
-    # };
-    # user = {
-    #   hashedPassword = "$y$j9T$1b15FYbtNYo9cbuBDHes20$tGi2k75oJhgl6WKk/1RbsHtze3tFcHCABFASri7Hds9";
-    #   extraGroups = ["wheel"];
-    #   extraOptions = {
-    #     secrets = {
-    #       enable = true;
-    #     };
-    #   };
-    # };
+    user = {
+      enable = true;
+      hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
+      extraGroups = ["wheel" "NetworkManager"];
+      extraOptions = {
+        secrets = {
+          enable = true;
+        };
+      };
+    };
   };
 }
-

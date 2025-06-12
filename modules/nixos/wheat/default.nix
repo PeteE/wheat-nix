@@ -6,15 +6,17 @@
   ...
 }:
 with lib; let
-  cfg = config.wheat.defaults;
+  cfg = config.wheat.default;
 in {
-  options.wheat.defaults = with types; {
+  imports = [ ./user.nix ];
+
+  options.wheat.default = with types; {
     enable = mkEnableOption "Enable default settings";
   };
 
   config = mkIf cfg.enable {
     #  Common settings for all my nixos machines
-    services.openssh.enable = true;
+    # services.openssh.enable = true;
 
     environment.systemPackages = with pkgs; [
       btop
@@ -22,6 +24,7 @@ in {
       azure-storage-azcopy
       direnv
       curl
+      wget
       git
       git-credential-manager
       usql
@@ -65,6 +68,8 @@ in {
       yadm
       ipcalc
       wireshark
+      vim
+      tree
     ];
 
     fonts.packages = with pkgs; [
