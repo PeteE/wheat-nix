@@ -15,6 +15,7 @@
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
+    ../../../modules/shared/wheat/default.nix
   ];
 
   system.stateVersion = "25.11";
@@ -85,11 +86,8 @@
   services.libinput.enable = true;
 
   wheat = {
-    default = {
-      enable = true;
-    };
+    enable = true;
     user = {
-      enable = true;
       hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
       extraGroups = ["wheel" "NetworkManager"];
       extraOptions = {
