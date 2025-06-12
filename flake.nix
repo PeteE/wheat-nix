@@ -109,7 +109,7 @@
     systems = {
       modules = {
         darwin = with inputs; [
-          # home-manager.darwinModules.home-manager
+          home-manager.darwinModules.home-manager
         ];
 
         nixos = with inputs; [
