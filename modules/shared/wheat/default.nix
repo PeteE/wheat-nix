@@ -67,11 +67,6 @@ in {
       openssh.authorizedKeys.keys = cfg.authorizedKeys;
     };
 
-    # security.sudo = {
-    #   enable = true;
-    #   wheelNeedsPassword = false;
-    # };
-
     environment.systemPackages = with pkgs; [
       btop
       openbao
