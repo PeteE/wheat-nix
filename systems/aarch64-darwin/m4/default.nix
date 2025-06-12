@@ -18,6 +18,10 @@
      ../../../modules/shared/wheat/default.nix
  ];
 
+ # hack to workaround nix group id chnages
+ # only neccessary on this single box.
+ ids.gids.nixbld = 350;
+
   # services.nix-daemon.enable = true;
   # nixpkgs.config.allowUnfree = true;
   system.stateVersion = 4;
@@ -26,7 +30,6 @@
     "root"
     "pete"
   ];
-
   wheat = {
     enable = false;
     services.podman.enable = true;
