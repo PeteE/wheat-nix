@@ -2,16 +2,29 @@
   config,
   pkgs,
   lib,
-  inputs,
   ...
 }:
 with lib; let
-  cfg = config.wheat.default;
+  cfg = config.wheat;
 in {
-  imports = [ ./user.nix ];
-
-  options.wheat.default = with types; {
-    enable = mkEnableOption "Enable default settings";
+  options = {
+    wheat = with types; {
+      enable = mkEnableOption "Enable";
+      user.hashedPassword = mkOption {
+        type = types.str;
+        description = "The hashed password for the user.";
+      };
+      user.extraGroups = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = "Additional groups for the user.";
+      };
+      user.extraOptions.secrets.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Enable secrets for the user.";
+      };
+    };
   };
 
   config = mkIf cfg.enable {

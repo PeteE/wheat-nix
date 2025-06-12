@@ -60,6 +60,11 @@
       url = "github:catppuccin/nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    ollama = {
+      url = "github:abysssol/ollama-flake/5";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # disko = {
     #   url = "github:nix-community/disko/latest";
     #   inputs.nixpkgs.follows = "nixpkgs-unstable";

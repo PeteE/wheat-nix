@@ -13,6 +13,11 @@
     ...
 }:
 {
+
+ imports = [
+     ../../../modules/shared/wheat/default.nix
+ ];
+
   # services.nix-daemon.enable = true;
   # nixpkgs.config.allowUnfree = true;
   system.stateVersion = 4;
@@ -22,15 +27,12 @@
     "pete"
   ];
 
-  wheat = {   # modules/wheat/user
-    defaults = {
-      enable = true;
-    };
+  wheat = {
+    enable = false;
     services.podman.enable = true;
     user = {
-      enable = true;
       hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
-      extraGroups = ["wheel" "NetworkManager"];
+      extraGroups = ["wheel"];
       extraOptions = {
         secrets = {
           enable = true;
