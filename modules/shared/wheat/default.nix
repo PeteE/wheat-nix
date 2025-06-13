@@ -125,14 +125,8 @@ in {
       nerd-fonts.fira-code
      droid-sans-mono
     ];
-    # Keyboard
-    system.keyboard.enableKeyMapping = true;
-    system.keyboard.remapCapsLockToEscape = true;
-
     # TODO refactor later
     services.tailscale.enable = true;
     programs.nix-index.enable = true;
-
-
   };
 }
