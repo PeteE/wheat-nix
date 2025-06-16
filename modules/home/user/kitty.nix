@@ -7,7 +7,7 @@
       name = "Fira Code";
       size = 14.0;
     };
-    theme = "Catppuccin-Mocha";
+    themeFile = "Catppuccin-Mocha";
     settings = {
       cursor_shape = "underline";
       strip_trailing_spaces = "smart";
@@ -15,12 +15,11 @@
       enable_audio_bell = "no";
       disable_ligatures = "cursor";
       cursor_blink_interval = 0;
-      dynamic_background_opacity = "no";
-      background_opacity = "0.9";
+      dynamic_background_opacity = "yes";
+      background_opacity = "1.0";
     };
   };
-
-    home.packages = with pkgs; [
+  home.packages = with pkgs; [
     kitty
     kitty-themes
   ];

@@ -64,13 +64,25 @@
       url = "github:abysssol/ollama-flake/5";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
+    colmena = {
+      url = "github:zhaofengli/colmena";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    mozilla = {
+      url = "github:mozilla/nixpkgs-mozilla";
+    };
     # disko = {
     #   url = "github:nix-community/disko/latest";
     #   inputs.nixpkgs.follows = "nixpkgs-unstable";
     # }
   };
-  outputs = inputs: inputs.snowfall-lib.mkFlake {
+  outputs = inputs:
+  let
+    common = {
+      wheat.work.enable = true;
+    };
+  in
+  inputs.snowfall-lib.mkFlake {
     inherit inputs;
     src = ./.;
 
@@ -85,6 +97,7 @@
 
     # overlays
     overlays = with inputs; [
+      # mozilla.overlays.firefox
       # neovim.overlays.default
       # tmux.overlay
       # flake.overlays.default
@@ -104,9 +117,14 @@
     homes.modules = with inputs; [
       sops-nix.homeManagerModules.sops
       catppuccin.homeModules.catppuccin
+      common
     ];
 
     systems = {
+      overlays = with inputs; [
+        mozilla.overlays.firefox
+      ];
+
       modules = {
         darwin = with inputs; [
           home-manager.darwinModules.home-manager

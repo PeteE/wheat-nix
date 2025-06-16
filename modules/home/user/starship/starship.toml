@@ -22,8 +22,9 @@ add_newline = false
 symbol = " "
 
 [character]
-vimcmd_symbol = "[❯](#73cef4)"
-success_symbol = "[❯](green)"
+vimcmd_symbol = "[↑](#73cef4)"
+success_symbol = "[➜](bold green)"
+error_symbol = "[➜](bold red)"
 format = "$symbol "
 
 ### Left prompt
@@ -91,11 +92,11 @@ detect_files = ["terragrunt.hcl"]
 
 [kubernetes]
 disabled = false
-style = "blue"
-format = '([ ❮ ](#767676)[$symbol$context (\[$namespace\])]($style))'
-detect_extensions = []
-detect_files = ['Chart.yaml']
-detect_folders = ['*helm*']
+# style = "blue"
+# format = '([ ❮ ](#767676)[$symbol$context (\[$namespace\])]($style))'
+# detect_extensions = []
+# detect_files = ['Chart.yaml']
+# detect_folders = ['*helm*']
 
 [golang]
 symbol = " "

@@ -11,7 +11,6 @@
     # zsh-powerlevel10k
     github-cli
     awscli2
-    azure-cli
     direnv
     kubectx
     kubectl

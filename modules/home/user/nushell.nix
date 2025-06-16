@@ -1,0 +1,55 @@
+# vim: ts=2:sw=2:et
+{ options, config, lib, pkgs, ... }:
+with lib; let
+  cfg = config.wheat.nushell;
+in {
+  options.wheat.nushell = {
+    enable = mkEnableOption "Enable";
+  };
+  config = mkIf cfg.enable {
+    home.packages = with pkgs; [
+      nushellPlugins.skim
+      nushellPlugins.query
+      nushellPlugins.polars
+      nushellPlugins.highlight
+      nufmt
+      skim
+    ];
+    programs.nushell = {
+      enable = true;
+      settings = {
+        edit_mode = "vi";
+        buffer_editor = "nvim";
+        history = {
+          file_format = "sqlite";
+          max_size = 10000000;
+        };
+        show_banner = false;
+        completions = {
+        };
+      };
+      extraConfig = ''
+         $env.config = {
+          completions: {
+            case_sensitive: false # case-sensitive completions
+            quick: true    # set to false to prevent auto-selecting completions
+            partial: true    # set to false to prevent partial filling of the prompt
+            algorithm: "fuzzy"    # prefix or fuzzy
+            # external: {
+            # # set to false to prevent nushell looking into $env.PATH to find more suggestions
+            #     enable: false
+            # # set to lower can improve completion performance at the cost of omitting some options
+            #     max_results: 100
+            #     completer: $carapace_completer # check 'carapace_completer'
+            # }
+          }
+         }
+         $env.PATH = (
+           $env.PATH |
+           split row (char esep) |
+           append /usr/bin/env
+         )
+      '';
+    };
+  };
+}

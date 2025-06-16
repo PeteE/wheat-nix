@@ -29,10 +29,19 @@
           require('nvim-surround').setup({ })
         '';
       }
-      # {
-      #   plugin = workspaces-nvim;
-      #   type = "lua";
-      # }
+      {
+        plugin = pkgs.vimUtils.buildVimPlugin {
+          pname = "workspaces-nvim";
+          version = "v4.11.0";
+          src = pkgs.fetchFromGitHub {
+            owner = "natecraddock";
+            repo = "workspaces.nvim";
+            rev = "55a1eb6f5b72e07ee8333898254e113e927180ca";
+            sha256 = "sha256-a3f0NUYooMxrZEqLer+Duv6/ktq5MH2qUoFHD8z7fZA=";
+          };
+        };
+        type = "lua";
+      }
       {
         plugin = cmp-fuzzy-path;
         type = "lua";
@@ -58,11 +67,32 @@
         type = "lua";
       }
       {
-        plugin = snacks-nvim;
+        plugin = pkgs.vimUtils.buildVimPlugin {
+          pname = "snacks-nvim";
+          version = "v2.20.0";
+          doCheck = false;
+          src = pkgs.fetchFromGitHub {
+            owner = "folke";
+            repo = "snacks.nvim";
+            rev = "5eac729fa290248acfe10916d92a5ed5e5c0f9ed";
+            sha256 = "sha256-iXfOTmeTm8/BbYafoU6ZAstu9+rMDfQtuA2Hwq0jdcE=";
+          };
+        };
         type = "lua";
       }
       {
-        plugin = markview-nvim;
+        plugin = pkgs.vimUtils.buildVimPlugin {
+          pname = "markview.nvim";
+          version = "v25.1.1";
+          src = pkgs.fetchFromGitHub {
+            owner = "OXY2DEV";
+            repo = "markview.nvim";
+            rev = "68902d7cba78a7fe331c13d531376b4be494a05c";
+            sha256 = "sha256-JOxjE4EBQ3dcu0eLa8MchFlsSdHadL++eOkpCpDtOHc=";
+            fetchSubmodules = true;
+          };
+          meta.homepage = "https://github.com/OXY2DEV/markview.nvim/";
+        };
         type = "lua";
         config = ''
           require("markview.extras.checkboxes").setup();
@@ -85,11 +115,30 @@
         '';
       }
       {
-        plugin = kulala-nvim;
+        plugin = pkgs.vimUtils.buildVimPlugin {
+          pname = "kulala-nvim";
+          version = "v4.11.0";
+          src = pkgs.fetchFromGitHub {
+            owner = "mistweaverco";
+            repo = "kulala.nvim";
+            rev = "a785d0dcbeee14b4bac0da42be04e1d3f0e73f64";
+            sha256 = "sha256-V96WFRQ8M9hiT58SM+eKt8RZhbXtoFARSpekBIOoG3s=";
+          };
+        };
         type = "lua";
       }
       {
-        plugin = yaml-companion-nvim;
+        plugin = pkgs.vimUtils.buildVimPlugin {
+          pname = "yaml-companion-nvim";
+          version = "0.1.3";
+          doCheck = false;
+          src = pkgs.fetchFromGitHub {
+            owner = "someone-stole-my-name";
+            repo = "yaml-companion.nvim";
+            rev = "03f66e5e9c8b26a35b14593f24697f9a3bc64e48";
+            sha256 = "sha256-9c+9oxrCNFMlAsRaamsimYbrYYXHpR4APljYMsjlrzY=";
+          };
+        };
         type = "lua";
         config = ''
         '';
@@ -390,6 +439,9 @@
         plugin = vim-better-whitespace;
       }
     ];
+
+
+
     withPython3 = true;
     withNodeJs = true;
     extraLuaConfig = ''

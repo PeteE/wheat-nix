@@ -1,15 +1,7 @@
 {
-    # Snowfall Lib provides a customized `lib` instance with access to your flake's library
-    # as well as the libraries available from your flake's inputs.
     lib,
-    # You also have access to your flake's inputs.
     inputs,
-
-    # The namespace used for your flake, defaulting to "internal" if not set.
     namespace,
-
-    # All other arguments come from NixPkgs. You can use `pkgs` to pull packages or helpers
-    # programmatically or you may add the named attributes as arguments here.
     pkgs,
     stdenv,
     ...
@@ -19,47 +11,70 @@
     enable = true;
     #tmuxp.enable = true;
     tmuxinator.enable = true;
-    plugins = with pkgs.tmuxPlugins; [
-        # {
-        #   plugin = pkgs.tmuxPlugins.tmux-super-fingers;
-        #   extraConfig = ''
-        #     set -g @super-fingers-key f
-        #     set -g @fingers-show-copied-notification 1
-        #     set -g @fingers-main-action 'xsel -i -b'
-        #   '';
-        # }
-        { plugin = pkgs.tmuxPlugins.tmux-fzf; }
-        { plugin = pkgs.tmuxPlugins.urlview; }
-        # { plugin = fuzzback; }
-        {
-          plugin = pkgs.tmuxPlugins.extrakto;
-        }
-        {
-            plugin = pkgs.tmuxPlugins.tmux-thumbs;
-            extraConfig = ''
-              set -g @thumbs-key f
-            '';
-        }
-        pkgs.tmuxPlugins.yank
-        pkgs.tmuxPlugins.open
-        pkgs.tmuxPlugins.copycat
-        pkgs.tmuxPlugins.sensible
-        pkgs.tmuxPlugins.resurrect
-        pkgs.tmuxPlugins.catppuccin
-        {
-            plugin = pkgs.tmuxPlugins.continuum;
-            #extraConfig = "set -g @continuum-boot-options 'kitty'";
-        }
-        pkgs.tmuxPlugins.better-mouse-mode
-        pkgs.tmuxPlugins.vim-tmux-navigator
-        pkgs.tmuxPlugins.session-wizard
-        pkgs.tmuxPlugins.prefix-highlight
+    plugins = with pkgs; [
+      { plugin = tmuxPlugins.tmux-fzf; }
+      { plugin = tmuxPlugins.urlview; }
+       { plugin = tmuxPlugins.fuzzback; }
+      {
+        plugin = tmuxPlugins.extrakto;
+      }
+      # {
+      #   plugin = pkgs.thumbs;
+      #   extraConfig = ''
+      #     set -g @thumbs-key f
+      #     run-shell ${pkgs.thumbs}/bin/tmux-thumbs
+      #   '';
+      # }
+      # {
+      #   plugin = mkTmuxPlugin {
+      #     pluginName = "tmux-super-fingers";
+      #     version = "unstable-2024-02-08";
+      #     src = pkgs.fetchFromGitHub {
+      #       owner = "artemave";
+      #       repo = "tmux_super_fingers";
+      #       rev = "61e4ea226bceb6d6da738c7b2b4be069a7eb3cc7";
+      #       sha256 = "sha256-oIAdQ8yOurYQ0KLiFLrppOKXe50s8UVEaSO+LyQbrhQ=";
+      #     };
+      #     installPhase = ''
+      #       mkdir -p $out
+      #       cp -r * $out/
+      #     '';
+      #     buildInputs = with pkgs; [
+      #       python313
+      #     ];
+
+      #   };
+      #   extraConfig = ''
+      #     set -g @super-fingers-key f
+      #     set -g @fingers-show-copied-notification 1
+      #     set -g @fingers-main-action 'xsel -i -b'
+      #   '';
+      # }
+      tmuxPlugins.yank
+      tmuxPlugins.open
+      tmuxPlugins.copycat
+      tmuxPlugins.sensible
+      tmuxPlugins.resurrect
+      tmuxPlugins.catppuccin
+      {
+          plugin = tmuxPlugins.continuum;
+          #extraConfig = "set -g @continuum-boot-options 'kitty'";
+      }
+      tmuxPlugins.better-mouse-mode
+      tmuxPlugins.vim-tmux-navigator
+      tmuxPlugins.session-wizard
+      tmuxPlugins.prefix-highlight
     ];
     extraConfig = builtins.readFile ./tmux.conf;
   };
   xdg.configFile."tmuxinator/" = {
       source = ./tmuxinator;
   };
+  home.packages = with pkgs; [
+    lsof
+    file
+    thumbs
+  ];
   programs.zsh.shellAliases.mux = "tmuxinator";
   # programs.zsh.initContent = ''
   #   source ${pkgs.tmuxinator}/share/zsh/site-functions/_tmuxinator

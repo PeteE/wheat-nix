@@ -49,20 +49,23 @@
       soma20_5g = {
         pskRaw = "121e447798031c71665a2728c57099b937b3a66b84b0ce21acb6ed7983a823ae";
       };
-      AAA_zz = {
-        psk = "1god=all";
+      AA_zzz = {
+        pskRaw = "121e447798031c71665a2728c57099b937b3a66b84b0ce21acb6ed7983a823ae";
+      };
+      "cabin-2.4Ghz" = {
+        pskRaw = "cb033f2f917b9b87e57d9702e1bea4561a4ef145af6a1c2387ee51a4052b8666";
       };
     };
   };
-
   hardware.cpu.intel.updateMicrocode = true;
   hardware.graphics.enable = true;
   hardware.bluetooth.enable = true;
 
+  console.useXkbConfig = true;
   services.xserver = {
     enable = true;
     xkb = {
-      layout = "us";
+      options = "caps:escape";
       variant = "";
     };
     desktopManager.xfce.enable = true;

@@ -18,6 +18,7 @@
     ./tmux/tmux.nix
     ./zoxide.nix
     ./starship/starship.nix
+    ./nushell.nix
   ];
 
   home = {
@@ -28,20 +29,7 @@
       presenterm
       asciinema
       mkpasswd
-      # thumbs
-      # attic-server
-      # clusterctl
-      # mpv
-      # clapper
-      # nitrogen
-
-      # pinentry-rofi
-      # nix-index
-      # devspace
-      # openvpn3
-      # virtualenv
       firefox
-      # wireshark
     ];
   };
   # services.ssh-agent.enable = true;

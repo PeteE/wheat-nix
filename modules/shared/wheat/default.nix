@@ -68,6 +68,8 @@ in {
     };
 
     environment.systemPackages = with pkgs; [
+      dig
+      nushell
       btop
       openbao
       azure-storage-azcopy
@@ -110,7 +112,6 @@ in {
       nitrogen
       pinentry-rofi
       niv
-      nix-index
       lua5_3
       firefox
       docker
@@ -119,14 +120,15 @@ in {
       wireshark
       vim
       tree
+      jq
     ];
 
     fonts.packages = with pkgs; [
       nerd-fonts.fira-code
-     droid-sans-mono
+      nerd-fonts.droid-sans-mono
     ];
+
     # TODO refactor later
     services.tailscale.enable = true;
-    programs.nix-index.enable = true;
   };
 }
