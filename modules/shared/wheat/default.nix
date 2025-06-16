@@ -14,7 +14,10 @@ with lib; let
 in {
   options = {
     wheat = with types; {
+
       enable = mkEnableOption "Enable";
+
+      secrets.enable = mkEnableOption "Enable SOPS secrets";
 
       user = with types; {
         enable = mkEnableOption "Enable";
@@ -31,11 +34,6 @@ in {
           default = [];
           description = "Additional groups to add the user to.";
           type = listOf str;
-        };
-        extraOptions.secrets.enable = mkOption {
-          type = types.bool;
-          default = false;
-          description = "Enable SOPS secrets.";
         };
         authorizedKeys = mkOption {
           type = listOf str;

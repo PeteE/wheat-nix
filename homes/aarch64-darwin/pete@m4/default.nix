@@ -12,7 +12,7 @@
     ...
 }:
 {
-  # The only customizations here should be setting values that apply to this specific combination of x86_64 on a hostname called `m4`.
-  # In other words, these should be pretty much empty
+  # TODO(pete): should have a generic "screenshot" tool
+  wheat.services.flameshot.enable = false;
   home.stateVersion = "25.11";
 }

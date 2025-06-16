@@ -90,14 +90,10 @@
 
   wheat = {
     enable = true;
+    secrets.enable = true;
     user = {
       hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
       extraGroups = ["wheel" "NetworkManager"];
-      extraOptions = {
-        secrets = {
-          enable = true;
-        };
-      };
     };
   };
 }

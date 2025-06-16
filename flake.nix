@@ -129,17 +129,19 @@
         darwin = with inputs; [
           home-manager.darwinModules.home-manager
         ];
-
         nixos = with inputs; [
           home-manager.nixosModules.home-manager
-          # nix-ld.nixosModules.nix-ld
-          # disko.nixosModules.disko  # disk partitioning
         ];
       };
 
       hosts = {
         x1.modules = with inputs; [
           nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
+          (
+            {
+              wheat.secrets.enable = true;
+            }
+          )
         ];
       };
     };

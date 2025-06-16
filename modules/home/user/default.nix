@@ -24,6 +24,7 @@
   home = {
     username = config.snowfallorg.user.name;
     packages = with pkgs; [
+      attic-client
       azure-storage-azcopy
       links2
       presenterm

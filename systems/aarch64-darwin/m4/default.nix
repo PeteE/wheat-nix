@@ -32,15 +32,11 @@
   ];
   wheat = {
     enable = false;
+    secrets.enable = true;
     services.podman.enable = true;
     user = {
       hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
       extraGroups = ["wheel"];
-      extraOptions = {
-        secrets = {
-          enable = true;
-        };
-      };
     };
   };
 }
