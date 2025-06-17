@@ -18,9 +18,16 @@
     ../../../modules/shared/wheat/default.nix
   ];
 
-  system.stateVersion = "25.11";
-
-  networking.hostName = "x1"; # Define your hostname.
+  wheat = {
+    enable = true;
+    wifi.enable = true;
+    secrets.enable = true;
+    user = {
+      hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
+      extraGroups = ["wheel" "NetworkManager"];
+    };
+  };
+  networking.hostName = "x1";
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "uas" "usb_storage" "sd_mod" ];
@@ -43,20 +50,7 @@
     }
   ];
   networking.useDHCP = true;
-  networking.wireless = {
-    enable = true;
-    networks = {
-      soma20_5g = {
-        pskRaw = "121e447798031c71665a2728c57099b937b3a66b84b0ce21acb6ed7983a823ae";
-      };
-      AA_zzz = {
-        pskRaw = "121e447798031c71665a2728c57099b937b3a66b84b0ce21acb6ed7983a823ae";
-      };
-      "cabin-2.4Ghz" = {
-        pskRaw = "cb033f2f917b9b87e57d9702e1bea4561a4ef145af6a1c2387ee51a4052b8666";
-      };
-    };
-  };
+
   hardware.cpu.intel.updateMicrocode = true;
   hardware.graphics.enable = true;
   hardware.bluetooth.enable = true;
@@ -87,13 +81,6 @@
     pulse.enable = true;
   };
   services.libinput.enable = true;
+  system.stateVersion = "25.11";
 
-  wheat = {
-    enable = true;
-    secrets.enable = true;
-    user = {
-      hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
-      extraGroups = ["wheel" "NetworkManager"];
-    };
-  };
-}
+  }
