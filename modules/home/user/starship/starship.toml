@@ -132,8 +132,8 @@ disabled = true
 disabled = true
 
 [shlvl]
-disabled = false
+disabled = true
 
 [os]
-disabled = false
+disabled = true
 # format = "[ ❮ ](#767676)[$symbol]($style)"
