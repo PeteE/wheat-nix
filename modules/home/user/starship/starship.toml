@@ -18,6 +18,9 @@ $character"""
 # Additional padding between newlines
 add_newline = false
 
+[line_break]
+disabled = true
+
 [fill]
 symbol = " "
 

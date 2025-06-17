@@ -22,6 +22,7 @@
         enable = true;
       };
     };
+    work.enable = true;
     nushell.enable = true;
   };
   home.stateVersion = "25.11";
