@@ -16,6 +16,11 @@
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
 
     # Hardware Configuration
     nixos-hardware.url = "github:nixos/nixos-hardware";
@@ -46,10 +51,10 @@
     };
 
     # Vault Integration
-    vault-service = {
-      url = "github:DeterminateSystems/nixos-vault-service";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # vault-service = {
+    #   url = "github:DeterminateSystems/nixos-vault-service";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     # Flake Hygiene
     flake-checker = {
@@ -102,11 +107,11 @@
       # tmux.overlay
       # flake.overlays.default
       # thaw.overlays.default
-      # cowsay.overlays.default
       # icehouse.overlays.default
       # attic.overlays.default
       # snowfall-docs.overlay
     ];
+
     channels-config = {
       allowUnfree = true;
       permittedInsecurePackages = [
@@ -137,6 +142,14 @@
       hosts = {
         x1.modules = with inputs; [
           nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
+          (
+            {
+              wheat.secrets.enable = true;
+            }
+          )
+        ];
+        pishield.modules = with inputs; [
+          nixos-hardware.nixosModules.raspberry-pi-4
           (
             {
               wheat.secrets.enable = true;
