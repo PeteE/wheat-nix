@@ -55,18 +55,19 @@
   hardware.graphics.enable = true;
   hardware.bluetooth.enable = true;
 
-  console.useXkbConfig = true;
+  # console.useXkbConfig = true;
+
   services.xserver = {
     enable = true;
     xkb = {
       options = "caps:escape";
-      variant = "";
     };
-    desktopManager.xfce.enable = true;
   };
-  services.displayManager = {
-    gdm.enable = true;
-  };
+
+  services.desktopManager.plasma6.enable = true;
+  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
+
   programs.firefox.enable = true;
   environment.systemPackages = with pkgs; [
     dmidecode
@@ -82,5 +83,4 @@
   };
   services.libinput.enable = true;
   system.stateVersion = "25.11";
-
-  }
+}

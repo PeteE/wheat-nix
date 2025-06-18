@@ -119,6 +119,7 @@
     '';
      envExtra = ''
        EDITOR=${pkgs.neovim}/bin/nvim
+
      '';
   };
 }

@@ -16,9 +16,7 @@ in {
     wheat = with types; {
 
       enable = mkEnableOption "Enable";
-
       secrets.enable = mkEnableOption "Enable SOPS secrets";
-
       user = with types; {
         enable = mkEnableOption "Enable";
         name = mkOption {
@@ -47,7 +45,6 @@ in {
           ];
         };
       };
-
     };
   };
 
@@ -63,7 +60,19 @@ in {
       home = home-directory;
       shell = pkgs.zsh;
       uid = 1000;
-      openssh.authorizedKeys.keys = cfg.authorizedKeys;
+      openssh.authorizedKeys.keys = cfg.user.authorizedKeys;
+    };
+
+    services.openssh = {
+      enable = true;
+      ports = [ 22 ];
+      settings = {
+        PasswordAuthentication = true;
+        AllowUsers = null;
+        UseDns = true;
+        X11Forwarding = false;
+        PermitRootLogin = "no";
+      };
     };
 
     environment.systemPackages = with pkgs; [
@@ -127,7 +136,6 @@ in {
       nerd-fonts.droid-sans-mono
     ];
 
-    # TODO refactor later
     services.tailscale.enable = true;
   };
 }

@@ -5,12 +5,11 @@
     lazygit
     nodePackages.eslint
     lua-language-server
-    nixd
-    # terraform-ls
     rust-analyzer
     helm-ls
     yaml-language-server
     pyright
+    nil
   ];
 
   programs.zsh.shellAliases = {
@@ -41,6 +40,9 @@
           };
         };
         type = "lua";
+        config = ''
+          require('workspaces').setup({})
+        '';
       }
       {
         plugin = cmp-fuzzy-path;
@@ -54,18 +56,18 @@
         plugin = mini-nvim;
         type = "lua";
       }
-      {
-        plugin = CopilotChat-nvim;
-        type = "lua";
-      }
-      {
-        plugin = copilot-lua;
-        type = "lua";
-      }
-      {
-        plugin = copilot-lualine;
-        type = "lua";
-      }
+      # {
+      #   plugin = CopilotChat-nvim;
+      #   type = "lua";
+      # }
+      # {
+      #   plugin = copilot-lua;
+      #   type = "lua";
+      # }
+      # {
+      #   plugin = copilot-lualine;
+      #   type = "lua";
+      # }
       {
         plugin = pkgs.vimUtils.buildVimPlugin {
           pname = "snacks-nvim";
@@ -218,9 +220,9 @@
           require('lspconfig').lua_ls.setup({
             capabilities = require('cmp_nvim_lsp').default_capabilities()
           })
-          require('lspconfig').nixd.setup({})
           require('lspconfig').terraformls.setup({})
           require('lspconfig').tflint.setup({})
+          require('lspconfig').nil_ls.setup({})
         '';
       }
       {
@@ -409,6 +411,8 @@
         '';
       }
       nvim-web-devicons
+      vim-nix
+
       # {
       #   plugin = null-ls-nvim;
       #   type = "lua";
@@ -488,6 +492,8 @@
       if vim.fn.filereadable(local_init) == 1 then
         dofile(local_init)
       end
+
+
     '';
   };
 }

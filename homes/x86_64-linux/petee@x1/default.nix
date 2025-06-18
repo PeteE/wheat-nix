@@ -13,6 +13,10 @@
     ...
 }:
 {
+  imports = [
+    ./kde.nix
+  ];
+
   # The only customizations here should be setting values that apply to this specific combination of x86_64 on a hostname called `x1`.
   # In other words, these should be pretty much empty
   wheat = {

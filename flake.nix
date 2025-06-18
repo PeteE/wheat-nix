@@ -81,7 +81,7 @@
     #   inputs.nixpkgs.follows = "nixpkgs-unstable";
     # }
   };
-  outputs = inputs: inputs.snowfall-lib.mkFlake {
+  outputs = { self, ... }@inputs: inputs.snowfall-lib.mkFlake {
     inherit inputs;
     src = ./.;
 
@@ -94,8 +94,28 @@
       };
     };
 
+    deploy = {
+      # remoteBuild = true; # Uncomment in case the system you're deploying from is not darwin
+      nodes.x1 = {
+        hostname = "192.168.1.7";
+        fastConnection = true;
+        interactiveSudo = false;
+
+        profiles = {
+          system = {
+            sshUser = "petee";
+            path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.x1;
+            user = "root";
+          };
+        };
+        # sshOpts = [ "-p" "2221" ];
+      };
+    };
+    # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
+
     # overlays
     overlays = with inputs; [
+      deploy-rs.overlays.default
       # mozilla.overlays.firefox
       # neovim.overlays.default
       # tmux.overlay
@@ -116,6 +136,7 @@
     homes.modules = with inputs; [
       sops-nix.homeManagerModules.sops
       catppuccin.homeModules.catppuccin
+      plasma-manager.homeManagerModules.plasma-manager
     ];
 
     systems = {
@@ -135,7 +156,9 @@
       hosts = {
         x1.modules = with inputs; [
           nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
-          ( { wheat.secrets.enable = true; })
+          ({
+             wheat.secrets.enable = true;
+          })
         ];
         pishield.modules = with inputs; [
           nixos-hardware.nixosModules.raspberry-pi-4
