@@ -14,7 +14,6 @@ with lib; let
 in {
   options = {
     wheat = with types; {
-
       enable = mkEnableOption "Enable";
       secrets.enable = mkEnableOption "Enable SOPS secrets";
       user = with types; {
@@ -67,7 +66,7 @@ in {
       enable = true;
       ports = [ 22 ];
       settings = {
-        PasswordAuthentication = true;
+        PasswordAuthentication = false;
         AllowUsers = null;
         UseDns = true;
         X11Forwarding = false;
@@ -75,6 +74,7 @@ in {
       };
     };
 
+    # TODO: waaaay too much; refactor
     environment.systemPackages = with pkgs; [
       dig
       nushell
@@ -135,7 +135,6 @@ in {
       nerd-fonts.fira-code
       nerd-fonts.droid-sans-mono
     ];
-
     services.tailscale.enable = true;
   };
 }

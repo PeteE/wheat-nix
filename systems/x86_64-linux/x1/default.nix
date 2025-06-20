@@ -15,18 +15,21 @@
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    ../../../modules/shared/wheat/default.nix
   ];
 
+  # set all my custom options
   wheat = {
     enable = true;
-    wifi.enable = true;
-    secrets.enable = true;
+    plasma.enable = true;
+    wifi.enable = true;  # configure wifi networks
+    sudo.enable = true;
     user = {
       hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
       extraGroups = ["wheel" "NetworkManager"];
     };
   };
+
+  # Host-specific config (old x1 carbon laptop)
   networking.hostName = "x1";
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -43,35 +46,14 @@
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
-
   swapDevices = [
     {
       device = "/dev/disk/by-uuid/6bacfc99-1805-42fb-9797-3593255c1dff";
     }
   ];
   networking.useDHCP = true;
-
   hardware.cpu.intel.updateMicrocode = true;
-  hardware.graphics.enable = true;
   hardware.bluetooth.enable = true;
-
-  # console.useXkbConfig = true;
-
-  services.xserver = {
-    enable = true;
-    xkb = {
-      options = "caps:escape";
-    };
-  };
-
-  services.desktopManager.plasma6.enable = true;
-  services.displayManager.sddm.enable = true;
-  services.displayManager.sddm.wayland.enable = true;
-
-  programs.firefox.enable = true;
-  environment.systemPackages = with pkgs; [
-    dmidecode
-  ];
   services.printing.enable = true;
   security.rtkit.enable = true;
   security.polkit.enable = true;

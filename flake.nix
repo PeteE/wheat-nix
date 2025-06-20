@@ -156,14 +156,14 @@
       hosts = {
         x1.modules = with inputs; [
           nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
-          ({
-             wheat.secrets.enable = true;
-          })
         ];
         pishield.modules = with inputs; [
           nixos-hardware.nixosModules.raspberry-pi-4
-          ({ wheat.secrets.enable = true; })
         ];
+        m4.modules = with inputs; [
+          # nothing currently
+        ];
+
       };
     };
   };

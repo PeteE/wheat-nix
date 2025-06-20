@@ -15,7 +15,6 @@ in {
   options.wheat.services.flameshot = {
     enable = mkEnableOption "Enable flameshot";
   };
-
   config = mkIf cfg.enable {
     services.flameshot = {
       enable = true;
