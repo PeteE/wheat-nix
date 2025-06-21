@@ -82,6 +82,10 @@ in {
         {
           plugin = mini-nvim;
           type = "lua";
+          config = ''
+            require('mini.indentscope').setup({ })
+            require('mini.jump').setup({ })
+          '';
         }
         # {
         #   plugin = CopilotChat-nvim;
@@ -110,8 +114,40 @@ in {
           type = "lua";
           config = ''
             require('snacks').setup({
-              follow_file = false,
-            });
+              indent = { enabled = true },
+              terminal = { enabled = true },
+              zen = { enabled = true },
+              bufdelete = { enabled = true },
+              dim = { enabled = true },
+              debug = { enabled = true },
+              layout = { enabled = true },
+              notifier = { enabled = true },
+              explorer = {
+                  replace_netrw = true,
+                  hidden = true,
+                  ignored = true,
+                  git_untracked = true,
+                  follow_file = false,
+              },
+              dashboard = {
+                  enabled = true,
+                  sections = {
+                    { section = "header" },
+                    { key = "s", desc = "Smart picker", action = ":lua Snacks.dashboard.picker.smart()" },
+                    { icon = " ", key = "s", desc = "Restore Session", section = "session" },
+                    { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+                    { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep', { hidden = true, ignored = true, fuzzy = true })" },
+
+                    -- { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
+                    { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
+                    { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
+                    { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
+                    { section = "startup" },
+                  },
+              },
+            })
+            Snacks.toggle.dim():map("<leader>uD")
+            Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
           '';
         }
         {
@@ -162,6 +198,8 @@ in {
           type = "lua";
           config = ''
             require("kulala").setup({})
+            vim.keymap.set('n', '<space>kr', ":lua require('kulala').run()<CR>", { desc = 'HTTP/graphql/gRPC client' })
+
           '';
         }
         {
@@ -178,6 +216,54 @@ in {
           };
           type = "lua";
           config = ''
+            local cfg = require("yaml-companion").setup({
+              -- Built in file matchers
+              builtin_matchers = {
+                -- Detects Kubernetes files based on content
+                kubernetes = { enabled = true },
+                cloud_init = { enabled = true }
+              },
+              -- Additional schemas
+              schemas = {
+                {
+                  name = "Kubernetes 1.26.7",
+                  uri = "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.26.7-standalone-strict/all.json",
+                },
+                {
+                  name = "Kubernetes 1.30.9",
+                  uri = "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.30.9-standalone-strict/all.json",
+                },
+              },
+              -- Pass any additional options that will be merged in the final LSP config
+              lspconfig = {
+                flags = {
+                  debounce_text_changes = 50,
+                },
+                settings = {
+                  yaml = {
+                    validate = true,
+                    format = { enable = true },
+                    hover = true,
+                    schemaStore = {
+                      enable = true,
+                      url = "https://www.schemastore.org/api/json/catalog.json",
+                    },
+                    schemaDownload = { enable = true },
+                    schemas = {},
+                    -- trace = { server = "debug" },
+                  },
+                },
+              },
+            })
+
+            require("telescope").load_extension("yaml_schema")
+            -- local function get_schema()
+            --   local schema = require("yaml-companion").get_buf_schema(0)
+            --   if schema.result[1].name == "none" then
+            --     return ""
+            --   end
+            --   return schema.result[1].name
+            -- end
           '';
         }
         # markdown-preview-nvim
@@ -264,6 +350,16 @@ in {
             require('lspconfig').terraformls.setup({})
             require('lspconfig').tflint.setup({})
             require('lspconfig').nil_ls.setup({})
+            require('lspconfig').pyright.setup({})
+            require('lspconfig').helm_ls.setup({
+              settings = {
+                ['helm-ls'] = {
+                  yamlls = {
+                    path = "yaml-language-server",
+                  }
+                }
+              }
+            })
           '';
         }
         {
@@ -386,6 +482,9 @@ in {
         {
           plugin = telescope-nvim;
           type = "lua";
+          config = ''
+            require("telescope")
+          '';
         }
         {
           plugin = telescope-fzf-native-nvim;
@@ -508,6 +607,9 @@ in {
         vim.o.laststatus = 2
         vim.o.updatetime = 150
         vim.o.guifont = 'Fira Code:h10'
+        vim.o.shiftwidth = 2
+        vim.o.tabstop = 2
+        vim.o.et = true
 
         vim.api.nvim_create_autocmd("FileType", {
           pattern = "nix",
@@ -528,6 +630,9 @@ in {
         vim.opt.undodir = { prefix .. "/nvim/.undodir//"}
         vim.opt.backupdir = {prefix .. "/nvim/.backup//"}
         vim.opt.directory = { prefix .. "/nvim/.swp//"}
+
+
+        require('lspconfig').yamlls.setup({})
 
         local local_init = vim.fn.expand("~/.config/nvim/init-local.lua")
         if vim.fn.filereadable(local_init) == 1 then
