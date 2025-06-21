@@ -1,3 +1,4 @@
+# vim: ts=2:sw=2:et
 {
   config,
   pkgs,
@@ -6,18 +7,12 @@
 }:
 with lib; let
   cfg = config.wheat;
-  home-directory =
-    if pkgs.stdenv.hostPlatform.isDarwin then
-      "/Users/${cfg.user.name}"
-    else
-      "/home/${cfg.user.name}";
 in {
   options = {
     wheat = with types; {
       enable = mkEnableOption "Enable";
       secrets.enable = mkEnableOption "Enable SOPS secrets";
       user = with types; {
-        enable = mkEnableOption "Enable";
         name = mkOption {
           default = "petee";
           description = "Username to create";
@@ -38,12 +33,14 @@ in {
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ3x/dtivaU+bPMRYzY1O+XQPEGnBahNnh9sBZMrJrIX petee"  # x1
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBaGYqqLKVikzCKsRJqfPu4zsTCKCfCz9xnWYQJNep+v petee@x1"  # prob dead
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAMShYQQ6RsCgYUXKxaVYjjGcjvdB533v/wsdrYq7G/7 JuiceSSH"  # phone
-            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMjd2zJEmRiuqMJz2kC4ABIiSVE2HWdRPkZTmcAxp6GS petee@nixos" # nixbox
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMjd2zJEmRiuqMJz2kC4ABIiSVE2HWdRPkZTmcAxp6GS petee@nixos" # nixos vm (ripper)
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL1SMCMFF12YYwlYGIi/UATCPTQ+PEdYOygGFouYrd5N petee@m3p" # lappy
-            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC1Xr2ircu0B1j+fmj8r1P5xtRi+LstqeXCJ7XIdhpyI nixos@nixos"
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC1Xr2ircu0B1j+fmj8r1P5xtRi+LstqeXCJ7XIdhpyI nixos@nixos" # rpi?
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEMv8uBStPXcU4V5+7L6TpP08HhpG5vumutAFogVd0ca pete@m4" # litle mac
           ];
         };
       };
+      tailscale.enable = mkEnableOption "Enable tailscale"
     };
   };
 
@@ -74,67 +71,10 @@ in {
       };
     };
 
-    # TODO: waaaay too much; refactor
-    environment.systemPackages = with pkgs; [
-      dig
-      nushell
-      btop
-      openbao
-      azure-storage-azcopy
-      direnv
-      curl
-      wget
-      git
-      git-credential-manager
-      usql
-      kubectx
-      kubectl
-      kubernetes-helm
-      tcpdump
-      oras
-      nodejs_22
-      uv
-      just
-      postgresql_15
-      cargo
-      fd
-      skopeo
-      openssl
-      github-cli
-      bc
-      podman
-      attic-client
-      yazi
-      stylua
-      yq-go
-      glow
-      aria2
-      nix-output-monitor
-      links2
-      presenterm
-      asciinema
-      attic-server
-      clusterctl
-      mpv
-      clapper
-      nitrogen
-      pinentry-rofi
-      niv
-      lua5_3
-      firefox
-      docker
-      yadm
-      ipcalc
-      wireshark
-      vim
-      tree
-      jq
-    ];
-
     fonts.packages = with pkgs; [
       nerd-fonts.fira-code
       nerd-fonts.droid-sans-mono
     ];
-    services.tailscale.enable = true;
+    services.tailscale.enable = cfg.
   };
 }
