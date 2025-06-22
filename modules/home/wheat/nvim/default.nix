@@ -109,9 +109,7 @@ in {
           };
           type = "lua";
           config = ''
-            require('snacks').setup({
-              follow_file = false,
-            });
+            require('snacks').setup({});
           '';
         }
         {
@@ -235,7 +233,7 @@ in {
           plugin = dashboard-nvim;
           type = "lua";
           config = ''
-            require("dashboard")
+            require("dashboard").setup({})
           '';
         }
         {
