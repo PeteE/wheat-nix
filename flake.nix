@@ -21,7 +21,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
-
     # Hardware Configuration
     nixos-hardware.url = "github:nixos/nixos-hardware";
 
@@ -29,15 +28,14 @@
     nixos-generators.url = "github:nix-community/nixos-generators";
     nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Snowfall Thaw
-    thaw.url = "github:snowfallorg/thaw?ref=v1.0.4";
-
     # Comma
     comma = {
       url = "github:nix-community/comma";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+    };
     # System Deployment
     deploy-rs = {
       url = "github:serokell/deploy-rs";
@@ -148,6 +146,7 @@
       sops-nix.homeManagerModules.sops
       catppuccin.homeModules.catppuccin
       plasma-manager.homeManagerModules.plasma-manager
+      nix-index-database.hmModules.nix-index
     ];
 
     systems = {

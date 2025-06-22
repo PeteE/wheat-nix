@@ -25,6 +25,7 @@
     starship.enable = true;
     vscode.enable = true;
     zoxide.enable = true;
+    comma.enable = true;
   };
 
   programs.home-manager.enable = true;

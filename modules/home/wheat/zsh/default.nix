@@ -56,6 +56,8 @@
       gd = "git diff";
       gs = "git status";
       nd = "nix develop -c zsh";
+      vi = "nvim";
+      vim = "nvim";
     };
     plugins = [
       {
