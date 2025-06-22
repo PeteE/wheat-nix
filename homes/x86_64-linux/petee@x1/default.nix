@@ -17,6 +17,7 @@
   # In other words, these should be pretty much empty
   wheat = {
     secrets.enable = true;  # enable SOPS secrets
+    kitty.enable = true;  # enable kitty
     nushell.enable = true;  # enable nushell
     starship.enable = true;  # enable starship prompt
     tmux.enable = true;  # enable tmux

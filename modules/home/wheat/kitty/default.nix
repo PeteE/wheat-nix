@@ -21,13 +21,13 @@ in {
     themeFile = mkOption {
       default = "Catppuccin-Mocha";
       description = "kitty theme";
-      type = str;
+      type = types.str;
     };
     font = {
       name = mkOption {
         default = "Fira Code";
         description = "kitty font";
-        type = str;
+        type = types.str;
       };
       size = mkOption {
         default = 14.0;
