@@ -96,22 +96,115 @@ in {
         #   type = "lua";
         # }
         {
-          plugin = pkgs.vimUtils.buildVimPlugin {
-            pname = "snacks-nvim";
-            version = "v2.20.0";
-            doCheck = false;
-            src = pkgs.fetchFromGitHub {
-              owner = "folke";
-              repo = "snacks.nvim";
-              rev = "5eac729fa290248acfe10916d92a5ed5e5c0f9ed";
-              sha256 = "sha256-iXfOTmeTm8/BbYafoU6ZAstu9+rMDfQtuA2Hwq0jdcE=";
-            };
-          };
+          plugin = snacks-nvim;
           type = "lua";
           config = ''
-            require('snacks').setup({});
-          '';
+            vim.keymap.set('n', '<space>da', ":lua Snacks.dashboard()<CR>")
+            vim.keymap.set('n', '<space>ff', ":lua Snacks.picker.smart()<CR>")
+            vim.keymap.set('n', '<space>fg', ":lua Snacks.picker.git_files()<CR>")
+            vim.keymap.set('n', '<space>fb', ":lua Snacks.picker.buffers()<CR>")
+            vim.keymap.set('n', '<space>fc', ":lua Snacks.picker.command_history()<CR>")
+            vim.keymap.set('n', '<space>fn', ":lua Snacks.picker.notifications()<CR>")
+            vim.keymap.set('n', '<space>fw', ":lua Snacks.picker.oldfiles()<CR>")
+            vim.keymap.set('n', '<space>gb', ":lua Snacks.picker.git_branches()<CR>")
+            vim.keymap.set('n', '<space>gl', ":lua Snacks.picker.git_log()<CR>")
+            vim.keymap.set({ "n", "x" }, "<leader>rg", function() Snacks.picker.grep_word() end)
+            -- old mapping, muscle memory
+            vim.keymap.set('n', '<leader>rg', "yiw:lua Snacks.picker.grep()<CR>")
+
+            vim.keymap.set('n', '<leader>ff', ":lua Snacks.picker.smart()<CR>")
+            vim.keymap.set("n", ":bd", ":lua Snacks.bufdelete()<CR>", { noremap = true, silent = true })
+            vim.keymap.set('n', '<space>dm', ":lua Snacks.dim()<CR>")
+
+            -- LSP
+            vim.keymap.set("n", "<space>gd", ":lua Snacks.picker.lsp_definitions()<CR>")
+            vim.keymap.set("n", "<space>gD", ":lua Snacks.picker.lsp_declarations()<CR>")
+            vim.keymap.set("n", "<space>gr", ":lua Snacks.picker.lsp_references()<CR>")
+            vim.keymap.set("n", "<space>gI", ":lua Snacks.picker.lsp_implementations()<CR>")
+            vim.keymap.set("n", "<space>gy", ":lua Snacks.picker.lsp_type_definitions()<CR>")
+            vim.keymap.set("n", "<leader>ss", ":lua Snacks.picker.lsp_symbols()<CR>")
+            vim.keymap.set("n", "<leader>sS", ":lua Snacks.picker.lsp_workspace_symbols()<CR>")
+            vim.keymap.set('n', "<C-n>", ":lua Snacks.picker.explorer()<CR>")
+            '';
         }
+        # {
+        #   plugin = pkgs.vimUtils.buildVimPlugin {
+        #     pname = "snacks-nvim";
+        #     version = "v2.20.0";
+        #     doCheck = false;
+        #     src = pkgs.fetchFromGitHub {
+        #       owner = "folke";
+        #       repo = "snacks.nvim";
+        #       rev = "5eac729fa290248acfe10916d92a5ed5e5c0f9ed";
+        #       sha256 = "sha256-iXfOTmeTm8/BbYafoU6ZAstu9+rMDfQtuA2Hwq0jdcE=";
+        #     };
+        #     type = "lua";
+        #     config = ''
+        #       vim.keymap.set('n', '<space>da', ":lua Snacks.dashboard()<CR>")
+        #       vim.keymap.set('n', '<space>ff', ":lua Snacks.picker.smart()<CR>")
+        #       vim.keymap.set('n', '<space>fg', ":lua Snacks.picker.git_files()<CR>")
+        #       vim.keymap.set('n', '<space>fb', ":lua Snacks.picker.buffers()<CR>")
+        #       vim.keymap.set('n', '<space>fc', ":lua Snacks.picker.command_history()<CR>")
+        #       vim.keymap.set('n', '<space>fn', ":lua Snacks.picker.notifications()<CR>")
+        #       vim.keymap.set('n', '<space>fw', ":lua Snacks.picker.oldfiles()<CR>")
+        #       vim.keymap.set('n', '<space>gb', ":lua Snacks.picker.git_branches()<CR>")
+        #       vim.keymap.set('n', '<space>gl', ":lua Snacks.picker.git_log()<CR>")
+        #       vim.keymap.set({ "n", "x" }, "<leader>rg", function() Snacks.picker.grep_word() end)
+        #       -- old mapping, muscle memory
+        #       vim.keymap.set('n', '<leader>rg', "yiw:lua Snacks.picker.grep()<CR>")
+
+        #       vim.keymap.set('n', '<leader>ff', ":lua Snacks.picker.smart()<CR>")
+        #       vim.keymap.set("n", ":bd", ":lua Snacks.bufdelete()<CR>", { noremap = true, silent = true })
+        #       vim.keymap.set('n', '<space>dm', ":lua Snacks.dim()<CR>")
+
+        #       -- LSP
+        #       vim.keymap.set("n", "<space>gd", ":lua Snacks.picker.lsp_definitions()<CR>")
+        #       vim.keymap.set("n", "<space>gD", ":lua Snacks.picker.lsp_declarations()<CR>")
+        #       vim.keymap.set("n", "<space>gr", ":lua Snacks.picker.lsp_references()<CR>")
+        #       vim.keymap.set("n", "<space>gI", ":lua Snacks.picker.lsp_implementations()<CR>")
+        #       vim.keymap.set("n", "<space>gy", ":lua Snacks.picker.lsp_type_definitions()<CR>")
+        #       vim.keymap.set("n", "<leader>ss", ":lua Snacks.picker.lsp_symbols()<CR>")
+        #       vim.keymap.set("n", "<leader>sS", ":lua Snacks.picker.lsp_workspace_symbols()<CR>")
+        #       vim.keymap.set('n', "<C-n>", ":lua Snacks.picker.explorer()<CR>")
+        #     '';
+        #   };
+        #   type = "lua";
+        #   config = ''
+        #     require('snacks').setup({
+        #       indent = { enabled = true },
+        #       terminal = { enabled = true },
+        #       zen = { enabled = true },
+        #       bufdelete = { enabled = true },
+        #       dim = { enabled = true },
+        #       debug = { enabled = true },
+        #       layout = { enabled = true },
+        #       notifier = { enabled = true },
+        #       explorer = {
+        #           replace_netrw = true,
+        #           hidden = true,
+        #           ignored = true,
+        #           git_untracked = true,
+        #       },
+        #       dashboard = {
+        #           enabled = true,
+        #           sections = {
+        #             { section = "header" },
+        #             { key = "s", desc = "Smart picker", action = ":lua Snacks.dashboard.picker.smart()" },
+        #             { icon = " ", key = "s", desc = "Restore Session", section = "session" },
+        #             { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+        #             { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep', { hidden = true, ignored = true, fuzzy = true })" },
+
+        #             -- { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
+        #             { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
+        #             { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
+        #             { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
+        #             { section = "startup" },
+        #           },
+        #       },
+        #     })
+
+        #   '';
+        # }
         {
           plugin = pkgs.vimUtils.buildVimPlugin {
             pname = "markview.nvim";
@@ -261,7 +354,6 @@ in {
             })
             require('lspconfig').terraformls.setup({})
             require('lspconfig').tflint.setup({})
-            require('lspconfig').nil_ls.setup({})
           '';
         }
         {
@@ -451,20 +543,19 @@ in {
         }
         nvim-web-devicons
         vim-nix
-
         # {
-        #   plugin = null-ls-nvim;
+        #   plugin = none-ls-nvim;
         #   type = "lua";
-        #   # config = ''
-        #   #   local null_ls = require("null-ls")
-        #   #   null_ls.setup({
-        #   #       sources = {
-        #   #           null_ls.builtins.formatting.stylua,
-        #   #           null_ls.builtins.diagnostics.eslint,
-        #   #           null_ls.builtins.completion.spell,
-        #   #       },
-        #   #   })
-        #   # '';
+        #   config = ''
+        #     local null_ls = require("null-ls")
+        #     null_ls.setup({
+        #         sources = {
+        #             null_ls.builtins.formatting.stylua,
+        #             null_ls.builtins.diagnostics.eslint,
+        #             null_ls.builtins.completion.spell,
+        #         },
+        #     })
+        #   '';
         # }
         {
           plugin = vim-gitgutter;
@@ -480,11 +571,14 @@ in {
         }
         {
           plugin = vim-better-whitespace;
+          type = "lua";
+          config = ''
+            vim.g.strip_whitespace_on_save = true
+            vim.g.better_whitespace_guicolor = "#eba0ac"
+            vim.g.better_whitespace_enabled = 0
+          '';
         }
       ];
-
-
-
       withPython3 = true;
       withNodeJs = true;
       extraLuaConfig = ''

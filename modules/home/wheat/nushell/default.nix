@@ -21,11 +21,7 @@ in {
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      nushellPlugins.skim
-      nushellPlugins.query
-      nushellPlugins.polars
-      nushellPlugins.highlight
-      nufmt
+            nufmt
       skim
     ];
     programs.carapace = {
@@ -34,7 +30,15 @@ in {
     };
     programs.nushell = {
       enable = true;
-
+      plugins = with pkgs; [
+        nushellPlugins.skim
+        nushellPlugins.query
+        nushellPlugins.polars
+        nushellPlugins.highlight
+        nushellPlugins.hcl
+        nushellPlugins.units
+        nushellPlugins.query
+      ];
       settings = {
         edit_mode = "vi";
         buffer_editor = "nvim";

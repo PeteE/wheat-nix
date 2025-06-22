@@ -100,15 +100,26 @@
         hostname = "192.168.1.7";
         fastConnection = true;
         interactiveSudo = false;
-
         profiles = {
           system = {
-            sshUser = "pete";
+            sshUser = "petee";
             path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.x1;
-            user = "root";
+            user = "petee";
           };
         };
-        # sshOpts = [ "-p" "2221" ];
+      };
+      nodes.m4 = {
+        hostname = "m4";
+        fastConnection = true;
+        interactiveSudo = false;
+        remoteBuild = true;
+        profiles = {
+          system = {
+            path = inputs.deploy-rs.lib.aarch64-darwin.activate.darwin self.darwinConfigurations.m4;
+            user = "root";
+            sshUser = "pete";
+          };
+        };
       };
     };
     # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;

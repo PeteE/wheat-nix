@@ -24,6 +24,7 @@
     wifi.enable = true;  # configure wifi networks
     sudo.enable = true;
     user = {
+      name = "petee";
       hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
       extraGroups = ["wheel" "NetworkManager"];
     };

@@ -21,16 +21,16 @@ in {
     themeFile = mkOption {
       default = "Catppuccin-Mocha";
       description = "kitty theme";
-      type = str;
+      type = types.str;
     };
     font = {
       name = mkOption {
         default = "Fira Code";
         description = "kitty font";
-        type = str;
+        type = types.str;
       };
       size = mkOption {
-        default = 14.0;
+        default = 12.0;
         description = "kitty font size";
         type = types.float;
       };
@@ -53,7 +53,7 @@ in {
         disable_ligatures = "cursor";
         cursor_blink_interval = 0;
         dynamic_background_opacity = "yes";
-        background_opacity = "1.0";
+        background_opacity = "0.9";
       };
     };
     home.packages = with pkgs; [

@@ -39,7 +39,7 @@ in {
           ];
         };
       };
-      tailscale.enable = mkEnableOption "Enable tailscale"
+      tailscale.enable = mkEnableOption "Enable tailscale";
     };
   };
 

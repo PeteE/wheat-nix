@@ -7,19 +7,19 @@
 # prompt character
 
 # Commands may be slower in restricted environments, e.g. containers
-command_timeout = 10000
 
 format = """$hostname$directory$git_branch$git_commit$git_state$git_status\
 $fill\
 $jobs$status$cmd_duration\
 $nix_shell$terraform$kubernetes$python$aws$nodejs$docker_context$golang$time$os
 $character"""
+palette = "catppuccin_mocha"
 
 # Additional padding between newlines
-add_newline = false
+add_newline = true
 
 [line_break]
-disabled = true
+disabled = false
 
 [fill]
 symbol = " "
@@ -78,11 +78,11 @@ format = "[$number]($style)"
 [status]
 disabled = false
 map_symbol = false
-format = "[$symbol$status]($style)"
+format = "[$symbol $status]($style) "
 
 [cmd_duration]
 style = "#a8a8a8"
-format = "([ ❮ ](#767676)[$duration ]($style))"
+format = "([ ❮ ](#767676)[$duration  ]($style))"
 
 ### Right prompt tools and versions
 
@@ -96,8 +96,8 @@ detect_files = ["terragrunt.hcl"]
 [kubernetes]
 disabled = false
 # style = "blue"
-# format = '([ ❮ ](#767676)[$symbol$context (\[$namespace\])]($style))'
-# detect_extensions = []
+format = '([ ❮ ](#767676)[$symbol$context (\[$namespace\])]($style))'
+detect_extensions = []
 # detect_files = ['Chart.yaml']
 # detect_folders = ['*helm*']
 
@@ -113,7 +113,7 @@ symbol = " "
 format = '([ ❮ ](#767676)[${symbol}${pyenv_prefix}(${version}) ([\($virtualenv\)](#306998))]($style))'
 
 [aws]
-disabled = false
+disabled = true
 symbol = " "
 format = '([ ❮ ](#767676)[$symbol$profile(\[$duration\])]($style))'
 
@@ -137,3 +137,31 @@ disabled = true
 [os]
 disabled = true
 # format = "[ ❮ ](#767676)[$symbol]($style)"
+
+[palettes.catppuccin_mocha]
+rosewater = "#f5e0dc"
+flamingo = "#f2cdcd"
+pink = "#f5c2e7"
+mauve = "#cba6f7"
+red = "#f38ba8"
+maroon = "#eba0ac"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+teal = "#94e2d5"
+sky = "#89dceb"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+lavender = "#b4befe"
+text = "#cdd6f4"
+subtext1 = "#bac2de"
+subtext0 = "#a6adc8"
+overlay2 = "#9399b2"
+overlay1 = "#7f849c"
+overlay0 = "#6c7086"
+surface2 = "#585b70"
+surface1 = "#45475a"
+surface0 = "#313244"
+base = "#1e1e2e"
+mantle = "#181825"
+crust = "#11111b"
