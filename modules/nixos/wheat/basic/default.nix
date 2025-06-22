@@ -14,7 +14,6 @@ in {
       secrets.enable = mkEnableOption "Enable SOPS secrets";
       user = with types; {
         name = mkOption {
-          default = "petee";
           description = "Username to create";
           type = str;
         };
@@ -53,10 +52,10 @@ in {
     users.users.${cfg.user.name} = {
       isNormalUser = true;
       inherit (cfg.user) extraGroups name hashedPassword;
-      home = home-directory;
+      home = "/home/${cfg.user.name}";
       shell = pkgs.zsh;
       uid = 1000;
-      openssh.authorizedKeys.keys = cfg.user.authorizedKeys;
+      # openssh.authorizedKeys.keys = cfg.user.authorizedKeys;
     };
 
     services.openssh = {
@@ -75,6 +74,6 @@ in {
       nerd-fonts.fira-code
       nerd-fonts.droid-sans-mono
     ];
-    services.tailscale.enable = cfg.
+    services.tailscale.enable = true;
   };
 }

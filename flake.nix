@@ -87,7 +87,7 @@
 
     # snowfall metadata
     snowfall = {
-      namespace = "petee";
+      namespace = "wheat";
       meta = {
           name = "wheat";
           title = "PeteE's Flake";
@@ -103,7 +103,7 @@
 
         profiles = {
           system = {
-            sshUser = "petee";
+            sshUser = "pete";
             path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.x1;
             user = "root";
           };
@@ -160,10 +160,9 @@
         pishield.modules = with inputs; [
           nixos-hardware.nixosModules.raspberry-pi-4
         ];
-        m4.modules = with inputs; [
-          # nothing currently
-        ];
-
+        # m4.modules = with inputs; [
+        #   # nothing currently
+        # ];
       };
     };
   };
