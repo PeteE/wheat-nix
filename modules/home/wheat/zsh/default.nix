@@ -1,19 +1,23 @@
 # vim: ts=2:sw=2:et
-{ pkgs, config, ... }:
 {
-  home.file.".p10k.zsh".text = builtins.readFile ./p10k.zsh;
+  lib,
+  pkgs,
+  inputs,
+  namespace,
+  format,
+  virtual,
+  host,
+  config,
+  ...
+}:
+{
   home.packages = with pkgs; [
     fasd
     zoxide
     zsh-histdb
+    nmap
     fzf
     sqlite
-    # zsh-powerlevel10k
-    github-cli
-    awscli2
-    direnv
-    kubectx
-    kubectl
   ];
   programs.zsh = {
     enable = true;
@@ -82,10 +86,6 @@
       ENABLE_CORRECTION="true"
       COMPLETION_WAITING_DOTS="true"
       HIST_STAMPS="yyyy-mm-dd"
-
-      if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
-        source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
-      fi
 
       HISTIGNORE='\&:fg:bg:ls:pwd:cd ..:cd ~-:cd -:cd:jobs:set -x:ls -l:ls -l'
 

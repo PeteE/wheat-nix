@@ -26,6 +26,7 @@
     vscode.enable = true;
     zoxide.enable = true;
     comma.enable = true;
+    desktop.enable = true;
   };
 
   programs.home-manager.enable = true;
@@ -59,6 +60,7 @@
     git
     git-credential-manager
     usql
+    podman
     kubectx
     kubectl
     kubernetes-helm
@@ -74,7 +76,6 @@
     openssl
     github-cli
     bc
-    # podman
     attic-client
     # yazi
     stylua

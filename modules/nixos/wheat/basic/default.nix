@@ -22,7 +22,9 @@ in {
           type = str;
         };
         extraGroups = mkOption {
-          default = [];
+          default = [
+            "podman"
+          ];
           description = "Additional groups to add the user to.";
           type = listOf str;
         };

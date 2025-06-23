@@ -29,8 +29,8 @@
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEMv8uBStPXcU4V5+7L6TpP08HhpG5vumutAFogVd0ca pete@m4" # litle mac
       ];
     };
-    # sudo.enable = true;
-    # services.podman.enable = true;
+    sudo.enable = true;
+    services.podman.enable = true;
   };
 
   # hack to workaround nix group id changes
