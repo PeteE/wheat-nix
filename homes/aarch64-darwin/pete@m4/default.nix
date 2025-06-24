@@ -12,9 +12,6 @@
     ...
 }:
 {
-  # imports = [
-  #     ../../../modules/darwin/wheat/basic/default.nix
-  # ];
   wheat = {
     secrets.enable = true;  # enable SOPS secrets
     nushell.enable = true;  # enable nushell
@@ -22,7 +19,7 @@
     tmux.enable = true;  # enable tmux
     nvim.enable = true;  # enable tmux
     zoxide.enable = true;  # enable zoxide fuzzy shell navigation (`cd` replacement)
-    vscode.enable = true;  # enable vscode
+    vscodium.enable = true;  # enable vscode
     ripgrep.enable = true;  # enable ripgrep
     #services.ssh-agent.enable = true;
     work.enable = true;

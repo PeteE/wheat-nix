@@ -20,6 +20,13 @@ in {
     enable = mkEnableOption "Enable";
   };
   config = mkIf cfg.enable {
-    programs.vscode.enable = true;
+    programs.vscode = {
+      enable = true;
+      package = pkgs.vscodium;
+    };
+    home.packages = with pkgs.vscode-extensions; [
+      b4dm4n.vscode-nixpkgs-fmt
+      asvetliakov.vscode-neovim
+    ];
   };
 }

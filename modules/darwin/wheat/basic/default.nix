@@ -36,17 +36,17 @@ in {
   };
 
   config = mkIf cfg.enable {
-    programs.zsh.enable = true;
-    users.groups.${cfg.user.name} = {};
-    users.users.${cfg.user.name} = {
-      inherit (cfg.user) name;
-      home = "/Users/${cfg.user.name}";
-      createHome = true;
-      isHidden = false;
-      shell = pkgs.zsh;
-      # uid = 1000;
-      openssh.authorizedKeys.keys = cfg.user.authorizedKeys;
-    };
+    # programs.zsh.enable = true;
+    # users.groups.${cfg.user.name} = {};
+    # users.users.${cfg.user.name} = {
+    #   inherit (cfg.user) name;
+    #   home = "/Users/${cfg.user.name}";
+    #   createHome = true;
+    #   isHidden = false;
+    #   shell = pkgs.zsh;
+    #   # uid = 1000;
+    #   openssh.authorizedKeys.keys = cfg.user.authorizedKeys;
+    # };
 
     services.openssh = {
       enable = true;

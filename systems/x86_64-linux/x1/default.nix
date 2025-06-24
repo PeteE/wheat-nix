@@ -15,19 +15,23 @@
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
+    (../../../modules/shared/wheat/default.nix)
   ];
 
   # set all my custom options
   wheat = {
     enable = true;
-    plasma.enable = true;
-    wifi.enable = true;  # configure wifi networks
-    sudo.enable = true;
     user = {
       name = "petee";
       hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
       extraGroups = ["wheel" "NetworkManager"];
     };
+
+    secrets.enable = true;
+    plasma.enable = true;
+    wifi.enable = true;
+    sudo.enable = true;
+    tailscale.enable = false;
   };
 
   # Host-specific config (old x1 carbon laptop)

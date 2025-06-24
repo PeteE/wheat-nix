@@ -48,6 +48,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-vscode-extensions = {
+      url = "github:nix-community/nix-vscode-extensions/1a1442e13dc1730de0443f80dcf02658365e999a";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Vault Integration
     # vault-service = {
     #   url = "github:DeterminateSystems/nixos-vault-service";
@@ -74,10 +79,6 @@
     mozilla = {
       url = "github:mozilla/nixpkgs-mozilla";
     };
-    # disko = {
-    #   url = "github:nix-community/disko/latest";
-    #   inputs.nixpkgs.follows = "nixpkgs-unstable";
-    # }
   };
   outputs = { self, ... }@inputs: inputs.snowfall-lib.mkFlake {
     inherit inputs;
@@ -152,6 +153,7 @@
     systems = {
       overlays = with inputs; [
         mozilla.overlays.firefox
+        nix-vscode-extension.overlays.default
       ];
 
       modules = {
