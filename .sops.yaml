@@ -1,9 +1,10 @@
-# This example uses YAML anchors which allows reuse of multiple keys 
+# This example uses YAML anchors which allows reuse of multiple keys
 # without having to repeat yourself.
 # Also see https://github.com/Mic92/dotfiles/blob/master/nixos/.sops.yaml
 # for a more complex example.
 keys:
   - &petee age1u8dqa38qkztrzcuppkezy7mt7500aa0yex65e7h7qxyze59sdgpssksa62
+  - &petee-m3p age14t2x3suh4qec8rwmls580er6fef9ct4du6vcyqlv874qkvknf4uqtkk3r7
 creation_rules:
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
     key_groups1: foo
