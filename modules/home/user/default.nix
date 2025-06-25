@@ -27,6 +27,7 @@
     zoxide.enable = true;
     comma.enable = true;
     desktop.enable = true;
+    azure.enable = true;
   };
 
   programs.home-manager.enable = true;

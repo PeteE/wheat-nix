@@ -29,6 +29,8 @@ in {
       yaml-language-server
       pyright
       nil
+      terraform-ls
+      tflint
     ];
 
     programs.zsh.shellAliases = {
@@ -63,6 +65,8 @@ in {
           config = ''
             require('workspaces').setup({
               cd_type = "tab",
+              global_cd = false,
+              auto_open = true,
               hooks = {
                 open = {
                   "lua Snacks.picker.smart()",
@@ -99,6 +103,39 @@ in {
           plugin = snacks-nvim;
           type = "lua";
           config = ''
+            require('snacks').setup({
+              indent = { enabled = true },
+              terminal = { enabled = true },
+              zen = { enabled = true },
+              bufdelete = { enabled = true },
+              dim = { enabled = true },
+              debug = { enabled = true },
+              layout = { enabled = true },
+              notifier = { enabled = true },
+              explorer = {
+                  replace_netrw = true,
+                  hidden = true,
+                  ignored = true,
+                  git_untracked = true,
+                  follow_file = false,
+              },
+              dashboard = {
+                  enabled = true,
+                  sections = {
+                    { section = "header" },
+                    { key = "s", desc = "Smart picker", action = ":lua Snacks.dashboard.picker.smart()" },
+                    { icon = " ", key = "s", desc = "Restore Session", section = "session" },
+                    { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+                    { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep', { hidden = true, ignored = true, fuzzy = true })" },
+
+                    -- { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
+                    { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
+                    { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
+                    { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
+                    { section = "startup" },
+                  },
+              },
+            })
             vim.keymap.set('n', '<space>da', ":lua Snacks.dashboard()<CR>")
             vim.keymap.set('n', '<space>ff', ":lua Snacks.picker.smart()<CR>")
             vim.keymap.set('n', '<space>fg', ":lua Snacks.picker.git_files()<CR>")

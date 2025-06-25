@@ -126,6 +126,7 @@
     # overlays
     overlays = with inputs; [
       deploy-rs.overlays.default
+      nix-vscode-extensions.overlays.default
       # mozilla.overlays.firefox
       # neovim.overlays.default
       # tmux.overlay
@@ -153,7 +154,6 @@
     systems = {
       overlays = with inputs; [
         mozilla.overlays.firefox
-        nix-vscode-extension.overlays.default
       ];
 
       modules = {
