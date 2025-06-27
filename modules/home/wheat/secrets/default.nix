@@ -16,7 +16,10 @@ in {
     enable = mkEnableOption "Enable custom sops secrets";
   };
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.sops ];
+    home.packages = with pkgs; [
+      sops
+      age
+    ];
     sops.defaultSopsFile = ./main.yaml;
     sops.age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
     sops.secrets.openaiApiKey = { };

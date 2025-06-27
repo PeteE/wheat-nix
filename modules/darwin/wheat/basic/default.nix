@@ -44,27 +44,24 @@ in {
       createHome = true;
       isHidden = false;
       shell = pkgs.zsh;
-      # uid = 1000;
       openssh.authorizedKeys.keys = cfg.user.authorizedKeys;
     };
 
     services.openssh = {
       enable = true;
       extraConfig = ''
-        # GatewayPorts no
-        PasswordAuthentication yes
+        GatewayPorts yes
+        PasswordAuthentication no
         PermitRootLogin no
-        # PrintMotd no
+        PrintMotd no
         # StrictModes yes
-        # UseDns yes
+        UseDns no
         # UsePAM yes
       '';
     };
-
     fonts.packages = with pkgs; [
       nerd-fonts.fira-code
       nerd-fonts.droid-sans-mono
     ];
-    services.tailscale.enable = true;
   };
 }

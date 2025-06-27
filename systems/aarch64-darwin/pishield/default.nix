@@ -15,7 +15,6 @@
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    ../../../modules/shared/wheat/default.nix
   ];
 
   system.stateVersion = "25.11";
