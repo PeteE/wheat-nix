@@ -68,10 +68,6 @@
       url = "github:catppuccin/nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    ollama = {
-      url = "github:abysssol/ollama-flake/5";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     colmena = {
       url = "github:zhaofengli/colmena";
       inputs.nixpkgs.follows = "nixpkgs";

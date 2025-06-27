@@ -512,27 +512,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-unfree": {
-      "inputs": {
-        "nixpkgs": [
-          "ollama",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1727984955,
-        "narHash": "sha256-vP3XzXfQLaxy2QYipK5teKFzgWBeSkv9hByCvrMEL1c=",
-        "owner": "numtide",
-        "repo": "nixpkgs-unfree",
-        "rev": "deab889228cedd7bca43e71ea4f61f9ea12c260e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "nixpkgs-unfree",
-        "type": "github"
-      }
-    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1750365781,
@@ -562,28 +541,6 @@
         "owner": "NixOS",
         "ref": "nixpkgs-unstable",
         "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "ollama": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "nixpkgs-unfree": "nixpkgs-unfree"
-      },
-      "locked": {
-        "lastModified": 1733353752,
-        "narHash": "sha256-bK6GjOKhQ44Jdh5Scyj/XD/o7AweNSnRuG6G1TIa6SM=",
-        "owner": "abysssol",
-        "repo": "ollama-flake",
-        "rev": "c0b28d97cdc484b24adc2164bd7a6e72a30dc581",
-        "type": "github"
-      },
-      "original": {
-        "owner": "abysssol",
-        "ref": "5",
-        "repo": "ollama-flake",
         "type": "github"
       }
     },
@@ -626,7 +583,6 @@
         "nixos-generators": "nixos-generators",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",
-        "ollama": "ollama",
         "plasma-manager": "plasma-manager",
         "snowfall-lib": "snowfall-lib",
         "sops-nix": "sops-nix"

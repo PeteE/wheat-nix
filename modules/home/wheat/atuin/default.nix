@@ -24,6 +24,7 @@ in {
        source = ./.config/atuin/config.toml;
        target = "atuin/config.toml";
     };
+    # TODO(pete) not sure why this is here.... should be a new module
     programs.carapace = {
       enableZshIntegration = true;
     };

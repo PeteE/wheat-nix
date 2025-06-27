@@ -34,6 +34,7 @@
 
   programs.home-manager.enable = true;
   home.packages = with pkgs; [
+    ollama
     dig
     btop
     openbao

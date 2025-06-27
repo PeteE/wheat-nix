@@ -18,16 +18,20 @@ with lib; let
 in {
   options.wheat.ollama = {
     enable = mkEnableOption "Enable";
+    port = mkOption {
+      default = 11434;
+      type = types.ints.unsigned;
+    };
   };
   config = mkIf cfg.enable {
     services.ollama = {
       enable = true;
-      acceleration = "cuda";
-      environmentVariables = {
-      };
+      host = "0.0.0.0";
+      port = cfg.port;
+      # acceleration = "cuda";
     };
-    home.packages = with pkgs; [
-      ollama
+    home.packages = [
+      pkgs.ollama
     ];
   };
 }
