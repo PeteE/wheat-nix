@@ -3,15 +3,26 @@
   config,
   pkgs,
   lib,
+  system,
   ...
 }:
 with lib; let
   cfg = config.wheat;
+  isDarwin = if lib.hasSuffix "darwin" system then true else false;
+
 in {
   options = {
     wheat = with types; {
       enable = mkEnableOption "Enable";
       secrets.enable = mkEnableOption "Enable SOPS secrets";
+      nameservers = mkOption {
+        description = "DNS Servers";
+        type = types.listOf types.str;
+        default = [
+          "1.1.1.1"
+          "1.0.0.1"
+        ];
+      };
       user = with types; {
         name = mkOption {
           description = "Username to create";
@@ -41,25 +52,33 @@ in {
           ];
         };
       };
+      fonts = mkOption {
+        description = "fonts";
+        type = types.listOf types.str;
+        default = with pkgs; [
+          nerd-fonts.fira-code
+          nerd-fonts.droid-sans-mono
+          "1.1.1.1"
+          "1.0.0.1"
+        ];
+      };
       tailscale.enable = mkEnableOption "Enable tailscale";
     };
   };
 
   config = mkIf cfg.enable {
-    #  Common settings for all my nixos machines
-    # services.openssh.enable = true;
-
     programs.zsh.enable = true;
     users.groups.${cfg.user.name} = {};
     users.users.${cfg.user.name} = {
-      isNormalUser = true;
-      inherit (cfg.user) extraGroups name hashedPassword;
-      home = "/home/${cfg.user.name}";
+      inherit (cfg.user) name;
+      # home = "/Users/${cfg.user.name}";
+      home = if isDarwin then "/Users/${cfg.user.name}" else "/home/${cfg.user.name}";
+      createHome = true;
       shell = pkgs.zsh;
-      uid = 1000;
-      # openssh.authorizedKeys.keys = cfg.user.authorizedKeys;
+      openssh.authorizedKeys.keys = cfg.user.authorizedKeys;
+    } // lib.optionalAttrs isDarwin {
+      isHidden = false;
     };
-
     services.openssh = {
       enable = true;
       ports = [ 22 ];
@@ -72,10 +91,13 @@ in {
       };
     };
 
-    fonts.packages = with pkgs; [
-      nerd-fonts.fira-code
-      nerd-fonts.droid-sans-mono
+    fonts.packages = with pkgs.nerd-fonts; [
+      fira-code
+      droid-sans-mono
+      symbols-only
+      jetbrains-mono
     ];
-    services.tailscale.enable = true;
+    services.tailscale.enable = cfg.enable;
+    networking.nameservers = cfg.nameservers;
   };
 }

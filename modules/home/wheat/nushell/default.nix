@@ -21,8 +21,9 @@ in {
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-            nufmt
+      nufmt
       skim
+      nushell
     ];
     programs.carapace = {
       enable = true;

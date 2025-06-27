@@ -1,0 +1,28 @@
+name: opaque-systems
+root: ~/dev/opaque-systems
+windows:
+  - opaque:
+      layout: main-vertical
+      root: ~/dev/opaque-systems/opaque
+      panes:
+        - zsh
+  - helm-charts:
+      layout: main-vertical
+      root: ~/dev/opaque-systems/helm-charts
+      panes:
+        - zsh
+  - tf-modules:
+      layout: main-vertical
+      root: ~/dev/opaque-systems/terraform-modules
+      panes:
+        - zsh
+  - infra-stacks:
+      layout: main-vertical
+      root: ~/dev/opaque-systems/terragrunt-infra-stacks
+      panes:
+        - zsh
+  - app-stacks:
+      layout: main-vertical
+      root: ~/dev/opaque-systems/terragrunt-application-stacks
+      panes:
+        - zsh

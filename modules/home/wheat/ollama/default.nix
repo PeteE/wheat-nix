@@ -14,22 +14,20 @@
     ...
 }:
 with lib; let
-  cfg = config.wheat.starship;
+  cfg = config.wheat.ollama;
 in {
-  options.wheat.starship = {
+  options.wheat.ollama = {
     enable = mkEnableOption "Enable";
   };
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
-      starship
-    ];
-    programs.starship = {
+    services.ollama = {
       enable = true;
-      enableZshIntegration = true;
-      enableNushellIntegration = true;
+      acceleration = "cuda";
+      environmentVariables = {
+      };
     };
-    xdg.configFile."starship.toml" = {
-      source = ./starship.toml;
-    };
+    home.packages = with pkgs; [
+      ollama
+    ];
   };
 }

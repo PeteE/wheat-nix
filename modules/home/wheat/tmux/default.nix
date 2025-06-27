@@ -75,9 +75,6 @@ in {
       thumbs
     ];
     programs.zsh.shellAliases.mux = "tmuxinator";
-    # programs.zsh.initContent = ''
-    #   source ${pkgs.tmuxinator}/share/zsh/site-functions/_tmuxinator
-    # '';
   };
 }
 

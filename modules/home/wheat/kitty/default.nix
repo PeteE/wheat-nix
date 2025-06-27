@@ -30,7 +30,7 @@ in {
         type = types.str;
       };
       size = mkOption {
-        default = 12.0;
+        default = 14.0;
         description = "kitty font size";
         type = types.float;
       };
@@ -53,7 +53,7 @@ in {
         disable_ligatures = "cursor";
         cursor_blink_interval = 0;
         dynamic_background_opacity = "yes";
-        background_opacity = "0.9";
+        background_opacity = "1.0";
       };
     };
     home.packages = with pkgs; [

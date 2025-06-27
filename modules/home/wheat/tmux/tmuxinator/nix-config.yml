@@ -1,7 +1,7 @@
 # ~/.tmuxinator/sample.yml
 
 name: nix-config
-root: ~/nix-config
+root: ~/nix-snowfall
 
 # Runs on project start, always
 # on_project_start: command
@@ -44,4 +44,4 @@ windows:
       # synchronize: after
       panes:
         - nvim flake.nix
-  - logs: journalctl -f
+  # - logs: journalctl -f
