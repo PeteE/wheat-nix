@@ -30,9 +30,11 @@
     desktop.enable = true;
     azure.enable = true;
     atuin.enable = true;
+    embedded.enable = true;
   };
 
   programs.home-manager.enable = true;
+
   home.packages = with pkgs; [
     ollama
     tailscale

@@ -50,6 +50,7 @@ in {
           vscode-marketplace-release.ms-vscode-remote.remote-ssh
           vscode-marketplace.ms-vscode.makefile-tools
           vscode-marketplace.ms-python.python
+          vscode-marketplace.platformio.platformio-ide
 
           # go
           vscode-marketplace.golang.go
