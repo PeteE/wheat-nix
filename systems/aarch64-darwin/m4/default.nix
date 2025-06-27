@@ -16,6 +16,7 @@
 {
   wheat = {
     enable = true;
+    tailscale.enable = true;
     user = {
       name = "pete";
       authorizedKeys = [

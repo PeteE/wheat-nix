@@ -32,7 +32,7 @@
     plasma.enable = true;
     wifi.enable = true;
     sudo.enable = true;
-    tailscale.enable = false;
+    tailscale.enable = true;
   };
 
   # Host-specific config (old x1 carbon laptop)

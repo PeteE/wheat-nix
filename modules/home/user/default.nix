@@ -35,6 +35,7 @@
   programs.home-manager.enable = true;
   home.packages = with pkgs; [
     ollama
+    tailscale
     dig
     btop
     openbao

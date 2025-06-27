@@ -95,7 +95,8 @@ in {
       symbols-only
       jetbrains-mono
     ];
-    services.tailscale.enable = cfg.enable;
+    services.tailscale.enable = true;
+    # services.tailscale.enable = cfg.enable;
     networking.nameservers = cfg.nameservers;
   };
 }
