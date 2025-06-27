@@ -39,32 +39,29 @@ in {
       secureSocket = true;
       historyLimit = cfg.historyLimit;
       keyMode = cfg.keyMode;
-
       tmuxp.enable = true;
-      tmuxinator.enable = true;
-      #plugins = with pkgs; [
-      #  { plugin = tmuxPlugins.tmux-fzf; }
-      #  { plugin = tmuxPlugins.urlview; }
-      #  { plugin = tmuxPlugins.fuzzback; }
-      #  {
-      #    plugin = tmuxPlugins.extrakto;
-      #  }
-      #  tmuxPlugins.yank
-      #  tmuxPlugins.open
-      #  tmuxPlugins.copycat
-      #  tmuxPlugins.sensible
-      #  tmuxPlugins.resurrect
-      #  tmuxPlugins.catppuccin
-      #  #{
-      #  #    plugin = tmuxPlugins.continuum;
-      #  #    #extraConfig = "set -g @continuum-boot-options 'kitty'";
-      #  #}
-      #  tmuxPlugins.better-mouse-mode
-      #  tmuxPlugins.vim-tmux-navigator
-      #  tmuxPlugins.session-wizard
-      #  tmuxPlugins.prefix-highlight
-      #];
-      #extraConfig = builtins.readFile ./tmux.conf;
+      # tmuxinator.enable = true;
+      plugins = with pkgs; [
+        # { plugin = tmuxPlugins.tmux-fzf; }
+        # { plugin = tmuxPlugins.urlview; }
+        # { plugin = tmuxPlugins.fuzzback; }
+        # { plugin = tmuxPlugins.extrakto; }
+        tmuxPlugins.yank
+        tmuxPlugins.open
+        tmuxPlugins.copycat
+        # tmuxPlugins.sensible
+        # tmuxPlugins.resurrect
+        tmuxPlugins.catppuccin
+        #{
+        #    plugin = tmuxPlugins.continuum;
+        #    #extraConfig = "set -g @continuum-boot-options 'kitty'";
+        #}
+        tmuxPlugins.better-mouse-mode
+        tmuxPlugins.vim-tmux-navigator
+        # tmuxPlugins.session-wizard
+        # tmuxPlugins.prefix-highlight
+      ];
+      extraConfig = builtins.readFile ./tmux.conf;
     };
     # xdg.configFile."tmuxinator/" = {
     #     source = ./tmuxinator;

@@ -172,9 +172,7 @@
         pishield.modules = with inputs; [
           nixos-hardware.nixosModules.raspberry-pi-4
         ];
-        m4.modules = with inputs; [
-          # nothing currently
-        ];
+        m4.modules = with inputs; [ ];
       };
     };
   };

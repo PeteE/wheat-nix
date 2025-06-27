@@ -58,8 +58,6 @@ in {
         default = with pkgs; [
           nerd-fonts.fira-code
           nerd-fonts.droid-sans-mono
-          "1.1.1.1"
-          "1.0.0.1"
         ];
       };
       tailscale.enable = mkEnableOption "Enable tailscale";

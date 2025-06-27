@@ -22,7 +22,7 @@ in {
   config = mkIf cfg.enable {
     programs.vscode = {
       enable = true;
-      package = pkgs.vscodium;
+      package = pkgs.vscode;
 
       profiles.default = {
         userSettings = {
