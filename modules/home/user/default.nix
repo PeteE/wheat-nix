@@ -1,3 +1,4 @@
+# vim: ts=2:sw=2:et
 {
     lib,
     pkgs,
@@ -28,12 +29,12 @@
     comma.enable = true;
     desktop.enable = true;
     azure.enable = true;
+    atuin.enable = true;
   };
 
   programs.home-manager.enable = true;
   home.packages = with pkgs; [
     dig
-    nushell
     btop
     openbao
     direnv

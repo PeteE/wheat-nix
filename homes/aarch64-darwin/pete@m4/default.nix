@@ -23,6 +23,7 @@
     ripgrep.enable = true;  # enable ripgrep
     #services.ssh-agent.enable = true;
     work.enable = true;
+    ollama.enable = true;
   };
   home.stateVersion = "25.11";
 }
