@@ -47,8 +47,8 @@
         "extract"
         "zoxide"
         "fzf"
-        # "systemd"
-        # "nmap"
+        "systemd"
+        "nmap"
       ];
     };
     shellAliases = {
@@ -63,12 +63,13 @@
       vi = "nvim";
       vim = "nvim";
     };
-    enableCompletion = true;
+    enableCompletion = false;
     autocd = true;
     syntaxHighlighting = {
-      enable = true;
+      enable = false;
     };
     initContent = ''
+      # zmodload zsh/zprof
       setopt nocorrectall
       setopt correct
 
@@ -86,7 +87,7 @@
       # export OPAQUE_GITHUB_TOKEN=$(cat $HOME/.config/sops-nix/secrets/opaqueGithubToken)
 
       autoload -Uz compinit && compinit
-
+      # zprof
     '';
      envExtra = ''
        EDITOR=${pkgs.neovim}/bin/nvim

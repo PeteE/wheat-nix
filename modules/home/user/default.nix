@@ -30,16 +30,22 @@
     desktop.enable = true;
     azure.enable = true;
     atuin.enable = true;
+
+    # TODO: only enable on m4, x1
     embedded.enable = true;
+    btop.enable = true;
   };
 
   programs.home-manager.enable = true;
+
+  home.sessionVariables = {
+    OLLAMA_HOST = "m4.porcupine-python.ts.net";
+  };
 
   home.packages = with pkgs; [
     ollama
     tailscale
     dig
-    btop
     openbao
     direnv
     curl

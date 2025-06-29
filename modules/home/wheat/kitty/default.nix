@@ -40,6 +40,7 @@ in {
   config = mkIf cfg.enable {
     programs.kitty = {
       enable = true;
+      shellIntegration.enableZshIntegration = true;
       font = {
         name = cfg.font.name;
         size = cfg.font.size;

@@ -23,7 +23,7 @@ in {
       type = types.str;
     };
     historyLimit = mkOption {
-      default = 20000;
+      default = 100000;
       type = types.ints.unsigned;
     };
     keyMode = mkOption {
@@ -39,7 +39,7 @@ in {
       secureSocket = true;
       historyLimit = cfg.historyLimit;
       keyMode = cfg.keyMode;
-      # tmuxp.enable = true;
+      tmuxp.enable = true;
       tmuxinator.enable = true;
 
       plugins = with pkgs; [
@@ -51,26 +51,67 @@ in {
         tmuxPlugins.open
         tmuxPlugins.copycat
         tmuxPlugins.sensible
-        tmuxPlugins.resurrect
-
-        tmuxPlugins.catppuccin
-        #{
-        #    plugin = tmuxPlugins.continuum;
-        #    #extraConfig = "set -g @continuum-boot-options 'kitty'";
-        #}
+        {
+          plugin = tmuxPlugins.resurrect;
+          extraConfig = ''
+            # defaults
+            # set -g @resurrect-save 's'
+            # set -g @resurrect-restore 'r'
+          '';
+        }
+        {
+          plugin = tmuxPlugins.catppuccin;
+          extraConfig = ''
+            set -g @catppuccin_flavor 'mocha'
+            set -g @catppuccin_window_status_style "rounded"
+          '';
+        }
         tmuxPlugins.better-mouse-mode
         tmuxPlugins.vim-tmux-navigator
         # tmuxPlugins.session-wizard
         # tmuxPlugins.prefix-highlight
       ];
-      extraConfig = builtins.readFile ./tmux.conf;
+      shortcut = "a";  # Ctrl-a
+      mouse = true;
+      newSession = true;
+      sensibleOnTop = true;
+      extraConfig = ''
+        set -g set-clipboard on
+        set -g @scroll-without-changing-pane "on"
+
+        # split windows
+        bind | split-window -h
+        bind - split-window -v
+
+        # hjkl pane traversal
+        bind h select-pane -L
+        bind j select-pane -D
+        bind k select-pane -U
+        bind l select-pane -R
+
+        # clear screen
+        bind C-l send-keys 'C-l'
+
+        bind-key V select-layout even-vertical
+        bind-key H select-layout even-horizontal
+        bind-key T select-layout tiled
+
+        set -g status-right-length 100
+        set -g status-left-length 100
+        set -g status-left ""
+        set -g status-right "#{E:@catppuccin_status_application}"
+        set -agF status-right "#{E:@catppuccin_status_cpu}"
+        set -ag status-right "#{E:@catppuccin_status_session}"
+        set -ag status-right "#{E:@catppuccin_status_uptime}"
+        set -agF status-right "#{E:@catppuccin_status_battery}"
+      '';
+      # builtins.readFile ./tmux.conf;
     };
     home.packages = with pkgs; [
       lsof
       file
       thumbs
     ];
-    # programs.zsh.shellAliases.mux = "tmuxinator";
   };
 }
 
