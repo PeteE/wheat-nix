@@ -11,6 +11,10 @@ This repo contains the config for all my Nix boxes.
 - shell history should not wipe out lines above it but maintain state (more like a popup window)
 - tmux refactor
 
+
+Misc
+-  starship exit code ugly X
+
 ## Additional Systems / TODO
 - pi-zero
 - hv - decommission from existing k3s cluster and migrate

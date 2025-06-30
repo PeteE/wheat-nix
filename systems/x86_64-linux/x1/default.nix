@@ -19,7 +19,7 @@
     (../../../modules/shared/wheat/default.nix)
   ];
 
-  # set all my custom options
+  # Anything "common" settings for NixOS and nix-arwin
   wheat = {
     enable = true;
     user = {

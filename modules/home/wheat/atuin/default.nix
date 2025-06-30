@@ -25,40 +25,15 @@ in {
        target = "atuin/config.toml";
     };
     # TODO(pete) not sure why this is here.... should be a new module
-    programs.carapace = {
-      enableZshIntegration = true;
-    };
     programs.zsh.initContent =
       lib.mkOrder 2000 ''
-        bindkey '^r' atuin-search
+        # bindkey '^r' atuin-search
 
         # bind to the up key, which depends on terminal mode
-        bindkey '^[[A' atuin-up-search
-        bindkey '^[OA' atuin-up-search
+        # bindkey '^[[A' atuin-up-search
+        # bindkey '^[OA' atuin-up-search
 
-        # # Just enable basic zsh completion caching globally
-        # zstyle ':completion:*' use-cache yes
-        # zstyle ':completion:*' cache-path ~/.zsh/cache
-        # zstyle ':completion:*' cache-policy _my_cache_policy
-
-        # _my_cache_policy() {
-        #     # Cache for 2 hours
-        #     [[ -n "$1" && "$1" -ot =(( CURRENT_TIME - 7200 )) ]]
-        # }
-
-        # # Completion formatting
-        # zstyle ':completion:*' format $'\e[2;37mCompleting %d ...\e[m'
-
-        # # source <(carapace az zsh)
-
-        # # # Override slow built-in az completion with carapace
-        # # compdef _az_completion az
-
-        # # Optional: completely remove the slow _az function to prevent accidental use
-        # # unfunction _az 2>/dev/null
-
-        source <(${lib.getExe pkgs.atuin} init zsh)
+        # source <(${lib.getExe pkgs.atuin} init zsh)
       '';
   };
 }
-
