@@ -30,10 +30,11 @@
     desktop.enable = true;
     azure.enable = true;
     atuin.enable = true;
+    carapace.enable = true;
+    btop.enable = true;
 
     # TODO: only enable on m4, x1
     embedded.enable = true;
-    btop.enable = true;
   };
 
   programs.home-manager.enable = true;
@@ -43,6 +44,7 @@
   };
 
   home.packages = with pkgs; [
+    carapace
     ollama
     tailscale
     dig

@@ -26,29 +26,28 @@
       # theme = "";
       # custom = "$HOME/.oh-my-zsh/custom";
       plugins = [
-        "aws"
-        "argocd"
+        # "aws"
+        # "argocd"
         "azure"
-        "colored-man-pages"
+        # "colored-man-pages"
         "vi-mode"
         "git"
         "gh"
         "kubectl"
-        "kubectx"
         "helm"
         "aliases"
-        "common-aliases"
-        "direnv"
-        "docker"
-        "docker-compose"
-        "dotenv"
-        "emoji"
-        "encode64"
-        "extract"
+        # "common-aliases"
+        # "direnv"
+        # "docker"
+        # "docker-compose"
+        # "dotenv"
+        # "emoji"      ONE of these 3 is slow
+        # "encode64"      ONE of these 3 is slow
+        # "extract"      ONE of these 3 is slow
         "zoxide"
         "fzf"
-        "systemd"
-        "nmap"
+        # "systemd"
+        # "nmap"
       ];
     };
     shellAliases = {
@@ -72,6 +71,13 @@
       # zmodload zsh/zprof
       setopt nocorrectall
       setopt correct
+
+
+      ENABLE_CORRECTION="true"
+      COMPLETION_WAITING_DOTS="true"
+      # HIST_STAMPS="yyyy-mm-dd"
+
+
 
       # CORRECT_IGNORE_FILE=""
       # ENABLE_CORRECTION="true"
