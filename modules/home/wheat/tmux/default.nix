@@ -34,7 +34,7 @@ in {
   config = mkIf cfg.enable {
     programs.tmux = {
       enable = true;
-      shell = "${pkgs.zsh}/bin/zsh";
+      shell = "/bin/zsh";
       terminal = cfg.terminal;
       secureSocket = true;
       historyLimit = cfg.historyLimit;
@@ -74,43 +74,44 @@ in {
       shortcut = "a";  # Ctrl-a
       mouse = true;
       newSession = true;
-      sensibleOnTop = true;
-      extraConfig = ''
-        set -g set-clipboard on
-        set -g @scroll-without-changing-pane "on"
+      # sensibleOnTop = true;
+      sensibleOnTop = false;
+      # extraConfig = ''
+      #   set -g set-clipboard on
+      #   set -g @scroll-without-changing-pane "on"
 
-        # split windows
-        bind | split-window -h
-        bind - split-window -v
+      #   # split windows
+      #   bind | split-window -h
+      #   bind - split-window -v
 
-        # hjkl pane traversal
-        bind h select-pane -L
-        bind j select-pane -D
-        bind k select-pane -U
-        bind l select-pane -R
+      #   # hjkl pane traversal
+      #   bind h select-pane -L
+      #   bind j select-pane -D
+      #   bind k select-pane -U
+      #   bind l select-pane -R
 
-        # clear screen
-        bind C-l send-keys 'C-l'
+      #   # clear screen
+      #   bind C-l send-keys 'C-l'
 
-        bind-key V select-layout even-vertical
-        bind-key H select-layout even-horizontal
-        bind-key T select-layout tiled
+      #   bind-key V select-layout even-vertical
+      #   bind-key H select-layout even-horizontal
+      #   bind-key T select-layout tiled
 
-        set -g status-right-length 100
-        set -g status-left-length 100
-        set -g status-left ""
-        set -g status-right "#{E:@catppuccin_status_application}"
-        set -agF status-right "#{E:@catppuccin_status_cpu}"
-        set -ag status-right "#{E:@catppuccin_status_session}"
-        set -ag status-right "#{E:@catppuccin_status_uptime}"
-        set -agF status-right "#{E:@catppuccin_status_battery}"
-      '';
+      #   set -g status-right-length 100
+      #   set -g status-left-length 100
+      #   set -g status-left ""
+      #   set -g status-right "#{E:@catppuccin_status_application}"
+      #   set -agF status-right "#{E:@catppuccin_status_cpu}"
+      #   set -ag status-right "#{E:@catppuccin_status_session}"
+      #   set -ag status-right "#{E:@catppuccin_status_uptime}"
+      #   set -agF status-right "#{E:@catppuccin_status_battery}"
+      # '';
       # builtins.readFile ./tmux.conf;
     };
     home.packages = with pkgs; [
-      lsof
+      lsof  # TODO(pete): probably not neccessary
       file
-      thumbs
+      # thumbs
     ];
   };
 }

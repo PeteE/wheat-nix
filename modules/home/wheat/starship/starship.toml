@@ -19,7 +19,7 @@ palette = "catppuccin_mocha"
 add_newline = true
 
 [line_break]
-disabled = false
+disabled = true
 
 [fill]
 symbol = " "
@@ -32,10 +32,10 @@ format = "$symbol "
 
 ### Left prompt
 [sudo]
-disabled = false
+disabled = true
 
 [username]
-disabled = false
+disabled = true
 
 [hostname]
 disabled = false
@@ -74,11 +74,11 @@ format = " ([$stashed$modified$staged$untracked $ahead_behind]($style))"
 ### Right prompt info
 
 [jobs]
-disabled = false
+disabled = true
 format = "[$number]($style)"
 
 [status]
-disabled = false
+disabled = true
 map_symbol = false
 format = "[$symbol $status]($style) "
 
@@ -104,14 +104,17 @@ detect_extensions = []
 # detect_folders = ['*helm*']
 
 [golang]
+disabled = true
 symbol = " "
 format = "([ ❮ ](#767676)[$symbol($version)]($style))"
 
 [nodejs]
+disabled = true
 symbol = " "
 format = "([ ❮ ](#767676)[$symbol($version)]($style))"
 
 [python]
+disabled = true
 symbol = " "
 format = '([ ❮ ](#767676)[${symbol}${pyenv_prefix}(${version}) ([\($virtualenv\)](#306998))]($style))'
 
@@ -121,6 +124,7 @@ symbol = " "
 format = '([ ❮ ](#767676)[$symbol$profile(\[$duration\])]($style))'
 
 [docker_context]
+disabled = true
 symbol = " "
 format = "([ ❮ ](#767676)[$symbol$context]($style))"
 
@@ -133,13 +137,13 @@ symbol = "󰍛 "
 disabled = true
 
 [time]
-disabled = false
+disabled = true
 
 [shlvl]
 disabled = true
 
 [os]
-disabled = false
+disabled = true
 # format = "[ ❮ ](#767676)[$symbol]($style)"
 
 [palettes.catppuccin_mocha]

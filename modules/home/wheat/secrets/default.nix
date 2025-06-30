@@ -22,11 +22,11 @@ in {
     ];
     sops.defaultSopsFile = ./main.yaml;
     sops.age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
-    sops.secrets.openaiApiKey = { };
-    sops.secrets.assemblyAiApiKey = { };
-    sops.secrets.peteeGptGithubToken = { };
-    sops.secrets.opaqueGithubToken = { };
-    sops.secrets.aws-credentials = { };
-    sops.secrets.jira-api-token = { };
+    # sops.secrets.openaiApiKey = { };
+    # sops.secrets.assemblyAiApiKey = { };
+    # sops.secrets.peteeGptGithubToken = { };
+    # sops.secrets.opaqueGithubToken = { };
+    # sops.secrets.aws-credentials = { };
+    # sops.secrets.jira-api-token = { };
   };
 }

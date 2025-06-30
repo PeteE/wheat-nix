@@ -127,7 +127,6 @@
       nix-vscode-extensions.overlays.default
       # mozilla.overlays.firefox
       # neovim.overlays.default
-      # tmux.overlay
       # flake.overlays.default
       # thaw.overlays.default
       # icehouse.overlays.default
@@ -171,6 +170,7 @@
           nixos-hardware.nixosModules.raspberry-pi-4
         ];
         m4.modules = with inputs; [ ];
+        m3p.modules = with inputs; [ ];
       };
     };
   };
