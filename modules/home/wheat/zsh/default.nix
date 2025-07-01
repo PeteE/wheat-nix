@@ -28,14 +28,14 @@
       plugins = [
         # "aws"
         # "argocd"
-        "azure"
+        # "azure"
         # "colored-man-pages"
         "vi-mode"
         "git"
         "gh"
         "kubectl"
         "helm"
-        "aliases"
+        # "aliases"
         # "common-aliases"
         # "direnv"
         # "docker"
@@ -62,7 +62,7 @@
       vi = "nvim";
       vim = "nvim";
     };
-    enableCompletion = false;
+    enableCompletion = true;
     autocd = true;
     syntaxHighlighting = {
       enable = false;
@@ -73,7 +73,7 @@
       setopt correct
 
 
-      ENABLE_CORRECTION="true"
+      # ENABLE_CORRECTION="true"
       COMPLETION_WAITING_DOTS="true"
       # HIST_STAMPS="yyyy-mm-dd"
 
