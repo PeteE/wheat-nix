@@ -106,7 +106,6 @@ in {
         set -agF status-right "#{E:@catppuccin_status_battery}"
         setenv -g PATH "$HOME/bin:$PATH"
         set-option -sa terminal-features ',xterm-kitty:RGB'
-        set-option -sa terminal-features ',xterm-kitty:RGB'
       '';
     };
     home.packages = with pkgs; [
