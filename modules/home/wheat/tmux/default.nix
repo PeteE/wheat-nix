@@ -104,8 +104,10 @@ in {
         set -ag status-right "#{E:@catppuccin_status_session}"
         set -ag status-right "#{E:@catppuccin_status_uptime}"
         set -agF status-right "#{E:@catppuccin_status_battery}"
+        setenv -g PATH "$HOME/bin:$PATH"
+        set-option -sa terminal-features ',xterm-kitty:RGB'
+        set-option -sa terminal-features ',xterm-kitty:RGB'
       '';
-      # builtins.readFile ./tmux.conf;
     };
     home.packages = with pkgs; [
       lsof
