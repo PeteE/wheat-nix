@@ -14,18 +14,15 @@
     ...
 }:
 with lib; let
-  cfg = config.wheat.starship;
+  cfg = config.wheat.xremap;
 in {
-  options.wheat.starship = {
+  options.wheat.xremap = {
     enable = mkEnableOption "Enable";
   };
   config = mkIf cfg.enable {
-    programs.starship = {
-      enable = true;
-      enableZshIntegration = true;
-    };
-    xdg.configFile."starship.toml" = {
-      source = ./starship.toml;
-    };
+    home.packages = with pkgs; [
+      xremapper
+    ];
+    # TODO create config file for remaping CapsLock to Esc
   };
 }

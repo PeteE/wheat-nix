@@ -11,7 +11,10 @@
       url = "github:snowfallorg/lib";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     darwin = {
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -22,61 +25,35 @@
       inputs.home-manager.follows = "home-manager";
     };
     # Hardware Configuration
-    nixos-hardware.url = "github:nixos/nixos-hardware";
-
-    # Generate System Images
-    nixos-generators = {
-      url = "github:nix-community/nixos-generators";
-      inputs.nixpkgs.follows = "nixpkgs";
+    nixos-hardware = {
+      url = "github:nixos/nixos-hardware";
     };
 
-    # Comma
-    comma = {
-      url = "github:nix-community/comma";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nix-index-database = {
-      url = "github:nix-community/nix-index-database";
-    };
+    # # Generate System Images
+    # nixos-generators = {
+    #   url = "github:nix-community/nixos-generators";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+
     # System Deployment
-    deploy-rs = {
-      url = "github:serokell/deploy-rs";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # Run unpatched dynamically compiled binaries
-    nix-ld = {
-      url = "github:Mic92/nix-ld";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # deploy-rs = {
+    #   url = "github:serokell/deploy-rs";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions/1a1442e13dc1730de0443f80dcf02658365e999a";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Vault Integration
-    # vault-service = {
-    #   url = "github:DeterminateSystems/nixos-vault-service";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-
-    # Flake Hygiene
-    flake-checker = {
-      url = "github:DeterminateSystems/flake-checker";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     catppuccin = {
       url = "github:catppuccin/nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    colmena = {
-      url = "github:zhaofengli/colmena";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    mozilla = {
-      url = "github:mozilla/nixpkgs-mozilla";
-    };
+    # nixvirt = {
+    #   url = "github:AshleyYakeley/NixVirt/v0.6.0";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
   };
   outputs = { self, ... }@inputs: inputs.snowfall-lib.mkFlake {
     inherit inputs;
@@ -91,41 +68,40 @@
       };
     };
 
-    deploy = {
-      # remoteBuild = true; # Uncomment in case the system you're deploying from is not darwin
-      nodes.x1 = {
-        hostname = "192.168.1.7";
-        fastConnection = true;
-        interactiveSudo = false;
-        profiles = {
-          system = {
-            sshUser = "petee";
-            path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.x1;
-            user = "petee";
-          };
-        };
-      };
-      nodes.m4 = {
-        hostname = "m4";
-        fastConnection = true;
-        interactiveSudo = false;
-        remoteBuild = true;
-        profiles = {
-          system = {
-            path = inputs.deploy-rs.lib.aarch64-darwin.activate.darwin self.darwinConfigurations.m4;
-            user = "root";
-            sshUser = "pete";
-          };
-        };
-      };
-    };
+    # deploy = {
+    #   # remoteBuild = true; # Uncomment in case the system you're deploying from is not darwin
+    #   nodes.x1 = {
+    #     hostname = "192.168.1.7";
+    #     fastConnection = true;
+    #     interactiveSudo = false;
+    #     profiles = {
+    #       system = {
+    #         sshUser = "petee";
+    #         path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.x1;
+    #         user = "petee";
+    #       };
+    #     };
+    #   };
+    #   nodes.m4 = {
+    #     hostname = "m4";
+    #     fastConnection = true;
+    #     interactiveSudo = false;
+    #     remoteBuild = true;
+    #     profiles = {
+    #       system = {
+    #         path = inputs.deploy-rs.lib.aarch64-darwin.activate.darwin self.darwinConfigurations.m4;
+    #         user = "root";
+    #         sshUser = "pete";
+    #       };
+    #     };
+    #   };
+    # };
     # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
 
     # overlays
     overlays = with inputs; [
-      deploy-rs.overlays.default
+      # deploy-rs.overlays.default
       nix-vscode-extensions.overlays.default
-      # mozilla.overlays.firefox
       # neovim.overlays.default
       # tmux.overlay
       # flake.overlays.default
@@ -146,13 +122,11 @@
       sops-nix.homeManagerModules.sops
       catppuccin.homeModules.catppuccin
       plasma-manager.homeManagerModules.plasma-manager
-      nix-index-database.hmModules.nix-index
+      # nixvirt.homeModules.default
     ];
 
     systems = {
-      overlays = with inputs; [
-        mozilla.overlays.firefox
-      ];
+      overlays = with inputs; [ ];
 
       modules = {
         darwin = with inputs; [

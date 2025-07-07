@@ -20,10 +20,6 @@ in {
       enable = true;
       enableNushellIntegration = if config.wheat.nushell.enable then true else false;
       enableZshIntegration = true;
-      enableBashIntegration = true;
     };
-    home.packages = with pkgs; [
-      carapace
-    ];
   };
 }
