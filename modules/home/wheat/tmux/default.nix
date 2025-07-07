@@ -76,7 +76,7 @@ in {
       newSession = true;
       # sensibleOnTop = true;
       sensibleOnTop = false;
-      # extraConfig = ''
+      extraConfig = ''
       #   set -g set-clipboard on
       #   set -g @scroll-without-changing-pane "on"
 
