@@ -43,7 +43,7 @@ in {
       home = "/Users/${cfg.user.name}";
       createHome = true;
       isHidden = false;
-      shell = pkgs.zsh;
+      shell = "${pkgs.zsh}/bin/zsh";
       openssh.authorizedKeys.keys = cfg.user.authorizedKeys;
     };
 
@@ -59,9 +59,11 @@ in {
         # UsePAM yes
       '';
     };
-    fonts.packages = with pkgs; [
-      nerd-fonts.fira-code
-      nerd-fonts.droid-sans-mono
+    fonts.packages = with pkgs.nerd-fonts; [
+      fira-code
+      droid-sans-mono
+      symbols-only
+      jetbrains-mono
     ];
   };
 }

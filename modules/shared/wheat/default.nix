@@ -72,7 +72,7 @@ in {
       # home = "/Users/${cfg.user.name}";
       home = if isDarwin then "/Users/${cfg.user.name}" else "/home/${cfg.user.name}";
       createHome = true;
-      shell = pkgs.zsh;
+      shell = "${pkgs.zsh}/bin/zsh";
       openssh.authorizedKeys.keys = cfg.user.authorizedKeys;
     } // lib.optionalAttrs isDarwin {
       isHidden = false;

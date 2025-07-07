@@ -15,6 +15,16 @@
 }:
 with lib; let
   cfg = config.wheat.tmux;
+  tmux-35 = pkgs.tmux.overrideAttrs (oldAttrs: rec {
+    inherit (oldAttrs) pname;
+    version = "3.5";
+    src = pkgs.fetchFromGitHub {
+      owner = pname;
+      repo = pname;
+      rev = "${version}";
+      sha256 = "sha256-8CRZj7UyBhuB5QO27Y+tHG62S/eGxPOHWrwvh1aBqq0=";
+    };
+  });
 in {
   options.wheat.tmux = {
     enable = mkEnableOption "Enable";
@@ -33,32 +43,33 @@ in {
   };
   config = mkIf cfg.enable {
     programs.tmux = {
+      package = tmux-35;
       enable = true;
-      shell = "/bin/zsh";
+      shell = "${pkgs.zsh}/bin/zsh";
       terminal = cfg.terminal;
       secureSocket = true;
       historyLimit = cfg.historyLimit;
       keyMode = cfg.keyMode;
       tmuxp.enable = true;
-      tmuxinator.enable = true;
+      # tmuxinator.enable = true;
 
       plugins = with pkgs; [
+        tmuxPlugins.sensible
         { plugin = tmuxPlugins.tmux-fzf; }
         { plugin = tmuxPlugins.urlview; }
         { plugin = tmuxPlugins.fuzzback; }
-        { plugin = tmuxPlugins.extrakto; }
+        # { plugin = tmuxPlugins.extrakto; }
         tmuxPlugins.yank
         tmuxPlugins.open
         tmuxPlugins.copycat
-        tmuxPlugins.sensible
-        {
-          plugin = tmuxPlugins.resurrect;
-          extraConfig = ''
-            # defaults
-            # set -g @resurrect-save 's'
-            # set -g @resurrect-restore 'r'
-          '';
-        }
+        # {
+        #   plugin = tmuxPlugins.resurrect;
+        #   extraConfig = ''
+        #     # defaults
+        #     # set -g @resurrect-save 's'
+        #     # set -g @resurrect-restore 'r'
+        #   '';
+        # }
         {
           plugin = tmuxPlugins.catppuccin;
           extraConfig = ''
@@ -73,29 +84,56 @@ in {
       ];
       shortcut = "a";  # Ctrl-a
       mouse = true;
-      newSession = true;
-      # sensibleOnTop = true;
-      sensibleOnTop = false;
+      # newSession = true;
+      sensibleOnTop = true;
       extraConfig = ''
-      #   set -g set-clipboard on
-      #   set -g @scroll-without-changing-pane "on"
+        # https://github.com/tmux/tmux/wiki/Clipboard#quick-summary
+        # support
+        set -g set-clipboard on
+        set-option -sa terminal-features ',xterm-kitty:Clipboard'
 
-      #   # split windows
-      #   bind | split-window -h
-      #   bind - split-window -v
+        set -g @scroll-without-changing-pane "on"
 
-      #   # hjkl pane traversal
-      #   bind h select-pane -L
-      #   bind j select-pane -D
-      #   bind k select-pane -U
-      #   bind l select-pane -R
+        # split windows
+        bind | split-window -h
+        bind - split-window -v
 
-      #   # clear screen
-      #   bind C-l send-keys 'C-l'
+        # hjkl pane traversal
+        bind h select-pane -L
+        bind j select-pane -D
+        bind k select-pane -U
+        bind l select-pane -R
 
-      #   bind-key V select-layout even-vertical
-      #   bind-key H select-layout even-horizontal
-      #   bind-key T select-layout tiled
+        bind-key V select-layout even-vertical
+        bind-key H select-layout even-horizontal
+        bind-key T select-layout tiled
+
+        # TOD(pete): can't remember why I added this...especially here....
+        setenv -g PATH "$HOME/bin:$PATH"
+
+        # clear screen
+        bind C-l send-keys 'C-l'
+
+        # Smart pane switching with awareness of Vim splits.
+        # See: https://github.com/christoomey/vim-tmux-navigator
+        vim_pattern='(\S+/)?g?\.?(view|l?n?vim?x?|fzf)(diff)?(-wrapped)?'
+        is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
+            | grep -iqE '^[^TXZ ]+ +''\${vim_pattern}$'"
+        bind-key -n 'C-h' if-shell "$is_vim" 'send-keys C-h'  'select-pane -L'
+        bind-key -n 'C-j' if-shell "$is_vim" 'send-keys C-j'  'select-pane -D'
+        bind-key -n 'C-k' if-shell "$is_vim" 'send-keys C-k'  'select-pane -U'
+        bind-key -n 'C-l' if-shell "$is_vim" 'send-keys C-l'  'select-pane -R'
+        tmux_version='$(tmux -V | sed -En "s/^tmux ([1-9]+(.[0-9]+)?).*/\1/p")'
+        if-shell -b '[ "$(echo "$tmux_version < 3.0" | bc)" = 1 ]' \
+            "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\'  'select-pane -l'"
+        if-shell -b '[ "$(echo "$tmux_version >= 3.0" | bc)" = 1 ]' \
+            "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\\\'  'select-pane -l'"
+
+        bind-key -T copy-mode-vi 'C-h' select-pane -L
+        bind-key -T copy-mode-vi 'C-j' select-pane -D
+        bind-key -T copy-mode-vi 'C-k' select-pane -U
+        bind-key -T copy-mode-vi 'C-l' select-pane -R
+        bind-key -T copy-mode-vi 'C-\' select-pane -l
 
         set -g status-right-length 100
         set -g status-left-length 100
@@ -105,13 +143,12 @@ in {
         set -ag status-right "#{E:@catppuccin_status_session}"
         set -ag status-right "#{E:@catppuccin_status_uptime}"
         set -agF status-right "#{E:@catppuccin_status_battery}"
-        setenv -g PATH "$HOME/bin:$PATH"
-        set-option -sa terminal-features ',xterm-kitty:RGB'
       '';
     };
     home.packages = with pkgs; [
-      lsof  # TODO(pete): probably not neccessary
-      file
+      lsof  # TODO(pete): probably not neccessary, can't remember
+      file  # TODO(pete): probably not neccessary, can't remember
+      fzf
       # thumbs
     ];
   };

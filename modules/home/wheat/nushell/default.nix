@@ -33,7 +33,7 @@ in {
         nushellPlugins.polars
         nushellPlugins.highlight
         nushellPlugins.hcl
-        nushellPlugins.units
+        #nushellPlugins.units
         nushellPlugins.query
       ];
       settings = {

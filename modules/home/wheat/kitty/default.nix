@@ -56,6 +56,9 @@ in {
         dynamic_background_opacity = "yes";
         background_opacity = "1.0";
       };
+      environment = {
+        SHELL = "${pkgs.zsh}/bin/zsh";
+      };
     };
     home.packages = with pkgs; [
       kitty
