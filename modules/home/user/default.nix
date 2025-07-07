@@ -26,10 +26,7 @@
     starship.enable = true;
     vscode.enable = true;
     zoxide.enable = true;
-    comma.enable = true;
-    desktop.enable = true;
     azure.enable = true;
-    atuin.enable = true;
     carapace.enable = true;
     btop.enable = true;
 
@@ -44,7 +41,7 @@
   };
 
   home.packages = with pkgs; [
-    carapace
+    claude-code
     ollama
     tailscale
     dig
@@ -52,6 +49,7 @@
     direnv
     curl
     wget
+    nh
     git
     git-credential-manager
     usql

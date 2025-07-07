@@ -4,12 +4,12 @@ This repo contains the config for all my Nix boxes.
 
 # TODO
 - spend more time on nushell
-- add functions for QOL az-cli usage
-- add `nn` and nix-output-mon`
-- btop catppuccin
-- alt-tab between windows on all virtual screens
+- create an fzf switcher for azure
+- [x] add `nn` and nix-output-mon`
+- [x] btop catppuccin
+- [x] tmux refactor
 - shell history should not wipe out lines above it but maintain state (more like a popup window)
-- tmux refactor
+- alt-tab between windows on all virtual screens
 
 
 Misc
