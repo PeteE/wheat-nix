@@ -30,6 +30,7 @@
     carapace.enable = true;
     btop.enable = true;
     k9s.enable = true;
+    attic-client.enable = true;
 
     # TODO: only enable on m4, x1
     embedded.enable = true;
@@ -70,7 +71,6 @@
     openssl
     github-cli
     bc
-    attic-client
     # yazi
     # stylua
     yq-go
@@ -78,7 +78,6 @@
     links2
     presenterm
     asciinema
-    # attic-server
     # clusterctl
     # mpv
     # clapper

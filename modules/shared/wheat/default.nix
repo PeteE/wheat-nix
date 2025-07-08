@@ -69,7 +69,6 @@ in {
     users.groups.${cfg.user.name} = {};
     users.users.${cfg.user.name} = {
       inherit (cfg.user) name;
-      # home = "/Users/${cfg.user.name}";
       home = if isDarwin then "/Users/${cfg.user.name}" else "/home/${cfg.user.name}";
       createHome = true;
       shell = "${pkgs.zsh}/bin/zsh";
@@ -88,7 +87,6 @@ in {
         PermitRootLogin = "no";
       };
     };
-
     fonts.packages = with pkgs.nerd-fonts; [
       fira-code
       droid-sans-mono
@@ -96,7 +94,9 @@ in {
       jetbrains-mono
     ];
     services.tailscale.enable = true;
-    # services.tailscale.enable = cfg.enable;
     networking.nameservers = cfg.nameservers;
+    nix.settings.trusted-users = [
+       cfg.user.name
+    ];
   };
 }
