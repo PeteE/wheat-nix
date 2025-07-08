@@ -31,6 +31,7 @@
     btop.enable = true;
     k9s.enable = true;
     attic-client.enable = true;
+    firefox.enable = true;
 
     # TODO: only enable on m4, x1
     embedded.enable = true;
@@ -83,7 +84,6 @@
     # clapper
     # nitrogen
     # lua5_3
-    firefox
     vim
     tree
     jq

@@ -98,5 +98,6 @@ in {
     nix.settings.trusted-users = [
        cfg.user.name
     ];
+    programs.firefox.enable = true;
   };
 }
