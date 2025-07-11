@@ -30,6 +30,7 @@
     carapace.enable = true;
     btop.enable = true;
     k9s.enable = true;
+    git.enable = true;
 
     # TODO: only enable on m4, x1
     embedded.enable = true;
@@ -42,6 +43,7 @@
   };
 
   home.packages = with pkgs; [
+    meld # 3 way diff
     claude-code
     ollama
     tailscale
@@ -75,6 +77,7 @@
     # stylua
     yq-go
     glow
+    delve
     links2
     presenterm
     asciinema
