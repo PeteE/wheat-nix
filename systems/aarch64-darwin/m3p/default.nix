@@ -35,9 +35,4 @@
   ids.gids.nixbld = 350;
 
   system.stateVersion = 4;
-  nix.settings.trusted-users = [
-     "@wheel"
-     "root"
-     "petee"
-  ];
 }

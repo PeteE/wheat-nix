@@ -19,7 +19,6 @@
     (../../../modules/shared/wheat/default.nix)
   ];
 
-  # Anything "common" settings for NixOS and nix-arwin
   wheat = {
     enable = true;
     user = {
@@ -33,10 +32,14 @@
     wifi.enable = true;
     sudo.enable = true;
     tailscale.enable = true;
+    virtualisation.enable = true;
   };
 
   # Host-specific config (old x1 carbon laptop)
   networking.hostName = "x1";
+
+  time.timeZone = "America/Chicago";
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "uas" "usb_storage" "sd_mod" ];

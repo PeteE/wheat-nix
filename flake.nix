@@ -50,6 +50,10 @@
       url = "github:catppuccin/nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # mozilla = {
+    #   url = "github:mozilla/nixpkgs-mozilla";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
     # nixvirt = {
     #   url = "github:AshleyYakeley/NixVirt/v0.6.0";
     #   inputs.nixpkgs.follows = "nixpkgs";
@@ -102,12 +106,8 @@
     overlays = with inputs; [
       # deploy-rs.overlays.default
       nix-vscode-extensions.overlays.default
-      # neovim.overlays.default
+      # mozilla.overlays.firefox
       # flake.overlays.default
-      # thaw.overlays.default
-      # icehouse.overlays.default
-      # attic.overlays.default
-      # snowfall-docs.overlay
     ];
 
     channels-config = {
