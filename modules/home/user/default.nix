@@ -32,6 +32,8 @@
     k9s.enable = true;
     attic-client.enable = true;
     firefox.enable = true;
+    dev-tools.enable = true;
+    ai.enable = true;
 
     # TODO: only enable on m4, x1
     embedded.enable = true;
@@ -45,10 +47,6 @@
 
   home.packages = with pkgs; [
     bat
-    claude-code
-    ollama
-    tailscale
-    dig
     openbao
     direnv
     curl
@@ -56,40 +54,14 @@
     nh
     git
     git-credential-manager
-    usql
-    podman
-    kubectx
-    kubectl
-    kubernetes-helm
-    tcpdump
-    oras
-    nodejs_22
-    uv
-    just
-    postgresql_15
-    cargo
     fd
-    skopeo
-    openssl
-    github-cli
     bc
-    # yazi
-    # stylua
-    yq-go
     glow
     links2
     presenterm
     asciinema
-    # clusterctl
-    # mpv
-    # clapper
-    # nitrogen
-    # lua5_3
-    vim
     tree
-    jq
     slack
     slack-term
-    delve
   ];
 }

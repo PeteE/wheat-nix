@@ -73,5 +73,13 @@
     pulse.enable = true;
   };
   services.libinput.enable = true;
+
+  powerManagement = {
+    enable = true;
+    powertop = {
+      enable = true;
+    };
+    cpuFreqGovernor = "performance";
+  };
   system.stateVersion = "25.11";
 }
