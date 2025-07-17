@@ -1,4 +1,11 @@
-environment.systemPackages = with pkgs; [
-  delve
-];
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+{
+  home.packages = with pkgs; [
+    delve
+  ];
+}

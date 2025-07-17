@@ -4,11 +4,12 @@
   lib,
   ...
 }:
+{
+  services.thermald = {
+   enable = true;
+  };
 
-services.thermald = {
- enable = true;
-};
-
-environment.systemPackages = [
-  lm_sensors
-];
+  environment.systemPackages = with pkgs; [
+    lm_sensors
+  ];
+}

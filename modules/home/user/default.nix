@@ -44,6 +44,7 @@
   };
 
   home.packages = with pkgs; [
+    bat
     claude-code
     ollama
     tailscale
@@ -87,5 +88,8 @@
     vim
     tree
     jq
+    slack
+    slack-term
+    delve
   ];
 }
