@@ -19,7 +19,7 @@ in {
   };
   config = mkIf cfg.enable {
     programs.firefox = {
-      enable = true;
+      enable = false;
       package = pkgs.firefox-bin;
       profiles.default = {
         id = 0;

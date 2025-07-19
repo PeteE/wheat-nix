@@ -33,10 +33,15 @@ in {
       tflint
     ];
 
-    programs.zsh.shellAliases = {
-      v = "nvim";
-      vi = "nvim";
-      vim = "nvim";
+    programs.zsh = {
+      shellAliases = {
+        v = "nvim";
+        vi = "nvim";
+        vim = "nvim";
+      };
+      envExtra = ''
+        EDITOR=nvim
+      '';
     };
 
     programs.neovim = {

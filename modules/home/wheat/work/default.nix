@@ -16,7 +16,7 @@ with lib; let
 in {
   # This module will contain any work-related stuff
   options.wheat.work = with types; {
-      enable = mkEnableOption "Enable work-related stuff";
+    enable = mkEnableOption "Enable work-related stuff";
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
@@ -35,7 +35,8 @@ in {
     # zsh stuff
     programs.zsh.shellAliases = {
       k = "kubectl";
-      az-accounts = "az account list --output table";
+      # TODO
+      # az_switch = "az account list --all --output tsv --query '[*].name' 2> /dev/null | fzf";
     };
   };
 }
