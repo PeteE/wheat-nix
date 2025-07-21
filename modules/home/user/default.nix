@@ -34,6 +34,7 @@
     firefox.enable = true;
     dev-tools.enable = true;
     ai.enable = true;
+    # firefox.enable = true;
 
     # TODO: only enable on m4, x1
     embedded.enable = true;
@@ -49,7 +50,6 @@
     meld # 3 way diff
     claude-code
     ollama
-    tailscale
     dig
     bat
     openbao

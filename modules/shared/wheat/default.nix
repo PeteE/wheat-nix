@@ -93,10 +93,16 @@ in {
       symbols-only
       jetbrains-mono
     ];
-    services.tailscale.enable = true;
+
+    services.tailscale = mkIf cfg.tailscale.enable {
+      enable = true;
+      package = config.inputs.nixpkgs-stable.${system}.tailscale;
+    };
     networking.nameservers = cfg.nameservers;
     nix.settings.trusted-users = [
-       cfg.user.name
+       "petee"
+       "root"
+       "pete"
     ];
     programs.firefox.enable = true;
   };
