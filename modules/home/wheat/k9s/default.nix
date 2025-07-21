@@ -16,11 +16,12 @@ with lib; let
 in {
   # This module will contain any work-related stuff
   options.wheat.k9s = with types; {
-      enable = mkEnableOption "Enable";
+    enable = mkEnableOption "Enable";
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       k9s
+      kubectl
     ];
   };
 }

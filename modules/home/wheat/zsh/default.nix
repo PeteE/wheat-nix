@@ -19,6 +19,7 @@
     fzf
     sqlite
   ];
+
   programs.zsh = {
     enable = true;
     oh-my-zsh = {
@@ -71,20 +72,10 @@
       setopt nocorrectall
       setopt correct
 
-      # ENABLE_CORRECTION="true"
-      # COMPLETION_WAITING_DOTS="true"
-      HIST_STAMPS="yyyy-mm-dd"
-      HISTIGNORE='\&:fg:bg:ls:pwd:cd ..:cd ~-:cd -:cd:jobs:set -x:ls -l:ls -l'
+      # HIST_STAMPS="yyyy-mm-dd"
+      # HISTIGNORE='\&:fg:bg:ls:pwd:cd ..:cd ~-:cd -:cd:jobs:set -x:ls -l:ls -l'
 
-      # # TODO fix secrets
       export PATH=$HOME/bin:$PATH
-      # export OPENAI_API_KEY=$(cat $HOME/.config/sops-nix/secrets/openaiApiKey)
-      # export ASSEMBLYAI_API_KEY=$(cat $HOME/.config/sops-nix/secrets/assemblyAiApiKey)
-      # export GITHUB_PERSONAL_ACCESS_TOKEN=$(cat $HOME/.config/sops-nix/secrets/peteeGptGithubToken)
-      # export OPAQUE_GITHUB_TOKEN=$(cat $HOME/.config/sops-nix/secrets/opaqueGithubToken)
     '';
-     envExtra = ''
-       EDITOR=${pkgs.neovim}/bin/nvim
-     '';
   };
 }

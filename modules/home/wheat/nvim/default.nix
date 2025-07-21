@@ -31,12 +31,18 @@ in {
       nil
       terraform-ls
       tflint
+      alejandra
     ];
 
-    programs.zsh.shellAliases = {
-      v = "nvim";
-      vi = "nvim";
-      vim = "nvim";
+    programs.zsh = {
+      shellAliases = {
+        v = "nvim";
+        vi = "nvim";
+        vim = "nvim";
+      };
+      envExtra = ''
+        EDITOR=nvim
+      '';
     };
 
     programs.neovim = {
@@ -259,6 +265,21 @@ in {
             require('lspconfig').lua_ls.setup({
               capabilities = require('cmp_nvim_lsp').default_capabilities()
             })
+            require('lspconfig').nil_ls.setup({
+              capabilities = require('cmp_nvim_lsp').default_capabilities(),
+              settings = {
+                ['nil'] = {
+                  nix = {
+                    flake = {
+                      autoEvalInputs = true,
+                    },
+                  },
+                  formatting = {
+                    command = { "alejandra" },
+                  },
+                },
+              },
+            })
             require('lspconfig').terraformls.setup({})
             require('lspconfig').tflint.setup({})
           '';
@@ -462,6 +483,15 @@ in {
             vim.g.better_whitespace_enabled = 0
           '';
         }
+        # {
+        #   plugin = toggleterm-nvim;
+        #   type = "lua";
+        #   config = ''
+        #     require("toggleterm").setup({
+
+        #     })
+        #   '';
+        # }
       ];
       withPython3 = true;
       withNodeJs = true;

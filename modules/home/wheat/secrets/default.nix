@@ -14,17 +14,19 @@ with lib; let
 in {
   options.wheat.secrets = {
     enable = mkEnableOption "Enable custom sops secrets";
+    defaultSopsFile  = mkOption {
+      default = ./secrets.yaml;
+      description = "SOPS encrypted file containing all secrets";
+      type = types.path;
+    };
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       sops
       age
     ];
-    sops.defaultSopsFile = ./main.yaml;
+    sops.defaultSopsFile = cfg.defaultSopsFile;
     sops.age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
-    # sops.secrets.openaiApiKey = { };
-    # sops.secrets.assemblyAiApiKey = { };
-    # sops.secrets.peteeGptGithubToken = { };
     # sops.secrets.opaqueGithubToken = { };
     # sops.secrets.aws-credentials = { };
     # sops.secrets.jira-api-token = { };
