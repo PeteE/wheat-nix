@@ -162,6 +162,10 @@ in {
             '';
         }
         {
+          plugin = which-key-nvim;
+          type = "lua";
+        }
+        {
           plugin = markview-nvim;
           type = "lua";
           config = ''
@@ -483,15 +487,15 @@ in {
             vim.g.better_whitespace_enabled = 0
           '';
         }
-        # {
-        #   plugin = toggleterm-nvim;
-        #   type = "lua";
-        #   config = ''
-        #     require("toggleterm").setup({
+        {
+          plugin = toggleterm-nvim;
+          type = "lua";
+          # config = ''
+          #   require("toggleterm").setup({
 
-        #     })
-        #   '';
-        # }
+          #   })
+          # '';
+        }
       ];
       withPython3 = true;
       withNodeJs = true;
@@ -524,7 +528,10 @@ in {
 
         -- remap Y to yy
         vim.keymap.set('n', 'Y', 'yy')
+
+        -- TODO test
         vim.keymap.set('n', '<C-n>', '<Cmd>NvimTreeToggle<CR>')
+
         -- vim.keymap.set('n', '<leader>r', '<Cmd>NvimTreeRefresh<CR>')
         -- vim.keymap.set('n', '<leader>n', '<Cmd>NvimTreeFindFile<CR>')
         -- vim.keymap.set('n', '<leader>rg', 'yiw:Rg<Space><C-r>0<CR>')
