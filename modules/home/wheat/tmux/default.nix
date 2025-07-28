@@ -59,17 +59,16 @@ in {
         { plugin = tmuxPlugins.urlview; }
         { plugin = tmuxPlugins.fuzzback; }
         # { plugin = tmuxPlugins.extrakto; }
-        tmuxPlugins.yank
+        {
+          plugin = tmuxPlugins.yank;
+          extraConfig = ''
+            # vim-like visual selection keybindings
+            bind-key -T copy-mode-vi 'v' send-keys -X begin-selection
+            bind-key -T copy-mode-vi 'V' send-keys -X rectangle-toggle
+          '';
+        }
         tmuxPlugins.open
         tmuxPlugins.copycat
-        # {
-        #   plugin = tmuxPlugins.resurrect;
-        #   extraConfig = ''
-        #     # defaults
-        #     # set -g @resurrect-save 's'
-        #     # set -g @resurrect-restore 'r'
-        #   '';
-        # }
         {
           plugin = tmuxPlugins.catppuccin;
           extraConfig = ''

@@ -27,12 +27,25 @@
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEMv8uBStPXcU4V5+7L6TpP08HhpG5vumutAFogVd0ca pete@m4" # litle mac
       ];
     };
-    secrets.enable = true;
     services.podman.enable = true;
+  };
+
+  nix.settings.extra-substituters = [ "https://virby-nix-darwin.cachix.org" ];
+  nix.settings.extra-trusted-public-keys = [
+    "virby-nix-darwin.cachix.org-1:z9GiEZeBU5bEeoDQjyfHPMGPBaIQJOOvYOOjGMKIlLo="
+  ];
+  services.virby = {
+    debug = true;
+    enable = false;
+    cores = 8;
+    rosetta = true;
+    memory = "6GiB";
+    diskSize = "100GiB";
+    port = 31222;
+    speedFactor = 1;
   };
 
   # hack to workaround nix group id changes
   ids.gids.nixbld = 350;
-
   system.stateVersion = 4;
 }

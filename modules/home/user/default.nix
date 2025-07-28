@@ -81,5 +81,6 @@
     tree
     slack
     slack-term
+    cachix
   ];
 }

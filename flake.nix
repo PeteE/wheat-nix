@@ -41,7 +41,10 @@
     #   url = "github:serokell/deploy-rs";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
-
+    virby = {
+      url = "github:quinneden/virby-nix-darwin?ref=be19793779852006fe6bc498f8670c954b4adf96";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions/1a1442e13dc1730de0443f80dcf02658365e999a";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -130,7 +133,9 @@
 
       modules = {
         darwin = with inputs; [
+          sops-nix.darwinModules.sops
           home-manager.darwinModules.home-manager
+          virby.darwinModules.default
         ];
         nixos = with inputs; [
           home-manager.nixosModules.home-manager

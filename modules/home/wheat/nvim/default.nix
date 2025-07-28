@@ -225,7 +225,6 @@ in {
         telescope-symbols-nvim
         vim-fugitive
         vim-tmux-navigator
-        vim-terminator     # execute shell commands
         fzf-lsp-nvim
         telescope-zoxide
         lazy-nvim
