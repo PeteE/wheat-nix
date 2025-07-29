@@ -11,7 +11,7 @@ in {
   options = {
     wheat = with types; {
       enable = mkEnableOption "Enable";
-      # secrets.enable = mkEnableOption "Enable SOPS secrets";
+      secrets.enable = mkEnableOption "Enable SOPS secrets";
       user = with types; {
         name = mkOption {
           default = "pete";
