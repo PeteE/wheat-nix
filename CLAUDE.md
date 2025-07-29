@@ -104,6 +104,10 @@ Uses SOPS with age encryption:
 - Age key location: `~/.config/sops/age/keys.txt`
 - API keys for OpenAI, Anthropic, AssemblyAI automatically exported as environment variables
 
+**SOPS Commands:**
+- Edit secrets: `sops edit modules/home/wheat/secrets/secrets.yaml`
+- Fix key mismatch errors: `sops updatekeys modules/home/wheat/secrets/secrets.yaml`
+
 ## Configuration Patterns
 
 1. **Module Structure**: Each module follows the standard pattern:

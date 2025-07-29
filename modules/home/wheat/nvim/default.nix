@@ -161,10 +161,10 @@ in {
             vim.keymap.set('n', "<C-n>", ":lua Snacks.picker.explorer()<CR>")
             '';
         }
-        {
-          plugin = which-key-nvim;
-          type = "lua";
-        }
+        # {
+        #   plugin = which-key-nvim;
+        #   type = "lua";
+        # }
         {
           plugin = markview-nvim;
           type = "lua";

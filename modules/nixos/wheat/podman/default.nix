@@ -17,5 +17,6 @@ in {
     ];
     virtualisation.podman.enable = true;
     virtualisation.podman.dockerSocket.enable = true;
+    virtualisation.podman.networkSocket.enable = true;
   };
 }

@@ -75,6 +75,7 @@
       # HIST_STAMPS="yyyy-mm-dd"
       # HISTIGNORE='\&:fg:bg:ls:pwd:cd ..:cd ~-:cd -:cd:jobs:set -x:ls -l:ls -l'
 
+      export PYTHONWARNINGS="ignore::FutureWarning"
       export PATH=$HOME/bin:$PATH
     '';
   };
