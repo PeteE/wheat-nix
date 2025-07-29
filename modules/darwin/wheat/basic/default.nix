@@ -28,6 +28,7 @@ in {
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL1SMCMFF12YYwlYGIi/UATCPTQ+PEdYOygGFouYrd5N petee@m3p" # lappy
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC1Xr2ircu0B1j+fmj8r1P5xtRi+LstqeXCJ7XIdhpyI nixos@nixos" # rpi?
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEMv8uBStPXcU4V5+7L6TpP08HhpG5vumutAFogVd0ca pete@m4" # litle mac
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJPEHFE1Xt7Bh3fQeTTYDljVwvDoHO4hLYdOeEY0fYv0 root@m3p"
           ];
         };
       };
