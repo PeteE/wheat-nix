@@ -29,9 +29,10 @@ in {
     models = mkOption {
       type = listOf str;
       default = [
-        "qwen2.5-coder:latest"
+        "qwen2.5-coder:7b"
         "gemma3:4b"
         "qwen:7b"
+        "mistral:7b"
       ];
     };
   };

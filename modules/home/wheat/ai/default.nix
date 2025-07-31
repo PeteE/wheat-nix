@@ -25,7 +25,7 @@ in {
     home.file.".opencommit" = {
       text = ''
         OCO_AI_PROVIDER=ollama
-        OCO_MODEL=gemma3:4b
+        OCO_MODEL=mistral:7b  # gemma3:4b
         OCO_API_URL='http://192.168.1.115:11434/api/chat'
         OCO_API_KEY=undefined
         OCO_API_CUSTOM_HEADERS=undefined
@@ -38,8 +38,8 @@ in {
         OCO_PROMPT_MODULE=conventional-commit
         OCO_ONE_LINE_COMMIT=false
         OCO_TEST_MOCK_TYPE=commit-message
-        OCO_OMIT_SCOPE=true
-        OCO_GITPUSH=true
+        OCO_OMIT_SCOPE=false
+        OCO_GITPUSH=false
         OCO_WHY=false
       '';
     };

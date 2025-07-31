@@ -17,6 +17,10 @@
     username = config.snowfallorg.user.name;
   };
   wheat = {
+    git = {
+      enable = true;
+      openCommit = true;
+    };
     tmux.enable = true;
     kitty.enable = true;
     nushell.enable = true;
