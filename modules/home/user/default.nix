@@ -78,5 +78,6 @@
     slack
     slack-term
     cachix
+    unixtools.netstat
   ];
 }
