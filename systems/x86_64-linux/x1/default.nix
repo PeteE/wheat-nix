@@ -31,8 +31,8 @@
     plasma.enable = true;
     wifi.enable = true;
     sudo.enable = true;
-    tailscale.enable = true;
     virtualisation.enable = true;
+    services.podman.enable = true;
   };
 
   # Host-specific config (old x1 carbon laptop)

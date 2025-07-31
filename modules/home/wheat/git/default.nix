@@ -16,13 +16,17 @@ with lib; let
   theme = "git/theme.gitconfig";
 in {
   options.wheat.git = with types; {
-      enable = mkEnableOption "Enable";
+    enable = mkEnableOption "Enable";
+    openCommit = mkEnableOption "Enable";
   };
   config = mkIf cfg.enable {
     xdg.configFile."${theme}" = {
       source = ./catppuccin.gitconfig;
     };
 
+    home.packages = mkIf cfg.openCommit [
+      pkgs.opencommit
+    ];
     programs.git = {
       enable = true;
       lfs.enable = true;
@@ -58,6 +62,10 @@ in {
         include = {
           path = "${config.xdg.configHome}/${theme}";
         };
+      };
+
+      hooks = mkIf cfg.openCommit {
+        prepare-commit-msg = "${pkgs.opencommit}/bin/oco hook run";
       };
 
       # TODO: gpg signing

@@ -13,25 +13,38 @@
     modulesPath,
     ...
 }:
-with lib; let
+with lib; with types; let
   cfg = config.wheat.ollama;
 in {
   options.wheat.ollama = {
     enable = mkEnableOption "Enable";
     port = mkOption {
       default = 11434;
-      type = types.ints.unsigned;
+      type = ints.unsigned;
+    };
+    listen = mkOption {
+      default = "0.0.0.0";
+      type = str;
+    };
+    models = mkOption {
+      type = listOf str;
+      default = [
+        "qwen2.5-coder:7b"
+        "gemma3:4b"
+        "qwen:7b"
+        "mistral:7b"
+      ];
     };
   };
   config = mkIf cfg.enable {
     services.ollama = {
       enable = true;
-      host = "0.0.0.0";
+      host = cfg.listen;
       port = cfg.port;
       # acceleration = "cuda";
     };
-    home.packages = [
-      pkgs.ollama
+    home.packages = with pkgs; [
+      ollama
     ];
   };
 }

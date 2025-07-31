@@ -60,7 +60,6 @@ in {
           nerd-fonts.droid-sans-mono
         ];
       };
-      tailscale.enable = mkEnableOption "Enable tailscale";
     };
   };
 
@@ -94,10 +93,7 @@ in {
       jetbrains-mono
     ];
 
-    services.tailscale = mkIf cfg.tailscale.enable {
-      enable = true;
-      package = config.inputs.nixpkgs-stable.${system}.tailscale;
-    };
+    services.tailscale.enable = true;
     networking.nameservers = cfg.nameservers;
     nix.settings.trusted-users = [
        "petee"

@@ -12,11 +12,8 @@ in {
     enable = mkEnableOption "Enable podman";
   };
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-        podman
-    ];
     virtualisation.podman.enable = true;
+    virtualisation.podman.dockerCompat = true;
     virtualisation.podman.dockerSocket.enable = true;
-    virtualisation.podman.networkSocket.enable = true;
   };
 }
