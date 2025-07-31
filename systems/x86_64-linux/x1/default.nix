@@ -31,7 +31,6 @@
     plasma.enable = true;
     wifi.enable = true;
     sudo.enable = true;
-    tailscale.enable = true;
     virtualisation.enable = true;
     services.podman.enable = true;
   };

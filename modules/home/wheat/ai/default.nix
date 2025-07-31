@@ -9,11 +9,40 @@ with lib; let
 in {
   options.wheat.ai = {
     enable = mkEnableOption "Enable";
+    ollamaHost = mkOption {
+      description = "ollama hostname";
+      default = "127.0.0.1";
+      type = types.str;
+    };
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       claude-code
+      ollama
+      opencommit
     ];
+
+    home.file.".opencommit" = {
+      text = ''
+        OCO_AI_PROVIDER=ollama
+        OCO_MODEL=gemma3:4b
+        OCO_API_URL='http://192.168.1.115:11434/api/chat'
+        OCO_API_KEY=undefined
+        OCO_API_CUSTOM_HEADERS=undefined
+        OCO_TOKENS_MAX_INPUT=4096
+        OCO_TOKENS_MAX_OUTPUT=500
+        OCO_DESCRIPTION=false
+        OCO_EMOJI=true
+        OCO_LANGUAGE=en
+        OCO_MESSAGE_TEMPLATE_PLACEHOLDER=$msg
+        OCO_PROMPT_MODULE=conventional-commit
+        OCO_ONE_LINE_COMMIT=false
+        OCO_TEST_MOCK_TYPE=commit-message
+        OCO_OMIT_SCOPE=true
+        OCO_GITPUSH=true
+        OCO_WHY=false
+      '';
+    };
     # sops.secrets."aichat" = {
     #   path = "${config.home.homeDirectory}/.config/aichat/config.yaml";
     # };
@@ -27,6 +56,7 @@ in {
     sops.secrets.opaqueGithubToken = { };
     programs.zsh = {
       envExtra = ''
+        export OLLAMA_HOST=${cfg.ollamaHost}
         export OPENAI_API_KEY=$(cat ${config.sops.secrets.openaiApiKey.path})
         export ANTHROPIC_API_KEY=$(cat ${config.sops.secrets.anthropicApiKey.path})
         export ASSEMBLYAI_API_KEY=$(cat ${config.sops.secrets.assemblyAiApiKey.path})
