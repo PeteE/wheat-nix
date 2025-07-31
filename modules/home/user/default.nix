@@ -42,13 +42,8 @@
 
   programs.home-manager.enable = true;
 
-  home.sessionVariables = {
-    OLLAMA_HOST = "m4.porcupine-python.ts.net";
-  };
-
   home.packages = with pkgs; [
     meld # 3 way diff
-    claude-code
     ollama
     dig
     bat

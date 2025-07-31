@@ -13,12 +13,17 @@ in {
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       claude-code
+      opencommit
     ];
     # sops.secrets."aichat" = {
     #   path = "${config.home.homeDirectory}/.config/aichat/config.yaml";
     # };
     programs.aichat = {
       enable = true;
+    };
+
+    home.sessionVariables = {
+      OLLAMA_HOST = "192.168.1.115";
     };
 
     sops.secrets.openaiApiKey = { };
