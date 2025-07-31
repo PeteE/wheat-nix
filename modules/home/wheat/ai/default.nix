@@ -31,16 +31,13 @@ in {
         OCO_API_CUSTOM_HEADERS=undefined
         OCO_TOKENS_MAX_INPUT=4096
         OCO_TOKENS_MAX_OUTPUT=500
-        OCO_DESCRIPTION=false
-        OCO_EMOJI=true
+        OCO_EMOJI=false
         OCO_LANGUAGE=en
         OCO_MESSAGE_TEMPLATE_PLACEHOLDER=$msg
         OCO_PROMPT_MODULE=conventional-commit
         OCO_ONE_LINE_COMMIT=false
         OCO_TEST_MOCK_TYPE=commit-message
-        OCO_OMIT_SCOPE=false
-        OCO_GITPUSH=false
-        OCO_WHY=false
+        OCO_GITPUSH=true
       '';
     };
     # sops.secrets."aichat" = {
