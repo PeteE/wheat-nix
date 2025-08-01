@@ -19,6 +19,18 @@
       (../../../modules/shared/wheat/default.nix)
     ];
 
+  wheat = {
+    enable = true;
+    user = {
+      name = "petee";
+      hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
+      extraGroups = ["wheel" "NetworkManager"];
+    };
+    secrets.enable = true;
+    services.podman.enable = true;
+  };
+
+  networking.hostName = "ripnix";
   boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "nvme" "uas" "virtio_pci" "virtio_scsi" "virtio_blk" ];
   boot.initrd.kernelModules = [ "amdgpu" "virtio_balloon" "virtio_console" "virtio_rng" ];
   boot.kernelModules = [ "amdgpu" ];
@@ -33,5 +45,4 @@
 
   hardware.enableRedistributableFirmware = true;
   networking.useDHCP = lib.mkDefault true;
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 }
