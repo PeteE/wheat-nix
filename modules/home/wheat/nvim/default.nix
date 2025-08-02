@@ -495,6 +495,15 @@ in {
           #   })
           # '';
         }
+        {
+          plugin = pkgs.wheat.nvim-base64;
+          type = "lua";
+          config = ''
+            require("nvim-base64").setup({})
+            vim.keymap.set('x', "<leader>b", "<Plug>(FromBase64)")
+            vim.keymap.set('x', "<leader>B", "<Plug>(ToBase64)")
+          '';
+        }
       ];
       withPython3 = true;
       withNodeJs = true;

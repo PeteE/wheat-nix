@@ -21,7 +21,6 @@
       enable = true;
       openCommit = true;
     };
-    entertainment.enable = true;
     tmux.enable = true;
     kitty.enable = true;
     nushell.enable = true;
