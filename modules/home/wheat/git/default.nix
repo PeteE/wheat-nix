@@ -58,6 +58,7 @@ in {
         };
 
         pull.rebase = "false";
+        push.default = "current";
 
         include = {
           path = "${config.xdg.configHome}/${theme}";
