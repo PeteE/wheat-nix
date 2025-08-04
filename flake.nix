@@ -79,7 +79,6 @@
 
     # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
     deploy = {
-      # remoteBuild = true; # Uncomment in case the system you're deploying from is not darwin
       nodes.x1 = {
         hostname = "192.168.1.7";
         fastConnection = true;
@@ -93,21 +92,46 @@
           };
         };
       };
-    #   nodes.m4 = {
-    #     hostname = "m4";
-    #     fastConnection = true;
-    #     interactiveSudo = false;
-    #     remoteBuild = true;
-    #     profiles = {
-    #       system = {
-    #         path = inputs.deploy-rs.lib.aarch65-darwin.activate.darwin self.darwinConfigurations.m4;
-    #         user = "root";
-    #         sshUser = "pete";
-    #       };
-    #     };
-    #   };
+      nodes.ripnix = {
+        hostname = "192.168.1.143";
+        fastConnection = true;
+        interactiveSudo = false;
+        remoteBuild = true;
+        profiles = {
+          system = {
+            sshUser = "petee";
+            path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.ripnix;
+            user = "root";
+          };
+        };
+      };
+      nodes.m4 = {
+        hostname = "192.168.1.115";
+        fastConnection = true;
+        interactiveSudo = false;
+        remoteBuild = true;
+        profiles = {
+          system = {
+            path = inputs.deploy-rs.lib.aarch64-darwin.activate.darwin self.darwinConfigurations.m4;
+            user = "root";
+            sshUser = "pete";
+          };
+        };
+      };
+      nodes.m3p = {
+        hostname = "192.168.1.209";
+        fastConnection = true;
+        interactiveSudo = false;
+        remoteBuild = true;
+        profiles = {
+          system = {
+            path = inputs.deploy-rs.lib.aarch64-darwin.activate.darwin self.darwinConfigurations.m3p;
+            user = "root";
+            sshUser = "petee";
+          };
+        };
+      };
     };
-    # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
 
     # overlays
     overlays = with inputs; [
