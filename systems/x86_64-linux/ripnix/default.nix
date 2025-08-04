@@ -26,6 +26,7 @@
       hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
       extraGroups = ["wheel" "NetworkManager"];
     };
+    sudo.enable = true;
     secrets.enable = true;
     services.podman.enable = true;
   };
@@ -36,6 +37,11 @@
   boot.kernelModules = [ "amdgpu" ];
   boot.extraModulePackages = [ ];
 
+  boot.loader.grub.enable = true;
+  boot.loader.grub.device = "/dev/vda";
+  boot.loader.grub.useOSProber = true;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/36dcd69b-d93a-47ab-aa71-bcaba1a02a59";
       fsType = "ext4";
@@ -45,4 +51,6 @@
 
   hardware.enableRedistributableFirmware = true;
   networking.useDHCP = lib.mkDefault true;
+
+  nix.settings.trusted-users = [ "root" "petee" "pete" ];
 }

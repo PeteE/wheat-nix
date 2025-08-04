@@ -11,6 +11,11 @@ with lib; let
   isDarwin = if lib.hasSuffix "darwin" system then true else false;
 
 in {
+  imports =
+    [
+      (./remote-builder.nix)
+    ];
+
   options = {
     wheat = with types; {
       enable = mkEnableOption "Enable";

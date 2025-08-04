@@ -20,7 +20,7 @@ in {
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      azure-cli
+      # azure-cli
       azure-storage-azcopy
       k9s
       terragrunt

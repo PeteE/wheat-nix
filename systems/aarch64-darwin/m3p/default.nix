@@ -35,6 +35,8 @@
   nix.settings.extra-trusted-public-keys = [
     "virby-nix-darwin.cachix.org-1:z9GiEZeBU5bEeoDQjyfHPMGPBaIQJOOvYOOjGMKIlLo="
   ];
+  nix.settings.trusted-users = [ "root" "petee" "pete" ];
+
   services.virby = {
     debug = true;
     enable = false;
@@ -49,4 +51,5 @@
   # hack to workaround nix group id changes
   ids.gids.nixbld = 350;
   system.stateVersion = 4;
+
 }

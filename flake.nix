@@ -37,10 +37,11 @@
     # };
 
     # System Deployment
-    # deploy-rs = {
-    #   url = "github:serokell/deploy-rs";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     virby = {
       url = "github:quinneden/virby-nix-darwin?ref=be19793779852006fe6bc498f8670c954b4adf96";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -76,20 +77,21 @@
       };
     };
 
-    # deploy = {
-    #   # remoteBuild = true; # Uncomment in case the system you're deploying from is not darwin
-    #   nodes.x1 = {
-    #     hostname = "192.168.1.7";
-    #     fastConnection = true;
-    #     interactiveSudo = false;
-    #     profiles = {
-    #       system = {
-    #         sshUser = "petee";
-    #         path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.x1;
-    #         user = "petee";
-    #       };
-    #     };
-    #   };
+    # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
+    deploy = {
+      # remoteBuild = true; # Uncomment in case the system you're deploying from is not darwin
+      nodes.x1 = {
+        hostname = "192.168.1.7";
+        fastConnection = true;
+        interactiveSudo = false;
+        profiles = {
+          system = {
+            sshUser = "petee";
+            path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.x1;
+            user = "petee";
+          };
+        };
+      };
     #   nodes.m4 = {
     #     hostname = "m4";
     #     fastConnection = true;
@@ -97,19 +99,21 @@
     #     remoteBuild = true;
     #     profiles = {
     #       system = {
-    #         path = inputs.deploy-rs.lib.aarch64-darwin.activate.darwin self.darwinConfigurations.m4;
+    #         path = inputs.deploy-rs.lib.aarch65-darwin.activate.darwin self.darwinConfigurations.m4;
     #         user = "root";
     #         sshUser = "pete";
     #       };
     #     };
     #   };
-    # };
+    };
     # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
 
     # overlays
     overlays = with inputs; [
       # deploy-rs.overlays.default
       nix-vscode-extensions.overlays.default
+      deploy-rs.overlays.default
+
       # mozilla.overlays.firefox
       # flake.overlays.default
     ];
