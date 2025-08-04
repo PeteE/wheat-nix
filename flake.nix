@@ -84,6 +84,7 @@
         hostname = "192.168.1.7";
         fastConnection = true;
         interactiveSudo = false;
+        remoteBuild = false;
         profiles = {
           system = {
             sshUser = "petee";
@@ -110,10 +111,7 @@
 
     # overlays
     overlays = with inputs; [
-      # deploy-rs.overlays.default
       nix-vscode-extensions.overlays.default
-      deploy-rs.overlays.default
-
       # mozilla.overlays.firefox
       # flake.overlays.default
     ];
@@ -150,9 +148,9 @@
         x1.modules = with inputs; [
           nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
         ];
-        pishield.modules = with inputs; [
-          nixos-hardware.nixosModules.raspberry-pi-4
-        ];
+        # pishield.modules = with inputs; [
+        #   nixos-hardware.nixosModules.raspberry-pi-4
+        # ];
         m4.modules = with inputs; [ ];
         m3p.modules = with inputs; [ ];
       };
