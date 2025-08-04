@@ -89,7 +89,7 @@
           system = {
             sshUser = "petee";
             path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.x1;
-            user = "petee";
+            user = "root";
           };
         };
       };

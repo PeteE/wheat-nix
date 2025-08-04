@@ -53,7 +53,6 @@
   home.packages = with pkgs; [
     meld # 3 way diff
     inputs.deploy-rs.packages."${system}".deploy-rs # https://github.com/serokell/deploy-rs
-    # deploy-rs # https://github.com/serokell/deploy-rs
     tailscale
     claude-code
     ollama
