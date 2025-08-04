@@ -42,11 +42,6 @@
 
     # TODO: only enable on m4, x1
     embedded.enable = true;
-
-    entertainment = {
-      vlc.enable = true;
-      spotify.enable = true;
-    };
   };
 
   programs.home-manager.enable = true;
