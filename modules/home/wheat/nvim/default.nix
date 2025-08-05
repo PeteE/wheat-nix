@@ -32,6 +32,7 @@ in {
       terraform-ls
       tflint
       alejandra
+      kubectl
     ];
 
     programs.zsh = {
@@ -196,6 +197,20 @@ in {
           '';
         }
         {
+          plugin = pkgs.wheat.vim-kubernetes;
+          type = "lua";
+          config = ''
+            vim.api.nvim_create_autocmd("FileType", {
+              pattern = "yaml",
+              callback = function()
+                vim.keymap.set({'n', 'v'}, '<leader>ka', '<cmd>KubeApply<CR>', { buffer = true })
+                vim.keymap.set({'n', 'v'}, '<leader>kd', '<cmd>KubeDelete<CR>', { buffer = true })
+              end
+            })
+          '';
+          # provides KubeApply, KubeCreate, KubeDelete
+        }
+        {
           plugin = pkgs.wheat.yaml-companion-nvim;
           type = "lua";
           config = ''
@@ -205,7 +220,15 @@ in {
         vim-unimpaired
         vim-repeat
         vim-go
-        vim-tmux-navigator
+        {
+          plugin = vim-tmux-navigator;
+          type = "lua";
+          config = ''
+            local opts = {buffer = 0}
+            vim.keymap.set('t', '<C-h>', [[<Cmd>TmuxNavigateLeft<CR>]], opts)
+            vim.keymap.set('t', '<C-l>', [[<Cmd>TmuxNavigateRight<CR>]], opts)
+          '';
+        }
         supertab
         cmp-nvim-lsp
         cmp-buffer
@@ -489,11 +512,11 @@ in {
         {
           plugin = toggleterm-nvim;
           type = "lua";
-          # config = ''
-          #   require("toggleterm").setup({
-
-          #   })
-          # '';
+          config = ''
+            require("toggleterm").setup({
+              shade_terminals = true;
+            })
+          '';
         }
         {
           plugin = pkgs.wheat.nvim-base64;

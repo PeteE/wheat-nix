@@ -16,6 +16,7 @@
 {
   wheat = {
     enable = true;
+    secrets.enable = true;
     user = {
       name = "pete";
       authorizedKeys = [
