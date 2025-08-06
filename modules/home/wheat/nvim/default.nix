@@ -81,20 +81,8 @@ in {
           plugin = cmp-fuzzy-buffer;
           type = "lua";
         }
-        {
-          plugin = mini-nvim;
-          type = "lua";
-        }
         # {
-        #   plugin = CopilotChat-nvim;
-        #   type = "lua";
-        # }
-        # {
-        #   plugin = copilot-lua;
-        #   type = "lua";
-        # }
-        # {
-        #   plugin = copilot-lualine;
+        #   plugin = mini-nvim;
         #   type = "lua";
         # }
         {
@@ -110,56 +98,64 @@ in {
               debug = { enabled = true },
               layout = { enabled = true },
               notifier = { enabled = true },
+              scratch = {
+                nabled = true
+              },
               explorer = {
-                  replace_netrw = true,
-                  hidden = true,
-                  ignored = true,
-                  git_untracked = true,
-                  follow_file = false,
+                replace_netrw = true,
+                hidden = true,
+                ignored = true,
+                git_untracked = true,
+                follow_file = false,
               },
               dashboard = {
-                  enabled = true,
-                  sections = {
-                    { section = "header" },
-                    { key = "s", desc = "Smart picker", action = ":lua Snacks.dashboard.picker.smart()" },
-                    { icon = " ", key = "s", desc = "Restore Session", section = "session" },
-                    { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
-                    { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep', { hidden = true, ignored = true, fuzzy = true })" },
+                enabled = true,
+                sections = {
+                  { section = "header" },
+                  { key = "s", desc = "Smart picker", action = ":lua Snacks.dashboard.picker.smart()" },
+                  { icon = " ", key = "s", desc = "Restore Session", section = "session" },
+                  { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+                  { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep', { hidden = true, ignored = true, fuzzy = true })" },
 
-                    -- { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
-                    { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
-                    { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
-                    { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
-                    { section = "startup" },
-                  },
+                  { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
+                  { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
+                  { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
+                  { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
+                  { section = "startup" },
+                },
               },
             })
-            vim.keymap.set('n', '<space>da', ":lua Snacks.dashboard()<CR>")
-            vim.keymap.set('n', '<space>ff', ":lua Snacks.picker.smart()<CR>")
-            vim.keymap.set('n', '<space>fg', ":lua Snacks.picker.git_files()<CR>")
-            vim.keymap.set('n', '<space>fb', ":lua Snacks.picker.buffers()<CR>")
-            vim.keymap.set('n', '<space>fc', ":lua Snacks.picker.command_history()<CR>")
-            vim.keymap.set('n', '<space>fn', ":lua Snacks.picker.notifications()<CR>")
-            vim.keymap.set('n', '<space>fw', ":lua Snacks.picker.oldfiles()<CR>")
-            vim.keymap.set('n', '<space>gb', ":lua Snacks.picker.git_branches()<CR>")
-            vim.keymap.set('n', '<space>gl', ":lua Snacks.picker.git_log()<CR>")
-            vim.keymap.set({ "n", "x" }, "<leader>rg", function() Snacks.picker.grep_word() end)
-            -- old mapping, muscle memory
-            vim.keymap.set('n', '<leader>rg', "yiw:lua Snacks.picker.grep()<CR>")
 
-            vim.keymap.set('n', '<leader>ff', ":lua Snacks.picker.smart()<CR>")
-            vim.keymap.set("n", ":bd", ":lua Snacks.bufdelete()<CR>", { noremap = true, silent = true })
-            vim.keymap.set('n', '<space>dm', ":lua Snacks.dim()<CR>")
+            -- Snacks keymaps
+            vim.keymap.set({'n','t'}, '<space>z',   function() Snacks.zen.zoom() end, { desc = 'Toggle Zoom' })
+            vim.keymap.set('n', '<space>Z',   function() Snacks.zen() end, { desc = 'Toggle Zen Mode' })
+            vim.keymap.set('n', '<space>.',   function() Snacks.scratch() end, { desc = 'Toggle Scratch Buffer' })
+            vim.keymap.set('n', '<space>S',   function() Snacks.scratch.select() end, { desc = 'Select Scratch Buffer' })
+            vim.keymap.set('n', '<space>bd',  function() Snacks.bufdelete() end, { desc = 'Delete Buffer' })
+            vim.keymap.set('n', '<c-/>',       function() Snacks.terminal() end, { desc = 'Toggle Terminal' })
+            vim.keymap.set({'n', 't'}, ']]',   function() Snacks.words.jump(vim.v.count1) end, { desc = 'Next Reference' })
+            vim.keymap.set({'n', 't'}, '[[',   function() Snacks.words.jump(-vim.v.count1) end, { desc = 'Prev Reference' })
+
+            vim.keymap.set('n', '<space>da',   function() Snacks.dashboard() end, { desc = 'Show dashboard' })
+            vim.keymap.set('n', '<space>ff',   function() Snacks.picker.smart() end, { desc = 'Open File' })
+            vim.keymap.set('n', '<space>fb',   function() Snacks.picker.buffers() end, { desc = 'Open Buffer' })
+            vim.keymap.set('n', '<space>fc',   function() Snacks.picker.command_history() end, { desc = 'Command history' })
+            vim.keymap.set('n', 'q:',          function() Snacks.picker.command_history() end, { desc = 'Command history' })
+
+            vim.keymap.set('n', '<space>fn',   function() Snacks.picker.notifications() end, { desc = 'Show notifications' })
+            vim.keymap.set('n', '<space>gb',   function() Snacks.picker.git_branches() end, { desc = 'Show Git branches' })
+            vim.keymap.set('n', '<space>rg',   function() Snacks.picker.grep() end, { desc = 'Search' })
+            -- vim.keymap.set('n', '<space>dm',   function() Snacks.dim() end, { desc = 'Toggle Dim' })
 
             -- LSP
-            vim.keymap.set("n", "<space>gd", ":lua Snacks.picker.lsp_definitions()<CR>")
-            vim.keymap.set("n", "<space>gD", ":lua Snacks.picker.lsp_declarations()<CR>")
-            vim.keymap.set("n", "<space>gr", ":lua Snacks.picker.lsp_references()<CR>")
-            vim.keymap.set("n", "<space>gI", ":lua Snacks.picker.lsp_implementations()<CR>")
-            vim.keymap.set("n", "<space>gy", ":lua Snacks.picker.lsp_type_definitions()<CR>")
-            vim.keymap.set("n", "<leader>ss", ":lua Snacks.picker.lsp_symbols()<CR>")
-            vim.keymap.set("n", "<leader>sS", ":lua Snacks.picker.lsp_workspace_symbols()<CR>")
-            vim.keymap.set('n', "<C-n>", ":lua Snacks.picker.explorer()<CR>")
+            vim.keymap.set('n', '<space>gd',   function() Snacks.picker.lsp_definitions() end, { desc = 'Go to definitions' })
+            vim.keymap.set('n', '<space>gD',   function() Snacks.picker.lsp_declaration() end, { desc = 'Go to definitions' })
+            vim.keymap.set('n', '<space>gr',   function() Snacks.picker.lsp_references() end, { desc = 'Go to references' })
+            vim.keymap.set('n', '<space>gI',   function() Snacks.picker.lsp_implementations() end, { desc = 'Go to implementations' })
+            vim.keymap.set('n', '<space>gy',   function() Snacks.picker.lsp_type_definitions() end, { desc = 'Go to type definitions' })
+            vim.keymap.set('n', '<space>ss',   function() Snacks.picker.lsp_symbols() end, { desc = 'LSP Symbols' })
+            vim.keymap.set('n', '<space>sS',   function() Snacks.picker.lsp_workspace_symbols() end, { desc = 'LSP Workspace symbols' })
+            vim.keymap.set('n', '<C-n>',       function() Snacks.picker.explorer() end, { desc = 'File explorer' })
             '';
         }
         # {
@@ -525,6 +521,72 @@ in {
             require("nvim-base64").setup({})
             vim.keymap.set('x', "<leader>b", "<Plug>(FromBase64)")
             vim.keymap.set('x', "<leader>B", "<Plug>(ToBase64)")
+          '';
+        }
+        {
+          plugin = claude-code-nvim;
+          type = "lua";
+          config = ''
+            require("claude-code").setup({
+              window = {
+                split_ratio = 0.3,      -- Percentage of screen for the terminal window (height for horizontal, width for vertical splits)
+                position = "botright",  -- Position of the window: "botright", "topleft", "vertical", "float", etc.
+                enter_insert = true,    -- Whether to enter insert mode when opening Claude Code
+                hide_numbers = true,    -- Hide line numbers in the terminal window
+                hide_signcolumn = true, -- Hide the sign column in the terminal window
+
+                -- Floating window configuration (only applies when position = "float")
+                -- float = {
+                --   width = "80%",        -- Width: number of columns or percentage string
+                --   height = "80%",       -- Height: number of rows or percentage string
+                --   row = "center",       -- Row position: number, "center", or percentage string
+                --   col = "center",       -- Column position: number, "center", or percentage string
+                --   relative = "editor",  -- Relative to: "editor" or "cursor"
+                --   border = "rounded",   -- Border style: "none", "single", "double", "rounded", "solid", "shadow"
+                -- },
+              },
+              -- File refresh settings
+              refresh = {
+                enable = true,           -- Enable file change detection
+                updatetime = 100,        -- updatetime when Claude Code is active (milliseconds)
+                timer_interval = 1000,   -- How often to check for file changes (milliseconds)
+                show_notifications = true, -- Show notification when files are reloaded
+              },
+              -- Git project settings
+              git = {
+                use_git_root = true,     -- Set CWD to git root when opening Claude Code (if in git project)
+              },
+              -- Shell-specific settings
+              shell = {
+                separator = '&&',        -- Command separator used in shell commands
+                pushd_cmd = 'pushd',     -- Command to push directory onto stack (e.g., 'pushd' for bash/zsh, 'enter' for nushell)
+                popd_cmd = 'popd',       -- Command to pop directory from stack (e.g., 'popd' for bash/zsh, 'exit' for nushell)
+              },
+              -- Command settings
+              command = "claude",        -- Command used to launch Claude Code
+              -- Command variants
+              command_variants = {
+                -- Conversation management
+                continue = "--continue", -- Resume the most recent conversation
+                resume = "--resume",     -- Display an interactive conversation picker
+
+                -- Output options
+                verbose = "--verbose",   -- Enable verbose logging with full turn-by-turn output
+              },
+              -- Keymaps
+              keymaps = {
+                toggle = {
+                  normal = "<space>ai",       -- Normal mode keymap for toggling Claude Code, false to disable
+                  terminal = "<space>ai",     -- Terminal mode keymap for toggling Claude Code, false to disable
+                  -- variants = {
+                  --   continue = "<leader>cc", -- Normal mode keymap for Claude Code with continue flag
+                  --   verbose = "<leader>cv",  -- Normal mode keymap for Claude Code with verbose flag
+                  -- },
+                },
+                window_navigation = true, -- Enable window navigation keymaps (<C-h/j/k/l>)
+                scrolling = true,         -- Enable scrolling keymaps (<C-f/b>) for page up/down
+              },
+            })
           '';
         }
       ];

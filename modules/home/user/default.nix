@@ -85,5 +85,6 @@
     slack-term
     cachix
     unixtools.netstat
+    htop
   ];
 }

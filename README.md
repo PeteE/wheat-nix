@@ -5,11 +5,11 @@ This repo contains the config for all my Nix boxes.
 # TODO
 
 - [ ] dynamic clipboard (rofi)
-- [ ] remote builder on ripnix
-- [ ] better dns (without pihole)
-- [ ] kubectl vim plugin
+- [x] kubectl vim plugin
 - [ ] claude-nvim
-- [x] add `nn` and nix-output-mon`
+- [ ] better dns (without pihole)
+- [x] remote builder on ripnix
+- [x] add `nn` and nix-output-mon
 - [x] btop catppuccin
 - [x] tmux refactor
 - spend more time on nushell
