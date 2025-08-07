@@ -14,6 +14,7 @@ in {
   imports =
     [
       (./remote-builder.nix)
+      (./remote-builder-client.nix)
     ];
 
   options = {
@@ -138,9 +139,8 @@ in {
     services.tailscale.enable = true;
     networking.nameservers = cfg.nameservers;
     nix.settings.trusted-users = [
-       "petee"
-       "root"
-       "pete"
+      "root"
+      "petee"
     ];
     programs.firefox.enable = true;
     system.stateVersion = "25.11";

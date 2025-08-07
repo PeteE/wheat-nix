@@ -30,13 +30,10 @@
     # services.podman.enable = true;
   };
 
-  # nix.linux-builder.enable = true;
   nix.settings.extra-substituters = [ "https://virby-nix-darwin.cachix.org" ];
   nix.settings.extra-trusted-public-keys = [
     "virby-nix-darwin.cachix.org-1:z9GiEZeBU5bEeoDQjyfHPMGPBaIQJOOvYOOjGMKIlLo="
   ];
-  nix.settings.trusted-users = [ "root" "petee" "pete" ];
-
   services.virby = {
     debug = true;
     enable = false;

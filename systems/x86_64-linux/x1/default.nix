@@ -33,8 +33,10 @@
     sudo.enable = true;
     virtualisation.enable = true;
     services.podman.enable = true;
+    remote-builder-client = {
+      enable = true;
+    };
   };
-
   # Host-specific config (old x1 carbon laptop)
   networking.hostName = "x1";
 
@@ -82,4 +84,5 @@
     cpuFreqGovernor = "performance";
   };
   system.stateVersion = "25.11";
+
 }

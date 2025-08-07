@@ -29,6 +29,7 @@
     sudo.enable = true;
     secrets.enable = true;
     services.podman.enable = true;
+    remote-builder.enable = true;
   };
 
   networking.hostName = "ripnix";
@@ -53,4 +54,5 @@
   networking.useDHCP = lib.mkDefault true;
 
   nix.settings.trusted-users = [ "root" "petee" "pete" ];
+
 }
