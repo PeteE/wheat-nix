@@ -17,7 +17,13 @@ in {
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      claude-code
+      (claude-code.overrideAttrs (oldAttrs: rec {
+        version = "1.0.66";
+        src = pkgs.fetchzip {
+          url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${version}.tgz";
+          sha256 = "sha256-T+BpCgXryrWHcHXob+EasFfFAaz7baUYCLNYFBxGh5U=";
+        };
+      }))
       ollama
       opencommit
     ];
