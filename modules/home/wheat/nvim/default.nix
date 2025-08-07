@@ -127,7 +127,7 @@ in {
             })
 
             -- Snacks keymaps
-            vim.keymap.set({'n','t'}, '<space>z',   function() Snacks.zen.zoom() end, { desc = 'Toggle Zoom' })
+            vim.keymap.set('n', '<space>z',   function() Snacks.zen.zoom() end, { desc = 'Toggle Zoom' })
             vim.keymap.set('n', '<space>Z',   function() Snacks.zen() end, { desc = 'Toggle Zen Mode' })
             vim.keymap.set('n', '<space>.',   function() Snacks.scratch() end, { desc = 'Toggle Scratch Buffer' })
             vim.keymap.set('n', '<space>S',   function() Snacks.scratch.select() end, { desc = 'Select Scratch Buffer' })
@@ -156,6 +156,17 @@ in {
             vim.keymap.set('n', '<space>ss',   function() Snacks.picker.lsp_symbols() end, { desc = 'LSP Symbols' })
             vim.keymap.set('n', '<space>sS',   function() Snacks.picker.lsp_workspace_symbols() end, { desc = 'LSP Workspace symbols' })
             vim.keymap.set('n', '<C-n>',       function() Snacks.picker.explorer() end, { desc = 'File explorer' })
+
+            vim.keymap.set('n', '<space>km', function() Snacks.picker.pick('keymaps') end, { desc = 'show keymaps' })
+
+            function copyFullPathToClipboard()
+              filename = vim.fn.expand('%:p')
+              -- copy to plus register
+              vim.fn.setreg('+', filename)
+              Snacks.notifier.notify("Path copied: " .. filename)
+            end
+            vim.keymap.set('n', '<space>cp', copyFullPathToClipboard, { desc = 'Copy filename' })
+
             '';
         }
         # {
@@ -576,8 +587,11 @@ in {
               -- Keymaps
               keymaps = {
                 toggle = {
-                  normal = "<space>ai",       -- Normal mode keymap for toggling Claude Code, false to disable
-                  terminal = "<space>ai",     -- Terminal mode keymap for toggling Claude Code, false to disable
+                  -- normal = "<space>ai",       -- Normal mode keymap for toggling Claude Code, false to disable
+                  -- terminal = "<space>ai",     -- Terminal mode keymap for toggling Claude Code, false to disable
+                  normal = false,       -- Normal mode keymap for toggling Claude Code, false to disable
+                  terminal = false,     -- Terminal mode keymap for toggling Claude Code, false to disable
+
                   -- variants = {
                   --   continue = "<leader>cc", -- Normal mode keymap for Claude Code with continue flag
                   --   verbose = "<leader>cv",  -- Normal mode keymap for Claude Code with verbose flag
