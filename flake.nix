@@ -31,10 +31,10 @@
     };
 
     # # Generate System Images
-    # nixos-generators = {
-    #   url = "github:nix-community/nixos-generators";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # System Deployment
     deploy-rs = {
@@ -165,6 +165,7 @@
         ];
         nixos = with inputs; [
           home-manager.nixosModules.home-manager
+          nixos-generators.nixosModules.all-formats
         ];
       };
 

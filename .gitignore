@@ -1,3 +1,6 @@
 result
 *.qcow2
 node_modules
+
+# SSH private keys
+id_ed25519

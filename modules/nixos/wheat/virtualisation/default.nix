@@ -9,10 +9,21 @@ with lib; let
 in {
   options.wheat.virtualisation = with types; {
     enable = mkEnableOption "Enable";
+    libvirtd.enable = mkEnableOption "Enable";
+    libvirtUri = mkOption {
+      type = str;
+      default = "qemu+ssh://petee@192.168.1.51/system";
+      description = "Default libvirt URI for virsh connections";
+    };
+    group = mkOption {
+      type = str;
+      default = "libvirtd";
+      description = "Group to add the user to for libvirt access";
+    };
   };
 
   config = mkIf cfg.enable {
-    virtualisation = {
+    virtualisation = mkIf cfg.libvirtd.enable {
       libvirtd = {
         enable = true;
         # runAsRoot = true;
@@ -30,10 +41,13 @@ in {
       };
     };
 
-    wheat.user.extraGroups = [ "libvirtd" ];
+    wheat.user.extraGroups = [ cfg.group ];
     environment.systemPackages = with pkgs; [
       virt-manager
     ];
 
+    environment.variables = {
+      LIBVIRT_DEFAULT_URI = cfg.libvirtUri;
+    };
   };
 }

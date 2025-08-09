@@ -31,7 +31,11 @@
     plasma.enable = true;
     wifi.enable = true;
     sudo.enable = true;
-    virtualisation.enable = true;
+    virtualisation = {
+      enable = true;
+      libvirtd.enable = true;
+      libvirtUri = "qemu+ssh://petee@ripper/system";
+    };
     services.podman.enable = true;
     remote-builder-client = {
       enable = true;
