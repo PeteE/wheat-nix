@@ -30,7 +30,7 @@
       url = "github:nixos/nixos-hardware";
     };
 
-    # # Generate System Images
+    # Generate System Images
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -59,10 +59,10 @@
     #   url = "github:mozilla/nixpkgs-mozilla";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
-    # nixvirt = {
-    #   url = "github:AshleyYakeley/NixVirt/v0.6.0";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    nixvirt = {
+      url = "github:AshleyYakeley/NixVirt/v0.6.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = { self, ... }@inputs: inputs.snowfall-lib.mkFlake {
     inherit inputs;
@@ -151,7 +151,6 @@
       sops-nix.homeManagerModules.sops
       catppuccin.homeModules.catppuccin
       plasma-manager.homeManagerModules.plasma-manager
-      # nixvirt.homeModules.default
     ];
 
     systems = {
@@ -162,10 +161,11 @@
           sops-nix.darwinModules.sops
           home-manager.darwinModules.home-manager
           virby.darwinModules.default
-        ];
+ r      ];
         nixos = with inputs; [
           home-manager.nixosModules.home-manager
           nixos-generators.nixosModules.all-formats
+          nixvirt.nixosModules.default
         ];
       };
 
@@ -178,6 +178,8 @@
         # ];
         m4.modules = with inputs; [ ];
         m3p.modules = with inputs; [ ];
+        shield.modules = with inputs; [ ];
+
       };
     };
   };

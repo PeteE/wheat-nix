@@ -287,6 +287,25 @@ in {
           '';
         }
         {
+          plugin = auto-session;
+          type = "lua";
+          config = ''
+            require('auto-session').setup({
+              auto_session_suppress_dirs = { '~/Downloads', '/' },
+              auto_save_enabled = true,
+              auto_restore_enabled = true,
+              auto_session_use_git_branch = false,
+              -- This will save and restore folds automatically
+              session_lens = {
+                buftypes_to_ignore = {},
+                load_on_setup = true,
+                theme_conf = { border = true },
+                previewer = false,
+              },
+            })
+          '';
+        }
+        {
           plugin = catppuccin-nvim;
           config = ''
             colorscheme catppuccin-mocha

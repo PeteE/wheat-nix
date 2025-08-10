@@ -1,0 +1,78 @@
+# NixOS Shield Azure Deployment Justfile
+# vim: ts=4:sw=4:et
+
+# Default target - list available recipes
+default:
+    @just --list
+
+# Build the Azure VHD image
+build:
+    @echo "🏗️  Building NixOS Shield Azure VHD image..."
+    @echo "📦 Starting Nix build process - this might take a while!"
+    cd ../../.. && nix build --builders '' .#nixosConfigurations.shield.config.formats.azure
+    @echo ""
+    @echo "✨ VHD image built successfully!"
+    @echo "🎯 Image location: $(realpath ../../../result/nixos-image-azure-*.vhd)"
+    @echo "📊 Image size: $(du -h ../../../result/nixos-image-azure-*.vhd | cut -f1)"
+    @echo "🚀 Ready for upload to Azure!"
+
+# Build and upload VHD to Azure storage
+upload: build
+    @echo ""
+    @echo "⬆️  Starting VHD upload to Azure..."
+    @echo "🌊 Surfing the cloud waves with your fresh NixOS image!"
+    ./deploy-azure.sh --subscription cba69f50-0a97-4d1d-8272-17ec79b32a7e \
+                      --resource-group shield-nixos-rg \
+                      --storage-account shieldnixosstorage \
+                      --location westus \
+                      --vm-name nixos-shield-vm \
+                      --overwrite
+    @echo ""
+    @echo "🎉 Upload complete! Your VHD is now chillin' in Azure storage."
+    @echo "💾 Ready to transform into a virtual machine!"
+
+# Deploy VM from uploaded VHD
+deploy:
+    @echo ""
+    @echo "🖥️  Deploying NixOS Shield VM..."
+    @echo "⚡ Time to bring your NixOS creation to life!"
+    ./deploy-azure.sh deploy \
+                     --subscription cba69f50-0a97-4d1d-8272-17ec79b32a7e \
+                     --resource-group shield-nixos-rg \
+                     --storage-account shieldnixosstorage \
+                     --location westus \
+                     --vm-name nixos-shield-vm \
+                     --vm-size Standard_B2s \
+                     --overwrite
+    @echo ""
+    @echo "🎊 VM deployment complete!"
+    @echo "🔑 SSH into your new NixOS machine:"
+    @echo "   ssh opadmin@$$(az vm show -d -g shield-nixos-rg -n nixos-shield-vm --query publicIps -o tsv)"
+
+# Destroy all Azure resources
+destroy:
+    @echo "💀 Destroying all Azure resources..."
+    @echo "🧹 Time for some cloud cleanup!"
+    ./deploy-azure.sh destroy \
+                     --subscription cba69f50-0a97-4d1d-8272-17ec79b32a7e \
+                     --resource-group shield-nixos-rg \
+                     --storage-account shieldnixosstorage \
+                     --vm-name nixos-shield-vm
+    @echo ""
+    @echo "💨 All resources have been sent to the digital void!"
+    @echo "💰 Your Azure bill just got lighter!"
+
+# Show help
+help:
+    @echo "🛡️  NixOS Shield Azure Deployment"
+    @echo ""
+    @echo "Available commands:"
+    @echo "  just build     - Build the NixOS Azure VHD image"
+    @echo "  just upload    - Build and upload VHD to Azure storage"
+    @echo "  just deploy    - Deploy VM from VHD"
+    @echo "  just destroy   - Destroy all Azure resources"
+    @echo "  just help      - Show this help"
+    @echo ""
+    @echo "🔗 Full workflow: just upload && just deploy"
+
+

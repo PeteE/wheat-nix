@@ -4,6 +4,12 @@ This repo contains the config for all my Nix boxes.
 
 # TODO
 
+QOL:
+- [ ] vim terminal delay when use ing `<Space>` key (likely due to keybindings)
+- [ ] persistent folding
+- [ ] learn undotree
+- [ ] markview disable by default
+
 - [ ] create an fzf switcher for azure
 - [ ] spend more time on nushell
 - [ ] dynamic clipboard (rofi)
