@@ -554,6 +554,17 @@ in {
           plugin = claude-code-nvim;
           type = "lua";
           config = ''
+            -- -- Fix space keymap conflicts in terminal mode
+            -- vim.api.nvim_create_autocmd("TermOpen", {
+            --   pattern = "*",
+            --   callback = function()
+            --     -- Set timeout to 0 for terminal buffers to eliminate keymap delays
+            --     vim.opt_local.timeoutlen = 0
+            --     -- Override all space-based keymaps in terminal mode
+            --     vim.keymap.set('t', '<space>', '<space>', { buffer = true, silent = true, nowait = true })
+            --   end
+            -- })
+
             require("claude-code").setup({
               window = {
                 split_ratio = 0.5,      -- Percentage of screen for the terminal window (height for horizontal, width for vertical splits)
@@ -642,6 +653,12 @@ in {
         vim.o.updatetime = 150
         vim.o.guifont = 'Fira Code:h10'
 
+        -- Enable fold persistence
+        --vim.o.foldmethod = 'syntax'
+        vim.o.foldmethod = 'manual'
+        vim.o.foldlevelstart = 99
+        vim.o.viewoptions = 'folds,cursor'
+
         vim.api.nvim_create_autocmd("FileType", {
           pattern = "nix",
           callback = function(args)
@@ -664,6 +681,25 @@ in {
         vim.opt.undodir = { prefix .. "/nvim/.undodir//"}
         vim.opt.backupdir = {prefix .. "/nvim/.backup//"}
         vim.opt.directory = { prefix .. "/nvim/.swp//"}
+
+        -- Auto-save and restore folds
+        vim.api.nvim_create_autocmd("BufWinLeave", {
+          pattern = "*",
+          callback = function()
+            if vim.bo.filetype ~= "" then
+              vim.cmd("silent! mkview")
+            end
+          end
+        })
+
+        vim.api.nvim_create_autocmd("BufWinEnter", {
+          pattern = "*",
+          callback = function()
+            if vim.bo.filetype ~= "" then
+              vim.cmd("silent! loadview")
+            end
+          end
+        })
 
         local local_init = vim.fn.expand("~/.config/nvim/init-local.lua")
         if vim.fn.filereadable(local_init) == 1 then

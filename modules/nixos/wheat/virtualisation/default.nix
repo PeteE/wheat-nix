@@ -41,9 +41,8 @@ in {
       };
     };
 
-    wheat.user.extraGroups = [ cfg.group ];
-    environment.systemPackages = with pkgs; [
-      virt-manager
+    environment.systemPackages = cfg.libvirtd.enable [
+      pkgs.virt-manager
     ];
 
     environment.variables = {

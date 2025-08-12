@@ -14,6 +14,7 @@
     ...
 }:
 {
+
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     (../../../modules/shared/wheat/default.nix)
@@ -45,11 +46,46 @@
       enable = true;
     };
   };
-  # Host-specific config (old x1 carbon laptop)
+  environment.systemPackages = with pkgs; [
+    bridge-utils
+  ];
+
   networking.hostName = "x1";
 
-  time.timeZone = "America/Chicago";
+  systemd.network.enable = true;
+  systemd.network.networks."10-lan" = {
+    matchConfig.Name = ["enp0s31f6" "vm-*"];
+    networkConfig = {
+      Bridge = "br0";
+    };
+  };
+  systemd.network.netdevs."br0" = {
+    netdevConfig = {
+      Name = "br0";
+      Kind = "bridge";
+    };
+  };
+  systemd.network.networks."10-lan-bridge" = {
+    matchConfig.Name = "br0";
+    networkConfig = {
+      Address = ["192.168.100.1/24"];
+      DNS = [
+        "1.1.1.1"
+        "8.8.8.8"
+      ];
+      IPv6AcceptRA = false;
+    };
+    linkConfig.RequiredForOnline = "routable";
+  };
 
+  networking.nat = {
+    enable = true;
+    enableIPv6 = true;
+    externalInterface = "wlp2s0";
+    internalInterfaces = [ "br0" ];
+  };
+
+  time.timeZone = "America/Chicago";
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "uas" "usb_storage" "sd_mod" ];
@@ -90,6 +126,13 @@
       enable = true;
     };
     cpuFreqGovernor = "performance";
+  };
+
+  # Micro VMs
+  microvm.vms = {
+    microvm-poc = {
+      flake = inputs.self;
+    };
   };
   system.stateVersion = "25.11";
 

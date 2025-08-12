@@ -39,6 +39,7 @@
     dev-tools.enable = true;
     ai.enable = true;
     k8s.enable = true;
+    gcloud.enable = true;
     # firefox.enable = true;
 
     # TODO: only enable on m4, x1

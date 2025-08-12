@@ -5,6 +5,7 @@ This repo contains the config for all my Nix boxes.
 # TODO
 
 QOL:
+- [ ] tmux finger / extracto
 - [ ] vim terminal delay when use ing `<Space>` key (likely due to keybindings)
 - [ ] persistent folding
 - [ ] learn undotree
