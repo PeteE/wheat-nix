@@ -4,16 +4,22 @@ This repo contains the config for all my Nix boxes.
 
 # TODO
 
+QOL:
+- [ ] vim terminal delay when use ing `<Space>` key (likely due to keybindings)
+- [ ] persistent folding
+- [ ] learn undotree
+- [ ] markview disable by default
+
+- [ ] create an fzf switcher for azure
+- [ ] spend more time on nushell
 - [ ] dynamic clipboard (rofi)
+- [x] better dns (without pihole)
+- [x] claude-nvim
 - [x] kubectl vim plugin
-- [ ] claude-nvim
-- [ ] better dns (without pihole)
 - [x] remote builder on ripnix
 - [x] add `nn` and nix-output-mon
 - [x] btop catppuccin
 - [x] tmux refactor
-- spend more time on nushell
-- create an fzf switcher for azure
 
 
 Misc

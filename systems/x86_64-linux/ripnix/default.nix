@@ -30,6 +30,11 @@
     secrets.enable = true;
     services.podman.enable = true;
     remote-builder.enable = true;
+
+    virtualisation = {
+      enable = true;
+      libvirtUri = "qemu+ssh://petee@ripper/system";
+    };
   };
 
   networking.hostName = "ripnix";

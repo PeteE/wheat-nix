@@ -31,7 +31,15 @@
     plasma.enable = true;
     wifi.enable = true;
     sudo.enable = true;
-    virtualisation.enable = true;
+
+    # todo(pete) : replace with VirtNix module
+    virtualisation = {
+      enable = false;
+      libvirtd.enable = false;
+      libvirtUri = "qemu+ssh://petee@ripper/system";
+    };
+
+    libvirt-vms.enable = true;
     services.podman.enable = true;
     remote-builder-client = {
       enable = true;
