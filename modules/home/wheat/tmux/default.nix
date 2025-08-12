@@ -70,6 +70,13 @@ in {
         tmuxPlugins.open
         tmuxPlugins.copycat
         {
+          plugin = tmuxPlugins.tmux-thumbs;
+          # extraConfig = ''
+          #   set -g @thumbs-key F
+          #   set -g @thumbs-osc52 1
+          # '';
+        }
+        {
           plugin = tmuxPlugins.catppuccin;
           extraConfig = ''
             set -g @catppuccin_flavor 'mocha'
@@ -148,7 +155,6 @@ in {
       lsof  # TODO(pete): probably not neccessary, can't remember
       file  # TODO(pete): probably not neccessary, can't remember
       fzf
-      # thumbs
     ];
   };
 }

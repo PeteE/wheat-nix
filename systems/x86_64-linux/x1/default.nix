@@ -130,9 +130,9 @@
 
   # Micro VMs
   microvm.vms = {
-    microvm-poc = {
-      flake = inputs.self;
-    };
+    # microvm-poc = {
+    #   flake = inputs.self;
+    # };
   };
   system.stateVersion = "25.11";
 
