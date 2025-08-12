@@ -161,7 +161,7 @@
           sops-nix.darwinModules.sops
           home-manager.darwinModules.home-manager
           virby.darwinModules.default
- r      ];
+        ];
         nixos = with inputs; [
           home-manager.nixosModules.home-manager
           nixos-generators.nixosModules.all-formats

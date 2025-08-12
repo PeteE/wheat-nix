@@ -116,6 +116,8 @@ in {
 
           # nushell
           vscode-marketplace.thenuprojectcontributors.vscode-nushell-lang
+          # repomix
+          vscode-marketplace.dorianmassoulier.repomix-runner
         ];
       };
     };

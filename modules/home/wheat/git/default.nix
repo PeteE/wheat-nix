@@ -46,25 +46,33 @@ in {
           };
         };
 
-        merge = {
-          # conflictstyle = "zdiff3";
-          tool = "meld";
-          path = "${pkgs.meld}/bin/meld";
-        };
-        diff = {
-          tool = "meld";
-          path = "${pkgs.meld}/bin/meld";
-        };
-        mergetool = {
-          tool = "meld";
-          path = "${pkgs.meld}/bin/meld";
-        };
+        # merge = {
+        #   conflictstyle = "zdiff3";
+        #   tool = "meld";
+        #   path = "${pkgs.meld}/bin/meld";
+        # };
+        # diff = {
+        #   tool = "meld";
+        #   path = "${pkgs.meld}/bin/meld";
+        # };
+        # mergetool = {
+        #   tool = "meld";
+        #   path = "${pkgs.meld}/bin/meld";
+        # };
 
         pull.rebase = "false";
         push.default = "current";
 
+        # include = [
+        #   {
+        #     path = "${config.xdg.configHome}/${theme}";
+        #   }
+        #   {
+        #     path = "~/.config/git/config.local";
+        #   }
+        # ];
         include = {
-          path = "${config.xdg.configHome}/${theme}";
+          path = "~/.config/git/config.local";
         };
       };
 

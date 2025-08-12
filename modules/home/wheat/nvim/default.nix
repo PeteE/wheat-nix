@@ -516,7 +516,7 @@ in {
           config = ''
             let g:gitgutter_enabled=1
             let g:gitgutter_terminal_reports_focus=0
-            let g:gitgutter_grep = 'rg'
+            let g:gitgutter_grep = 'rg --hidden'
             let g:gitgutter_map_keys = 1
             highlight GitGutterAdd    guifg=#a6e3a1 ctermfg=2
             highlight GitGutterChange guifg=#fab387 ctermfg=3
