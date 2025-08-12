@@ -47,7 +47,10 @@
 
   programs.home-manager.enable = true;
   home.packages = with pkgs; [
-    meld # 3 way diff
+    repomix  # packages a repo for use with AI tooling
+    ugrep-indexer
+    fx # json TUI
+    meld # 3 way visual diff
     inputs.deploy-rs.packages."${system}".deploy-rs # https://github.com/serokell/deploy-rs
     tailscale
     ollama
