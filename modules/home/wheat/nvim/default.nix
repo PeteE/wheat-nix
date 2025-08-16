@@ -21,6 +21,8 @@ in {
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
+      terraform-ls
+      nixpkgs-fmt
       lazygit
       nodePackages.eslint
       lua-language-server
@@ -29,7 +31,6 @@ in {
       yaml-language-server
       pyright
       nil
-      terraform-ls
       tflint
       alejandra
       kubectl
@@ -89,14 +90,15 @@ in {
               indent = { enabled = true },
               terminal = { enabled = true },
               zen = { enabled = true },
+              bigfile = { enabled = true },
               bufdelete = { enabled = true },
               dim = { enabled = true },
               debug = { enabled = true },
               layout = { enabled = true },
               notifier = { enabled = true },
-              scratch = {
-                enabled = true
-              },
+              scratch = { enabled = true },
+              scroll = { enabled = true },
+              statuscolumn = { enabled = true },
               explorer = {
                 replace_netrw = true,
                 hidden = true,
@@ -104,6 +106,8 @@ in {
                 git_untracked = true,
                 follow_file = false,
               },
+              gitbrowse = { enabled = true },
+              diagnostics = { enabled = true },
               dashboard = {
                 enabled = true,
                 sections = {
@@ -123,6 +127,10 @@ in {
             })
 
             -- Snacks keymaps
+
+            vim.keymap.set('n', '<space>sd', function() Snacks.picker.diagnostics() end, { desc = "Diagnostics" })
+            vim.keymap.set('n', '<space>sD', function() Snacks.picker.diagnostics_buffer() end, { desc = "Buffer Diagnostics"})
+
             vim.keymap.set('n', '<space>z',   function() Snacks.zen.zoom() end, { desc = 'Toggle Zoom' })
             vim.keymap.set('n', '<space>Z',   function() Snacks.zen() end, { desc = 'Toggle Zen Mode' })
             vim.keymap.set('n', '<space>.',   function() Snacks.scratch() end, { desc = 'Toggle Scratch Buffer' })
@@ -229,8 +237,8 @@ in {
           type = "lua";
           config = ''
             local opts = {buffer = 0}
-            vim.keymap.set('t', '<C-h>', [[<Cmd>TmuxNavigateLeft<CR>]], opts)
-            vim.keymap.set('t', '<C-l>', [[<Cmd>TmuxNavigateRight<CR>]], opts)
+            -- vim.keymap.set('t', '<C-h>', [[<Cmd>TmuxNavigateLeft<CR>]], opts)
+            -- vim.keymap.set('t', '<C-l>', [[<Cmd>TmuxNavigateRight<CR>]], opts)
           '';
         }
         supertab
@@ -319,12 +327,17 @@ in {
               settings = {
                 ['nil'] = {
                   nix = {
+                    filetypes =  { "nix" },
+                    rootPatterns = { "flake.nix" },
                     flake = {
-                      autoEvalInputs = true,
+                      autoEvalInputs = false,
                     },
                   },
                   formatting = {
-                    command = { "alejandra" },
+                    command = { "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt" },
+                  },
+                  diagnostics = {
+                    excludedFiles = { "generated.nix" },
                   },
                 },
               },
@@ -424,9 +437,6 @@ in {
             cmp.setup.cmdline(':', {
               mapping = cmp.mapping.preset.cmdline(),
               sources = cmp.config.sources(
-               {
-                 { name = 'fuzzy_path' }
-               },
                {
                 { name = 'cmdline' }
                }
@@ -554,80 +564,6 @@ in {
           plugin = claude-code-nvim;
           type = "lua";
           config = ''
-            -- -- Fix space keymap conflicts in terminal mode
-            -- vim.api.nvim_create_autocmd("TermOpen", {
-            --   pattern = "*",
-            --   callback = function()
-            --     -- Set timeout to 0 for terminal buffers to eliminate keymap delays
-            --     vim.opt_local.timeoutlen = 0
-            --     -- Override all space-based keymaps in terminal mode
-            --     vim.keymap.set('t', '<space>', '<space>', { buffer = true, silent = true, nowait = true })
-            --   end
-            -- })
-
-            require("claude-code").setup({
-              window = {
-                split_ratio = 0.5,      -- Percentage of screen for the terminal window (height for horizontal, width for vertical splits)
-                position = "float",  -- Position of the window: "botright", "topleft", "vertical", "float", etc.
-                enter_insert = true,    -- Whether to enter insert mode when opening Claude Code
-                hide_numbers = true,    -- Hide line numbers in the terminal window
-                hide_signcolumn = true, -- Hide the sign column in the terminal window
-
-                -- Floating window configuration (only applies when position = "float")
-                float = {
-                  width = "80%",        -- Width: number of columns or percentage string
-                  height = "80%",       -- Height: number of rows or percentage string
-                  row = "center",       -- Row position: number, "center", or percentage string
-                  col = "center",       -- Column position: number, "center", or percentage string
-                  relative = "editor",  -- Relative to: "editor" or "cursor"
-                  border = "rounded",   -- Border style: "none", "single", "double", "rounded", "solid", "shadow"
-                },
-              },
-              -- File refresh settings
-              refresh = {
-                enable = true,           -- Enable file change detection
-                updatetime = 100,        -- updatetime when Claude Code is active (milliseconds)
-                timer_interval = 1000,   -- How often to check for file changes (milliseconds)
-                show_notifications = true, -- Show notification when files are reloaded
-              },
-              -- Git project settings
-              git = {
-                use_git_root = true,     -- Set CWD to git root when opening Claude Code (if in git project)
-              },
-              -- Shell-specific settings
-              shell = {
-                separator = '&&',        -- Command separator used in shell commands
-                pushd_cmd = 'pushd',     -- Command to push directory onto stack (e.g., 'pushd' for bash/zsh, 'enter' for nushell)
-                popd_cmd = 'popd',       -- Command to pop directory from stack (e.g., 'popd' for bash/zsh, 'exit' for nushell)
-              },
-              -- Command settings
-              command = "claude",        -- Command used to launch Claude Code
-              -- Command variants
-              command_variants = {
-                -- Conversation management
-                continue = "--continue", -- Resume the most recent conversation
-                resume = "--resume",     -- Display an interactive conversation picker
-
-                -- Output options
-                verbose = "--verbose",   -- Enable verbose logging with full turn-by-turn output
-              },
-              -- Keymaps
-              keymaps = {
-                toggle = {
-                  -- normal = "<space>ai",       -- Normal mode keymap for toggling Claude Code, false to disable
-                  -- terminal = "<space>ai",     -- Terminal mode keymap for toggling Claude Code, false to disable
-                  normal = false,       -- Normal mode keymap for toggling Claude Code, false to disable
-                  terminal = false,     -- Terminal mode keymap for toggling Claude Code, false to disable
-
-                  -- variants = {
-                  --   continue = "<leader>cc", -- Normal mode keymap for Claude Code with continue flag
-                  --   verbose = "<leader>cv",  -- Normal mode keymap for Claude Code with verbose flag
-                  -- },
-                },
-                window_navigation = true, -- Enable window navigation keymaps (<C-h/j/k/l>)
-                scrolling = true,         -- Enable scrolling keymaps (<C-f/b>) for page up/down
-              },
-            })
           '';
          }
       ];
