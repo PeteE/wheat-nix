@@ -57,8 +57,7 @@ in {
         tmuxPlugins.sensible
         { plugin = tmuxPlugins.tmux-fzf; }
         { plugin = tmuxPlugins.urlview; }
-        { plugin = tmuxPlugins.fuzzback; }
-        # { plugin = tmuxPlugins.extrakto; }
+        # { plugin = tmuxPlugins.fuzzback; }  # TODO(pete)
         {
           plugin = tmuxPlugins.yank;
           extraConfig = ''
@@ -145,10 +144,10 @@ in {
         set -g status-left-length 100
         set -g status-left ""
         set -g status-right "#{E:@catppuccin_status_application}"
-        set -agF status-right "#{E:@catppuccin_status_cpu}"
-        set -ag status-right "#{E:@catppuccin_status_session}"
-        set -ag status-right "#{E:@catppuccin_status_uptime}"
-        set -agF status-right "#{E:@catppuccin_status_battery}"
+        # set -agF status-right "#{E:@catppuccin_status_cpu}"
+        # set -ag status-right "#{E:@catppuccin_status_session}"
+        # set -ag status-right "#{E:@catppuccin_status_uptime}"
+        # set -agF status-right "#{E:@catppuccin_status_battery}"
       '';
     };
     home.packages = with pkgs; [

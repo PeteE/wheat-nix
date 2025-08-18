@@ -1,34 +1,33 @@
 # Overview
 This repo contains the config for all my Nix boxes.
 
-
 # TODO
 
 QOL:
-- [ ] tmux finger / extracto
-- [ ] vim terminal delay when use ing `<Space>` key (likely due to keybindings)
-- [ ] persistent folding
+- [ ] setup tmuxinator (or something else to)
+  - tmux per project 
+  - dedicated claude window/pane
+- [ ] tmux ~~finger~~ thumbs / extrackto / fuzzback?
 - [ ] learn undotree
-- [ ] markview disable by default
-
 - [ ] create an fzf switcher for azure
 - [ ] spend more time on nushell
 - [ ] dynamic clipboard (rofi)
-- [x] better dns (without pihole)
-- [x] claude-nvim
-- [x] kubectl vim plugin
-- [x] remote builder on ripnix
-- [x] add `nn` and nix-output-mon
-- [x] btop catppuccin
-- [x] tmux refactor
+- [X] markview disable by default
+- [X] vim terminal delay when useing `<Space>` key (likely due to keybindings)
+- [X] persistent folding
+- [X] better dns (without pihole)
+- [X] claude-nvim
+- [X] kubectl vim plugin
+- [X] remote builder on ripnix
+- [X] add `nn` and nix-output-mon
+- [X] btop catppuccin
+- [X] tmux refactor
 
-
-Misc
--  starship exit code ugly X
 
 ## Additional Systems / TODO
 - pi-zero
 - hv - decommission from existing k3s cluster and migrate
-- ripper - ugh not sure, too many VMS
-- ripper-nos - nixos VM -- probably don't need anymore
+- ripper - ugh not sure, too many VMs
+- [x] ripper-nos - nixos VM -- probably don't need anymore
+    - renamed to `ripnix` and updated. Need more NVMe drives.
 - rpi5/octoprint

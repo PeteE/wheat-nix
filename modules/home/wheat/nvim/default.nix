@@ -178,13 +178,19 @@ in {
         #   plugin = which-key-nvim;
         #   type = "lua";
         # }
+
         {
           plugin = markview-nvim;
           type = "lua";
           config = ''
-            require("markview.extras.checkboxes").setup();
-            require("markview.extras.headings").setup();
-            require("markview.extras.editor").setup();
+            require("markview").setup({
+              preview = { 
+                enable = false,
+              },
+            })
+            require("markview.extras.checkboxes").setup()
+            require("markview.extras.headings").setup()
+            require("markview.extras.editor").setup()
           '';
         }
         {
@@ -549,6 +555,7 @@ in {
             require("toggleterm").setup({
               shade_terminals = true;
             })
+            vim.keymap.set({'n', 't'}, '<leader>tt', '<cmd>ToggleTerm<CR>')
           '';
         }
         {
@@ -565,7 +572,7 @@ in {
           type = "lua";
           config = ''
           '';
-         }
+        }
       ];
       withPython3 = true;
       withNodeJs = true;
