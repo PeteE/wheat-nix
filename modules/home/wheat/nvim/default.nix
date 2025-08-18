@@ -149,7 +149,7 @@ in {
 
             vim.keymap.set('n', '<space>fn',   function() Snacks.picker.notifications() end, { desc = 'Show notifications' })
             vim.keymap.set('n', '<space>gb',   function() Snacks.picker.git_branches() end, { desc = 'Show Git branches' })
-            vim.keymap.set('n', '<space>rg',   function() Snacks.picker.grep() end, { desc = 'Search' })
+            vim.keymap.set('n', '<space>rg',   function() Snacks.picker.grep_word() end, { desc = 'Search' })
             -- vim.keymap.set('n', '<space>dm',   function() Snacks.dim() end, { desc = 'Toggle Dim' })
 
             -- LSP
@@ -263,12 +263,9 @@ in {
         nvim-dap
         undotree
         zoxide-vim
-        telescope-vim-bookmarks-nvim
-        telescope-symbols-nvim
         vim-fugitive
         vim-tmux-navigator
         fzf-lsp-nvim
-        telescope-zoxide
         lazy-nvim
         vim-helm
         vim-indentwise
@@ -451,41 +448,13 @@ in {
             })
           '';
         }
-        {
-          plugin = trouble-nvim;
-          type = "lua";
-          config = ''
-            vim.keymap.set("n", "<space>t", "<cmd>TroubleToggle<CR>")
-          '';
-        }
-        {
-          plugin = telescope-nvim;
-          type = "lua";
-        }
-        {
-          plugin = telescope-fzf-native-nvim;
-          type = "lua";
-          config = ''
-            require('telescope').load_extension('fzf')
-          '';
-
-        }
-        {
-          plugin = telescope-file-browser-nvim;
-          type = "lua";
-          config = ''
-            -- require('telescope').load_extension('file_browser')
-            -- vim.keymap.set("n", "<space>f", "<cmd>Telescope file_browser select_buffer=true<CR>")
-          '';
-        }
-        {
-          plugin = telescope-undo-nvim;
-          type = "lua";
-          config = ''
-            require('telescope').load_extension('undo')
-            vim.keymap.set("n", "<leader>u", "<cmd>Telescope undo<CR>")
-          '';
-        }
+        # {
+        #   plugin = trouble-nvim;
+        #   type = "lua";
+        #   config = ''
+        #     vim.keymap.set("n", "<space>t", "<cmd>TroubleToggle<CR>")
+        #   '';
+        # }
         {
            plugin = fzf-lua;
            type = "lua";
@@ -563,7 +532,7 @@ in {
               vim.opt_local.updatetime = 15
             end,
             })
-            vim.keymap.set({'n', 't'}, '<leader>tt', '<cmd>ToggleTerm<CR>')
+            vim.keymap.set({'n', 't'}, '<space>tt', '<cmd>ToggleTerm<CR>')
           '';
         }
         {
@@ -645,10 +614,7 @@ in {
         -- TODO test
         vim.keymap.set('n', '<C-n>', '<Cmd>NvimTreeToggle<CR>')
 
-        -- vim.keymap.set('n', '<leader>r', '<Cmd>NvimTreeRefresh<CR>')
-        -- vim.keymap.set('n', '<leader>n', '<Cmd>NvimTreeFindFile<CR>')
         -- vim.keymap.set('n', '<leader>rg', 'yiw:Rg<Space><C-r>0<CR>')
-        -- vim.keymap.set('n', '<space>rg', '<Cmd>Telescope live_grep<CR>')
 
         local prefix = vim.env.XDG_CONFIG_HOME or vim.fn.expand("~/.config")
         vim.opt.undodir = { prefix .. "/nvim/.undodir//"}
