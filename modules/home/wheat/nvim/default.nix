@@ -183,14 +183,15 @@ in {
           plugin = markview-nvim;
           type = "lua";
           config = ''
+            require("markview.extras.checkboxes").setup()
+            require("markview.extras.headings").setup()
+            require("markview.extras.editor").setup()
             require("markview").setup({
               preview = { 
                 enable = false,
               },
             })
-            require("markview.extras.checkboxes").setup()
-            require("markview.extras.headings").setup()
-            require("markview.extras.editor").setup()
+            vim.keymap.set('n', '<space>mv', '<cmd>Markview<cr>', { desc = "Markdown Miewer toggle" })
           '';
         }
         {
@@ -555,6 +556,13 @@ in {
             require("toggleterm").setup({
               shade_terminals = true;
             })
+
+            -- Set updatetime for terminal buffers only
+            vim.api.nvim_create_autocmd("TermOpen", {
+            callback = function()
+              vim.opt_local.updatetime = 15
+            end,
+            })
             vim.keymap.set({'n', 't'}, '<leader>tt', '<cmd>ToggleTerm<CR>')
           '';
         }
@@ -571,6 +579,28 @@ in {
           plugin = claude-code-nvim;
           type = "lua";
           config = ''
+            require("claude-code").setup({
+              window = {
+                position = "float",
+                float = {
+                  width = "90%",
+                  height = "90%",
+                },
+              },
+              refresh = {
+                updatetime = 20,
+              },
+              command = "claude --continue",
+              keymaps = {
+                toggle = {
+                  normal = false,
+                  terminal = false,
+                },
+              },
+            })
+            vim.keymap.set({'n','t'}, '<space>ai', function()
+              require("claude-code").toggle()
+            end, { desc = 'Toggle AI' })
           '';
         }
       ];

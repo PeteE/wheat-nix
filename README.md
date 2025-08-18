@@ -2,8 +2,6 @@
 This repo contains the config for all my Nix boxes.
 
 # TODO
-
-QOL:
 - [ ] setup tmuxinator (or something else to)
   - tmux per project 
   - dedicated claude window/pane
@@ -25,9 +23,9 @@ QOL:
 
 
 ## Additional Systems / TODO
-- pi-zero
-- hv - decommission from existing k3s cluster and migrate
-- ripper - ugh not sure, too many VMs
+- [ ] rpi5/octoprint
+- [ ] pi-zero
+- [ ] hv - decommission from existing k3s cluster and migrate
+- [ ] ripper - ugh not sure, too many VMs
 - [x] ripper-nos - nixos VM -- probably don't need anymore
     - renamed to `ripnix` and updated. Need more NVMe drives.
-- rpi5/octoprint
