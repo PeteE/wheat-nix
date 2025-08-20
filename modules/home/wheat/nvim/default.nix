@@ -177,6 +177,7 @@ in {
             require("markview.extras.checkboxes").setup();
             require("markview.extras.headings").setup();
             require("markview.extras.editor").setup();
+            -- vim.keymap.set({'n'}, '<leader>mv', '<cmd>Markview<CR>', { buffer = true })
           '';
         }
         {
@@ -617,6 +618,10 @@ in {
                 scrolling = true,         -- Enable scrolling keymaps (<C-f/b>) for page up/down
               },
             })
+
+            vim.keymap.set('n', '<space>ai', function()
+              require("claude-code").toggle()
+            end, { desc = 'Toggle AI with zoom' })
           '';
          }
       ];

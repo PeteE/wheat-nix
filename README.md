@@ -3,14 +3,18 @@ This repo contains the config for all my Nix boxes.
 
 
 # TODO
+Work:
+- [ ] AI workload to diagnose sandbox
 
 QOL:
+- [ ] setup https://github.com/iannuttall/claude-sessions
+- [ ] tmux-thumbs
 - [ ] vim terminal delay when use ing `<Space>` key (likely due to keybindings)
 - [ ] persistent folding
 - [ ] learn undotree
 - [ ] markview disable by default
 
-- [ ] create an fzf switcher for azure
+ [ ] create an fzf switcher for azure
 - [ ] spend more time on nushell
 - [ ] dynamic clipboard (rofi)
 - [x] better dns (without pihole)

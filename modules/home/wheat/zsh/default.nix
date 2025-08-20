@@ -62,6 +62,7 @@
       nd = "nix develop -c zsh";
       vi = "nvim";
       vim = "nvim";
+      j = "just";
     };
     enableCompletion = true;
     autocd = false;
