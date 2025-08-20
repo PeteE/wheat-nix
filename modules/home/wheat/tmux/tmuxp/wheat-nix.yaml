@@ -1,0 +1,14 @@
+session_name: wheat-nix
+startup_window: editor
+start_directory: ~/dev/wheat-nix
+
+windows:
+  - window_name: editor
+    panes:
+      - nvim
+
+  - window_name: k9s
+    panes:
+      - k9s --context wheat
+
+root: ~/dev/wheat-nix

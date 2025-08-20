@@ -1,0 +1,25 @@
+session_name: opaque-systems
+startup_window: editor
+start_directory: ~/dev/opaque-systems
+
+windows:
+  - window_name: opaque
+    start_directory: ~/dev/opaque-systems
+    panes:
+      - blank
+  - window_name: helm-charts
+    start_directory: ~/dev/helm-charts
+    panes:
+      - blank
+  - window_name: tf-modules
+    start_directory: ~/dev/opaque-systems/terraform-modules
+    panes:
+      - blank
+  - window_name: infra-stacks
+    start_directory: ~/dev/opaque-systems/terragrunt-infra-stacks
+    panes:
+      - blank
+  - window_name: app-stacks
+    start_directory: ~/dev/opaque-systems/terragrunt-application-stacks
+    panes:
+      - blank

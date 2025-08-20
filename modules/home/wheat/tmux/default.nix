@@ -51,8 +51,6 @@ in {
       historyLimit = cfg.historyLimit;
       keyMode = cfg.keyMode;
       tmuxp.enable = true;
-      # tmuxinator.enable = true;
-
       plugins = with pkgs; [
         tmuxPlugins.sensible
         { plugin = tmuxPlugins.tmux-fzf; }
@@ -150,6 +148,15 @@ in {
         # set -agF status-right "#{E:@catppuccin_status_battery}"
       '';
     };
+    xdg.configFile."tmuxp/wheat-nix.yaml" = {
+       source = ./tmuxp/wheat-nix.yaml;
+    };
+    xdg.configFile."tmuxp/opaque-systems.yaml" = {
+       source = ./tmuxp/opaque-systems.yaml;
+    };
+    programs.zsh.envExtra = ''
+      export DISABLE_AUTO_TITLE=true
+    '';
     home.packages = with pkgs; [
       lsof  # TODO(pete): probably not neccessary, can't remember
       file  # TODO(pete): probably not neccessary, can't remember

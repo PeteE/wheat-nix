@@ -41,8 +41,8 @@ in {
       };
     };
 
-    environment.systemPackages = cfg.libvirtd.enable [
-      pkgs.virt-manager
+    environment.systemPackages = with pkgs; [
+      virt-manager
     ];
 
     environment.variables = {

@@ -46,10 +46,6 @@
       enable = true;
     };
   };
-  environment.systemPackages = with pkgs; [
-    bridge-utils
-  ];
-
   networking.hostName = "x1";
 
   systemd.network.enable = true;
