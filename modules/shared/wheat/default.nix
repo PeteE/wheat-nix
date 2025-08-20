@@ -143,6 +143,11 @@ in {
       "petee"
     ];
     programs.firefox.enable = true;
+
+    # environment.sessionVariables = {
+    #   TERM = "screen-256color";
+    # };
+
     system.stateVersion = "25.11";
   };
 }

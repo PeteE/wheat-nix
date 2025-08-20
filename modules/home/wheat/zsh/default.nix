@@ -24,8 +24,6 @@
     enable = true;
     oh-my-zsh = {
       enable = true;
-      # theme = "";
-      # custom = "$HOME/.oh-my-zsh/custom";
       plugins = [
         # "aws"
         "argocd"
@@ -39,10 +37,6 @@
         "aliases"
         "common-aliases"
         "direnv"
-        # "docker"
-        # "docker-compose"
-        # "dotenv"
-        # "emoji"      ONE of these 3 is slow
         "encode64"
         "extract"
         "zoxide"
@@ -78,6 +72,9 @@
 
       export PYTHONWARNINGS="ignore::FutureWarning"
       export PATH=$HOME/bin:$PATH
+
+      # Disable pager for systemd tools (journalctl, systemctl, etc.)
+      export SYSTEMD_PAGER=""
     '';
   };
 }

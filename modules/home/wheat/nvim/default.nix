@@ -21,6 +21,8 @@ in {
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
+      terraform-ls
+      nixpkgs-fmt
       lazygit
       nodePackages.eslint
       lua-language-server
@@ -29,7 +31,6 @@ in {
       yaml-language-server
       pyright
       nil
-      terraform-ls
       tflint
       alejandra
       kubectl
@@ -89,14 +90,15 @@ in {
               indent = { enabled = true },
               terminal = { enabled = true },
               zen = { enabled = true },
+              bigfile = { enabled = true },
               bufdelete = { enabled = true },
               dim = { enabled = true },
               debug = { enabled = true },
               layout = { enabled = true },
               notifier = { enabled = true },
-              scratch = {
-                enabled = true
-              },
+              scratch = { enabled = true },
+              scroll = { enabled = true },
+              statuscolumn = { enabled = true },
               explorer = {
                 replace_netrw = true,
                 hidden = true,
@@ -104,6 +106,8 @@ in {
                 git_untracked = true,
                 follow_file = false,
               },
+              gitbrowse = { enabled = true },
+              diagnostics = { enabled = true },
               dashboard = {
                 enabled = true,
                 sections = {
@@ -123,6 +127,10 @@ in {
             })
 
             -- Snacks keymaps
+
+            vim.keymap.set('n', '<space>sd', function() Snacks.picker.diagnostics() end, { desc = "Diagnostics" })
+            vim.keymap.set('n', '<space>sD', function() Snacks.picker.diagnostics_buffer() end, { desc = "Buffer Diagnostics"})
+
             vim.keymap.set('n', '<space>z',   function() Snacks.zen.zoom() end, { desc = 'Toggle Zoom' })
             vim.keymap.set('n', '<space>Z',   function() Snacks.zen() end, { desc = 'Toggle Zen Mode' })
             vim.keymap.set('n', '<space>.',   function() Snacks.scratch() end, { desc = 'Toggle Scratch Buffer' })
@@ -141,7 +149,7 @@ in {
 
             vim.keymap.set('n', '<space>fn',   function() Snacks.picker.notifications() end, { desc = 'Show notifications' })
             vim.keymap.set('n', '<space>gb',   function() Snacks.picker.git_branches() end, { desc = 'Show Git branches' })
-            vim.keymap.set('n', '<space>rg',   function() Snacks.picker.grep() end, { desc = 'Search' })
+            vim.keymap.set('n', '<space>rg',   function() Snacks.picker.grep_word() end, { desc = 'Search' })
             -- vim.keymap.set('n', '<space>dm',   function() Snacks.dim() end, { desc = 'Toggle Dim' })
 
             -- LSP
@@ -170,14 +178,20 @@ in {
         #   plugin = which-key-nvim;
         #   type = "lua";
         # }
+
         {
           plugin = markview-nvim;
           type = "lua";
           config = ''
-            require("markview.extras.checkboxes").setup();
-            require("markview.extras.headings").setup();
-            require("markview.extras.editor").setup();
-            -- vim.keymap.set({'n'}, '<leader>mv', '<cmd>Markview<CR>', { buffer = true })
+            require("markview.extras.checkboxes").setup()
+            require("markview.extras.headings").setup()
+            require("markview.extras.editor").setup()
+            require("markview").setup({
+              preview = { 
+                enable = false,
+              },
+            })
+            vim.keymap.set('n', '<space>mv', '<cmd>Markview<cr>', { desc = "Markdown Miewer toggle" })
           '';
         }
         {
@@ -230,8 +244,8 @@ in {
           type = "lua";
           config = ''
             local opts = {buffer = 0}
-            vim.keymap.set('t', '<C-h>', [[<Cmd>TmuxNavigateLeft<CR>]], opts)
-            vim.keymap.set('t', '<C-l>', [[<Cmd>TmuxNavigateRight<CR>]], opts)
+            -- vim.keymap.set('t', '<C-h>', [[<Cmd>TmuxNavigateLeft<CR>]], opts)
+            -- vim.keymap.set('t', '<C-l>', [[<Cmd>TmuxNavigateRight<CR>]], opts)
           '';
         }
         supertab
@@ -249,12 +263,9 @@ in {
         nvim-dap
         undotree
         zoxide-vim
-        telescope-vim-bookmarks-nvim
-        telescope-symbols-nvim
         vim-fugitive
         vim-tmux-navigator
         fzf-lsp-nvim
-        telescope-zoxide
         lazy-nvim
         vim-helm
         vim-indentwise
@@ -320,12 +331,17 @@ in {
               settings = {
                 ['nil'] = {
                   nix = {
+                    filetypes =  { "nix" },
+                    rootPatterns = { "flake.nix" },
                     flake = {
-                      autoEvalInputs = true,
+                      autoEvalInputs = false,
                     },
                   },
                   formatting = {
-                    command = { "alejandra" },
+                    command = { "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt" },
+                  },
+                  diagnostics = {
+                    excludedFiles = { "generated.nix" },
                   },
                 },
               },
@@ -426,50 +442,19 @@ in {
               mapping = cmp.mapping.preset.cmdline(),
               sources = cmp.config.sources(
                {
-                 { name = 'fuzzy_path' }
-               },
-               {
                 { name = 'cmdline' }
                }
               )
             })
           '';
         }
-        {
-          plugin = trouble-nvim;
-          type = "lua";
-          config = ''
-            vim.keymap.set("n", "<space>t", "<cmd>TroubleToggle<CR>")
-          '';
-        }
-        {
-          plugin = telescope-nvim;
-          type = "lua";
-        }
-        {
-          plugin = telescope-fzf-native-nvim;
-          type = "lua";
-          config = ''
-            require('telescope').load_extension('fzf')
-          '';
-
-        }
-        {
-          plugin = telescope-file-browser-nvim;
-          type = "lua";
-          config = ''
-            -- require('telescope').load_extension('file_browser')
-            -- vim.keymap.set("n", "<space>f", "<cmd>Telescope file_browser select_buffer=true<CR>")
-          '';
-        }
-        {
-          plugin = telescope-undo-nvim;
-          type = "lua";
-          config = ''
-            require('telescope').load_extension('undo')
-            vim.keymap.set("n", "<leader>u", "<cmd>Telescope undo<CR>")
-          '';
-        }
+        # {
+        #   plugin = trouble-nvim;
+        #   type = "lua";
+        #   config = ''
+        #     vim.keymap.set("n", "<space>t", "<cmd>TroubleToggle<CR>")
+        #   '';
+        # }
         {
            plugin = fzf-lua;
            type = "lua";
@@ -540,6 +525,14 @@ in {
             require("toggleterm").setup({
               shade_terminals = true;
             })
+
+            -- Set updatetime for terminal buffers only
+            vim.api.nvim_create_autocmd("TermOpen", {
+            callback = function()
+              vim.opt_local.updatetime = 15
+            end,
+            })
+            vim.keymap.set({'n', 't'}, '<space>tt', '<cmd>ToggleTerm<CR>')
           '';
         }
         {
@@ -557,73 +550,28 @@ in {
           config = ''
             require("claude-code").setup({
               window = {
-                split_ratio = 0.5,      -- Percentage of screen for the terminal window (height for horizontal, width for vertical splits)
-                position = "float",  -- Position of the window: "botright", "topleft", "vertical", "float", etc.
-                enter_insert = true,    -- Whether to enter insert mode when opening Claude Code
-                hide_numbers = true,    -- Hide line numbers in the terminal window
-                hide_signcolumn = true, -- Hide the sign column in the terminal window
-
-                -- Floating window configuration (only applies when position = "float")
+                position = "float",
                 float = {
-                  width = "80%",        -- Width: number of columns or percentage string
-                  height = "80%",       -- Height: number of rows or percentage string
-                  row = "center",       -- Row position: number, "center", or percentage string
-                  col = "center",       -- Column position: number, "center", or percentage string
-                  relative = "editor",  -- Relative to: "editor" or "cursor"
-                  border = "rounded",   -- Border style: "none", "single", "double", "rounded", "solid", "shadow"
+                  width = "90%",
+                  height = "90%",
                 },
               },
-              -- File refresh settings
               refresh = {
-                enable = true,           -- Enable file change detection
-                updatetime = 100,        -- updatetime when Claude Code is active (milliseconds)
-                timer_interval = 1000,   -- How often to check for file changes (milliseconds)
-                show_notifications = true, -- Show notification when files are reloaded
+                updatetime = 20,
               },
-              -- Git project settings
-              git = {
-                use_git_root = true,     -- Set CWD to git root when opening Claude Code (if in git project)
-              },
-              -- Shell-specific settings
-              shell = {
-                separator = '&&',        -- Command separator used in shell commands
-                pushd_cmd = 'pushd',     -- Command to push directory onto stack (e.g., 'pushd' for bash/zsh, 'enter' for nushell)
-                popd_cmd = 'popd',       -- Command to pop directory from stack (e.g., 'popd' for bash/zsh, 'exit' for nushell)
-              },
-              -- Command settings
-              command = "claude",        -- Command used to launch Claude Code
-              -- Command variants
-              command_variants = {
-                -- Conversation management
-                continue = "--continue", -- Resume the most recent conversation
-                resume = "--resume",     -- Display an interactive conversation picker
-
-                -- Output options
-                verbose = "--verbose",   -- Enable verbose logging with full turn-by-turn output
-              },
-              -- Keymaps
+              command = "claude --continue",
               keymaps = {
                 toggle = {
-                  -- normal = "<space>ai",       -- Normal mode keymap for toggling Claude Code, false to disable
-                  -- terminal = "<space>ai",     -- Terminal mode keymap for toggling Claude Code, false to disable
-                  normal = false,       -- Normal mode keymap for toggling Claude Code, false to disable
-                  terminal = false,     -- Terminal mode keymap for toggling Claude Code, false to disable
-
-                  -- variants = {
-                  --   continue = "<leader>cc", -- Normal mode keymap for Claude Code with continue flag
-                  --   verbose = "<leader>cv",  -- Normal mode keymap for Claude Code with verbose flag
-                  -- },
+                  normal = false,
+                  terminal = false,
                 },
-                window_navigation = true, -- Enable window navigation keymaps (<C-h/j/k/l>)
-                scrolling = true,         -- Enable scrolling keymaps (<C-f/b>) for page up/down
               },
             })
-
-            vim.keymap.set('n', '<space>ai', function()
+            vim.keymap.set({'n','t'}, '<space>ai', function()
               require("claude-code").toggle()
-            end, { desc = 'Toggle AI with zoom' })
+            end, { desc = 'Toggle AI' })
           '';
-         }
+        }
       ];
       withPython3 = true;
       withNodeJs = true;
@@ -647,6 +595,12 @@ in {
         vim.o.updatetime = 150
         vim.o.guifont = 'Fira Code:h10'
 
+        -- Enable fold persistence
+        --vim.o.foldmethod = 'syntax'
+        vim.o.foldmethod = 'manual'
+        vim.o.foldlevelstart = 99
+        vim.o.viewoptions = 'folds,cursor'
+
         vim.api.nvim_create_autocmd("FileType", {
           pattern = "nix",
           callback = function(args)
@@ -660,15 +614,31 @@ in {
         -- TODO test
         vim.keymap.set('n', '<C-n>', '<Cmd>NvimTreeToggle<CR>')
 
-        -- vim.keymap.set('n', '<leader>r', '<Cmd>NvimTreeRefresh<CR>')
-        -- vim.keymap.set('n', '<leader>n', '<Cmd>NvimTreeFindFile<CR>')
         -- vim.keymap.set('n', '<leader>rg', 'yiw:Rg<Space><C-r>0<CR>')
-        -- vim.keymap.set('n', '<space>rg', '<Cmd>Telescope live_grep<CR>')
 
         local prefix = vim.env.XDG_CONFIG_HOME or vim.fn.expand("~/.config")
         vim.opt.undodir = { prefix .. "/nvim/.undodir//"}
         vim.opt.backupdir = {prefix .. "/nvim/.backup//"}
         vim.opt.directory = { prefix .. "/nvim/.swp//"}
+
+        -- Auto-save and restore folds
+        vim.api.nvim_create_autocmd("BufWinLeave", {
+          pattern = "*",
+          callback = function()
+            if vim.bo.filetype ~= "" then
+              vim.cmd("silent! mkview")
+            end
+          end
+        })
+
+        vim.api.nvim_create_autocmd("BufWinEnter", {
+          pattern = "*",
+          callback = function()
+            if vim.bo.filetype ~= "" then
+              vim.cmd("silent! loadview")
+            end
+          end
+        })
 
         local local_init = vim.fn.expand("~/.config/nvim/init-local.lua")
         if vim.fn.filereadable(local_init) == 1 then
