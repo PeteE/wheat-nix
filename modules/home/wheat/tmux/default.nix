@@ -78,6 +78,17 @@ in {
           extraConfig = ''
             set -g @catppuccin_flavor 'mocha'
             set -g @catppuccin_window_status_style "rounded"
+
+            set -g status-right-length 100
+            set -g status-left-length 100
+            set -g status-left ""
+            set -g status-right "#{E:@catppuccin_status_application}"
+            set -agF status-right "#{E:@catppuccin_status_cpu}"
+            set -ag status-right "#{E:@catppuccin_status_session}"
+            # set -ag status-right "#{E:@catppuccin_status_uptime}"
+            # set -agF status-right "#{E:@catppuccin_status_battery}"
+
+
           '';
         }
         tmuxPlugins.better-mouse-mode
@@ -87,7 +98,6 @@ in {
       ];
       shortcut = "a";  # Ctrl-a
       mouse = true;
-      # newSession = true;
       sensibleOnTop = true;
       extraConfig = ''
         # https://github.com/tmux/tmux/wiki/Clipboard#quick-summary
@@ -96,6 +106,10 @@ in {
         set-option -sa terminal-features ',xterm-kitty:Clipboard'
 
         set -g @scroll-without-changing-pane "on"
+
+        # Preserve window names from tmuxp
+        set -g allow-rename off
+        set -g automatic-rename off
 
         # split windows
         bind | split-window -h
@@ -112,7 +126,7 @@ in {
         bind-key T select-layout tiled
 
         # TOD(pete): can't remember why I added this...especially here....
-        setenv -g PATH "$HOME/bin:$PATH"
+        # setenv -g PATH "$HOME/bin:$PATH"
 
         # clear screen
         bind C-l send-keys 'C-l'
@@ -138,14 +152,6 @@ in {
         bind-key -T copy-mode-vi 'C-l' select-pane -R
         bind-key -T copy-mode-vi 'C-\' select-pane -l
 
-        set -g status-right-length 100
-        set -g status-left-length 100
-        set -g status-left ""
-        set -g status-right "#{E:@catppuccin_status_application}"
-        # set -agF status-right "#{E:@catppuccin_status_cpu}"
-        # set -ag status-right "#{E:@catppuccin_status_session}"
-        # set -ag status-right "#{E:@catppuccin_status_uptime}"
-        # set -agF status-right "#{E:@catppuccin_status_battery}"
       '';
     };
     xdg.configFile."tmuxp/wheat-nix.yaml" = {
@@ -155,7 +161,7 @@ in {
        source = ./tmuxp/opaque-systems.yaml;
     };
     programs.zsh.envExtra = ''
-      export DISABLE_AUTO_TITLE=true
+      export DISABLE_AUTO_TITLE=false
     '';
     home.packages = with pkgs; [
       lsof  # TODO(pete): probably not neccessary, can't remember

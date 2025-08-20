@@ -4,10 +4,14 @@ start_directory: ~/dev/wheat-nix
 
 windows:
   - window_name: editor
+    options:
+      automatic-rename: on
     panes:
       - nvim
 
   - window_name: k9s
+    options:
+      automatic-rename: on
     panes:
       - k9s --context wheat
 
