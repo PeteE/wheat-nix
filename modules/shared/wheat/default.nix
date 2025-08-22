@@ -110,7 +110,7 @@ in {
     programs.zsh.enable = true;
     users.groups.${cfg.user.name} = {};
     users.users.${cfg.user.name} = {
-      inherit (cfg.user) name;
+      inherit (cfg.user) name extraGroups;
       home = if isDarwin then "/Users/${cfg.user.name}" else "/home/${cfg.user.name}";
       createHome = true;
       shell = "${pkgs.zsh}/bin/zsh";
