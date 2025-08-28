@@ -100,11 +100,18 @@ in {
               scroll = { enabled = true },
               statuscolumn = { enabled = true },
               explorer = {
+                enabled = true,
                 replace_netrw = true,
-                hidden = true,
-                ignored = true,
-                git_untracked = true,
-                follow_file = false,
+              },
+              picker = {
+                sources = {
+                  explorer = {
+                    hidden = true,
+                    ignored = true,
+                    git_untracked = true,
+                    follow_file = false,
+                  },
+                },
               },
               gitbrowse = { enabled = true },
               diagnostics = { enabled = true },
@@ -612,7 +619,7 @@ in {
         vim.keymap.set('n', 'Y', 'yy')
 
         -- TODO test
-        vim.keymap.set('n', '<C-n>', '<Cmd>NvimTreeToggle<CR>')
+        -- vim.keymap.set('n', '<C-n>', '<Cmd>NvimTreeToggle<CR>')
 
         -- vim.keymap.set('n', '<leader>rg', 'yiw:Rg<Space><C-r>0<CR>')
 

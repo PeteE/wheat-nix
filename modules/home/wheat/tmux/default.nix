@@ -161,7 +161,7 @@ in {
        source = ./tmuxp/opaque-systems.yaml;
     };
     programs.zsh.envExtra = ''
-      export DISABLE_AUTO_TITLE=false
+      export DISABLE_AUTO_TITLE=true
     '';
     home.packages = with pkgs; [
       lsof  # TODO(pete): probably not neccessary, can't remember

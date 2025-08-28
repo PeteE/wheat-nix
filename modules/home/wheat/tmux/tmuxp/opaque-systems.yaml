@@ -8,7 +8,7 @@ windows:
     panes:
       - blank
   - window_name: helm-charts
-    start_directory: ~/dev/helm-charts
+    start_directory: ~/dev/opaque-systems/helm-charts
     panes:
       - blank
   - window_name: tf-modules
