@@ -12,7 +12,19 @@
     config,
     modulesPath,
     ...
-}: {
+  }: 
+  let 
+    bridgeInterface = "br0";
+    lanInterface = "enp1s0";
+    vmInterfacePrefix = "vm-*";
+    staticIp = "192.168.1.143/24";
+    gateway = "192.168.1.33";
+    dns = [
+      "1.1.1.1"
+      "8.8.8.8"
+    ];
+  in 
+  {
   imports =
     [
       (modulesPath + "/profiles/qemu-guest.nix")
@@ -37,37 +49,36 @@
       libvirtUri = "qemu+ssh://petee@ripper/system";
     };
     libvirt-vms.enable = true;
+    services.redis.enable = true;
+    services.nats.enable = true;
+    services.clickhouse.enable = true;
+    services.suricata = {
+      enable = true;
+      interface = bridgeInterface;
+    };
   };
-
-  # TODO: move into nixos module (not shared)
-  # environment.systemPackages = with pkgs; [
-  #   bridge-utils
-  # ];
 
   networking.hostName = "ripnix";
 
   systemd.network.enable = true;
   systemd.network.networks."10-lan" = {
-    matchConfig.Name = ["enp1s0" "vm-*"];
+    matchConfig.Name = [lanInterface vmInterfacePrefix];
     networkConfig = {
-      Bridge = "br0";
+      Bridge = bridgeInterface;
     };
   };
-  systemd.network.netdevs."br0" = {
+  systemd.network.netdevs."${bridgeInterface}" = {
     netdevConfig = {
-      Name = "br0";
+      Name = "${bridgeInterface}";
       Kind = "bridge";
     };
   };
   systemd.network.networks."10-lan-bridge" = {
-    matchConfig.Name = "br0";
+    matchConfig.Name = "${bridgeInterface}";
     networkConfig = {
-      Address = ["192.168.1.143/24"];
-      Gateway = "192.168.1.33";
-      DNS = [
-        "1.1.1.1"
-        "8.8.8.8"
-      ];
+      Address = [staticIp];
+      Gateway = gateway;
+      DNS = dns;
       IPv6AcceptRA = false;
     };
     linkConfig.RequiredForOnline = "routable";
@@ -95,6 +106,7 @@
   hardware.enableRedistributableFirmware = true;
   networking.useDHCP = lib.mkDefault false;
 
+
   # Micro VMs
   microvm.vms = {
     # microvm-poc = {
@@ -103,5 +115,6 @@
   };
 
   nix.settings.trusted-users = [ "root" "petee" "pete" ];
-
+  nix.settings.substituters = [ "https://nix-cache-dev.corp.tooling.opaque-int.com/opaque" ];
+  nix.settings.trusted-public-keys = [ "opaque:od+Hipzy1dL0ZZBg24QiYP2QgEXVPVSQfDVSBxDBNWU=" ];
 }

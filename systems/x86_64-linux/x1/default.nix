@@ -25,7 +25,7 @@
     user = {
       name = "petee";
       hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
-      extraGroups = ["wheel" "NetworkManager"];
+      extraGroups = ["wheel" "NetworkManager" "kvm"];
     };
 
     secrets.enable = true;
@@ -45,7 +45,12 @@
     remote-builder-client = {
       enable = true;
     };
+    services.redis.enable = true;
   };
+  environment.systemPackages = with pkgs; [
+    bridge-utils
+    cloud-hypervisor
+  ];
   networking.hostName = "x1";
 
   systemd.network.enable = true;
