@@ -19,7 +19,7 @@ in {
       port = 6379;
       logLevel = "notice";
       syslog = true;
-      requirePass = "SuperSecret";
+      # requirePass = "SuperSecret";
 
       # TODO(pete): eviction policy
       settings = { };
