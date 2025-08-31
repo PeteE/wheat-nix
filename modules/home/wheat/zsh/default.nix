@@ -15,7 +15,7 @@
     fasd
     zoxide
     zsh-histdb
-    nmap
+    zsh-fzf-tab
     fzf
     sqlite
   ];
@@ -25,7 +25,6 @@
     oh-my-zsh = {
       enable = true;
       plugins = [
-        # "aws"
         "argocd"
         "azure"
         "colored-man-pages"
@@ -42,7 +41,6 @@
         "zoxide"
         "fzf"
         "systemd"
-        "nmap"
       ];
     };
     shellAliases = {
@@ -52,6 +50,7 @@
       nos-delete = "sudo nix-env --delete-generations --profile /nix/var/nix/profiles/system $@";
       k = "kubectl";
       gd = "git diff";
+      gdu = "git diff origin main";
       gs = "git status";
       nd = "nix develop -c zsh";
       vi = "nvim";
@@ -75,6 +74,9 @@
 
       # Disable pager for systemd tools (journalctl, systemctl, etc.)
       export SYSTEMD_PAGER=""
+
+      # enable fzf-tab
+      source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
     '';
   };
 }
