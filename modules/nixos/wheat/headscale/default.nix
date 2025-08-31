@@ -7,21 +7,19 @@
 }:
 with lib; let
   cfg = config.wheat;
-  inherit (lib) mkEnableOption mkOption mkIf;
+  inherit (lib) mkEnableOption mkIf;
 in {
   options.wheat = {
     headscale = {
       enable = mkEnableOption "Enable";
     };
   };
-  config = mkIf cfg.plasma.enable {
-    # console.useXkbConfig = true;
+  config = mkIf cfg.headscale.enable {
     services.headscale = {
-      enable = false;
-
+      enable = true;
     };
-    # environment.systemPackages = with pkgs; [
-    #   tailscale
-    # ];
+    environment.systemPackages = with pkgs; [
+      tailscale
+    ];
   };
 }
