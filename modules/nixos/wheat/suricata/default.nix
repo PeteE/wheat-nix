@@ -32,6 +32,7 @@ in {
     };
   };
   config = mkIf cfg.enable {
+    environment.systemPackages = [ pkgs.wheat.clickhouse-lua ];
     services.suricata = {
       enable = true;
       settings = {

@@ -5,7 +5,10 @@ This repo contains the config for all my Nix boxes.
 Work:
 - [ ] AI workload to diagnose sandbox
 
+Shield:
+- 
 QOL:
+- [ ] upgrade claude-code
 - [ ] setup https://github.com/iannuttall/claude-sessions
 - [ ] setup tmuxinator (or something else to)
   - tmux per project 

@@ -13,5 +13,11 @@ in {
   };
   config = mkIf cfg.enable {
     services.clickhouse.enable = true;
+
+    # TODO: add more configs here
+    # /etc/clickhouse-server/config.d
+    environment.systemPackages = with pkgs; [
+      clickhouse-cli
+    ];
   };
 }
