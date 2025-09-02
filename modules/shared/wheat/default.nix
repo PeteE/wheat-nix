@@ -130,6 +130,15 @@ in {
         PermitRootLogin = "no";
       };
     };
+
+    console.useXkbConfig = true;
+    services.xserver = {
+      enable = true;
+      xkb = {
+        options = "caps:escape";
+      };
+    };
+
     fonts.packages = with pkgs.nerd-fonts; [
       fira-code
       droid-sans-mono

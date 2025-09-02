@@ -5,7 +5,29 @@ This repo contains the config for all my Nix boxes.
 Work:
 - [ ] AI workload to diagnose sandbox
 
+Shield:
+- 
 QOL:
+- [ ]  ToggleTerm tweak: `:help toggleterm.txt`
+```
+This plugin automatically shades terminal filetypes to be darker than other
+window you can disable this by setting `shade_terminals = false` in the setup
+object
+>lua
+    require'toggleterm'.setup {
+      shade_terminals = false
+    }
+<
+alternatively you can set, _which_ filetypes should be shaded by setting
+
+>lua
+    -- fzf is just an example
+    require'toggleterm'.setup {
+      shade_filetypes = { "none", "fzf" }
+    }
+```
+
+- [ ] upgrade claude-code
 - [ ] setup https://github.com/iannuttall/claude-sessions
 - [ ] setup tmuxinator (or something else to)
   - tmux per project 

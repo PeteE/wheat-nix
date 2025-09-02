@@ -60,13 +60,8 @@
   hardware.graphics.enable = true;
   hardware.bluetooth.enable = true;
 
-  console.useXkbConfig = true;
   services.xserver = {
     enable = true;
-    xkb = {
-      options = "caps:escape";
-      variant = "";
-    };
     desktopManager.xfce.enable = true;
   };
   services.displayManager = {
