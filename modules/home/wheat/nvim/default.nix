@@ -250,9 +250,9 @@ in {
           plugin = vim-tmux-navigator;
           type = "lua";
           config = ''
-            local opts = {buffer = 0}
-            -- vim.keymap.set('t', '<C-h>', [[<Cmd>TmuxNavigateLeft<CR>]], opts)
-            -- vim.keymap.set('t', '<C-l>', [[<Cmd>TmuxNavigateRight<CR>]], opts)
+            -- local opts = {buffer = 0}
+            -- vim.keymap.set('t', '<C-k>', "<Cmd>TmuxNavigateUp<CR>", opts)
+            -- vim.keymap.set('t', '<C-j>', "<Cmd>TmuxNavigateDown<CR>", opts)
           '';
         }
         supertab
@@ -266,6 +266,7 @@ in {
         nvim-treesitter.withAllGrammars
         nvim-treesitter-parsers.just
         nvim-treesitter-parsers.rust
+        nvim-treesitter-textobjects
         rustaceanvim
         nvim-dap
         undotree
@@ -603,8 +604,9 @@ in {
         vim.o.guifont = 'Fira Code:h10'
 
         -- Enable fold persistence
-        --vim.o.foldmethod = 'syntax'
-        vim.o.foldmethod = 'manual'
+        -- vim.o.foldmethod = 'manual'
+        vim.o.foldmethod = 'expr'
+        vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
         vim.o.foldlevelstart = 99
         vim.o.viewoptions = 'folds,cursor'
 
