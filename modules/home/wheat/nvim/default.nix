@@ -42,7 +42,7 @@ in {
     programs.neovim = {
       enable = true;
       defaultEditor = true;
-      plugins = with pkgs.vimPlugins; [
+      plugins= with pkgs.vimPlugins; [
         { 
           plugin = trouble-nvim;
           type = "lua";
