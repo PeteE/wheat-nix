@@ -20,8 +20,12 @@ in {
   };
   config = mkIf cfg.plasma.enable {
     hardware.graphics.enable = true;
+    console.useXkbConfig = true;
     services.xserver = {
       enable = true;
+      xkb = {
+        options = "caps:escape";
+      };
     };
     services.desktopManager.plasma6.enable = true;
     services.displayManager.sddm.enable = true;
