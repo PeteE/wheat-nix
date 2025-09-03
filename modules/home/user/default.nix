@@ -53,6 +53,7 @@
     fx # json TUI
     meld # 3 way visual diff
     inputs.deploy-rs.packages."${system}".deploy-rs # https://github.com/serokell/deploy-rs
+    headscale
     tailscale
     ollama
     dig

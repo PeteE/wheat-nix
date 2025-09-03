@@ -266,7 +266,9 @@ in {
         nvim-treesitter.withAllGrammars
         nvim-treesitter-parsers.just
         nvim-treesitter-parsers.rust
+        nvim-treesitter-parsers.yaml
         nvim-treesitter-textobjects
+        nvim-treesitter-refactor
         rustaceanvim
         nvim-dap
         undotree
