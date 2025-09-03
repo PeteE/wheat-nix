@@ -53,13 +53,12 @@
     services.nats.enable = true;
     services.clickhouse.enable = true;
     services.suricata = {
-      enable = true;
+      enable = false;
       interface = bridgeInterface;
     };
   };
 
   networking.hostName = "ripnix";
-
   systemd.network.enable = true;
   systemd.network.networks."10-lan" = {
     matchConfig.Name = [lanInterface vmInterfacePrefix];
