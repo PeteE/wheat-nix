@@ -27,7 +27,7 @@ alternatively you can set, _which_ filetypes should be shaded by setting
     }
 ```
 
-- [ ] upgrade claude-code
+- [X] upgrade claude-code
 - [ ] setup https://github.com/iannuttall/claude-sessions
 - [ ] setup tmuxinator (or something else to)
   - tmux per project 

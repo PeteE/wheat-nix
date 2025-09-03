@@ -2,15 +2,7 @@
 {
     lib,
     pkgs,
-    inputs,
-    namespace,
-    system,
-    target,
-    format,
-    virtual,
-    systems,
     config,
-    modulesPath,
     ...
 }:
 with lib; let
@@ -51,6 +43,13 @@ in {
       enable = true;
       defaultEditor = true;
       plugins = with pkgs.vimPlugins; [
+        { 
+          plugin = trouble-nvim;
+          type = "lua";
+          config = ''
+            -- require('trouble').setup({})
+          '';
+        }
         {
           plugin = nvim-surround;
           type = "lua";
@@ -127,42 +126,41 @@ in {
             })
 
             -- Snacks keymaps
+            vim.keymap.set('n', '<leader>sd', function() Snacks.picker.diagnostics() end, { desc = "Diagnostics" })
+            vim.keymap.set('n', '<leader>sD', function() Snacks.picker.diagnostics_buffer() end, { desc = "Buffer Diagnostics"})
 
-            vim.keymap.set('n', '<space>sd', function() Snacks.picker.diagnostics() end, { desc = "Diagnostics" })
-            vim.keymap.set('n', '<space>sD', function() Snacks.picker.diagnostics_buffer() end, { desc = "Buffer Diagnostics"})
-
-            vim.keymap.set('n', '<space>z',   function() Snacks.zen.zoom() end, { desc = 'Toggle Zoom' })
-            vim.keymap.set('n', '<space>Z',   function() Snacks.zen() end, { desc = 'Toggle Zen Mode' })
-            vim.keymap.set('n', '<space>.',   function() Snacks.scratch() end, { desc = 'Toggle Scratch Buffer' })
-            vim.keymap.set('n', '<space>S',   function() Snacks.scratch.select() end, { desc = 'Select Scratch Buffer' })
-            vim.keymap.set('n', '<space>bd',  function() Snacks.bufdelete() end, { desc = 'Delete Buffer' })
+            vim.keymap.set('n', '<leader>z',   function() Snacks.zen.zoom() end, { desc = 'Toggle Zoom' })
+            vim.keymap.set('n', '<leader>Z',   function() Snacks.zen() end, { desc = 'Toggle Zen Mode' })
+            vim.keymap.set('n', '<leader>.',   function() Snacks.scratch() end, { desc = 'Toggle Scratch Buffer' })
+            vim.keymap.set('n', '<leader>S',   function() Snacks.scratch.select() end, { desc = 'Select Scratch Buffer' })
+            vim.keymap.set('n', '<leader>bd',  function() Snacks.bufdelete() end, { desc = 'Delete Buffer' })
             vim.keymap.set('n', '<c-/>',       function() Snacks.terminal() end, { desc = 'Toggle Terminal' })
             vim.keymap.set({'n', 't'}, ']]',   function() Snacks.words.jump(vim.v.count1) end, { desc = 'Next Reference' })
             vim.keymap.set({'n', 't'}, '[[',   function() Snacks.words.jump(-vim.v.count1) end, { desc = 'Prev Reference' })
 
-            vim.keymap.set('n', '<space>da',   function() Snacks.dashboard() end, { desc = 'Show dashboard' })
-            vim.keymap.set('n', '<space>ff',   function() Snacks.picker.smart() end, { desc = 'Open File' })
-            vim.keymap.set('n', '<space>fb',   function() Snacks.picker.buffers() end, { desc = 'Open Buffer' })
-            vim.keymap.set('n', '<space>fr',   function() Snacks.picker.registers() end, { desc = 'Show Registers' })
-            vim.keymap.set('n', '<space>fc',   function() Snacks.picker.command_history() end, { desc = 'Command history' })
+            vim.keymap.set('n', '<leader>da',   function() Snacks.dashboard() end, { desc = 'Show dashboard' })
+            vim.keymap.set('n', '<leader>ff',   function() Snacks.picker.smart() end, { desc = 'Open File' })
+            vim.keymap.set('n', '<leader>fb',   function() Snacks.picker.buffers() end, { desc = 'Open Buffer' })
+            vim.keymap.set('n', '<leader>fr',   function() Snacks.picker.registers() end, { desc = 'Show Registers' })
+            vim.keymap.set('n', '<leader>fc',   function() Snacks.picker.command_history() end, { desc = 'Command history' })
             vim.keymap.set('n', 'q:',          function() Snacks.picker.command_history() end, { desc = 'Command history' })
 
-            vim.keymap.set('n', '<space>fn',   function() Snacks.picker.notifications() end, { desc = 'Show notifications' })
-            vim.keymap.set('n', '<space>gb',   function() Snacks.picker.git_branches() end, { desc = 'Show Git branches' })
-            vim.keymap.set('n', '<space>rg',   function() Snacks.picker.grep_word() end, { desc = 'Search' })
-            -- vim.keymap.set('n', '<space>dm',   function() Snacks.dim() end, { desc = 'Toggle Dim' })
+            vim.keymap.set('n', '<leader>fn',   function() Snacks.picker.notifications() end, { desc = 'Show notifications' })
+            vim.keymap.set('n', '<leader>gb',   function() Snacks.picker.git_branches() end, { desc = 'Show Git branches' })
+            vim.keymap.set('n', '<leader>rg',   function() Snacks.picker.grep_word() end, { desc = 'Search' })
+            -- vim.keymap.set('n', '<leader>dm',   function() Snacks.dim() end, { desc = 'Toggle Dim' })
 
             -- LSP
-            vim.keymap.set('n', '<space>gd',   function() Snacks.picker.lsp_definitions() end, { desc = 'Go to definitions' })
-            vim.keymap.set('n', '<space>gD',   function() Snacks.picker.lsp_declaration() end, { desc = 'Go to definitions' })
-            vim.keymap.set('n', '<space>gr',   function() Snacks.picker.lsp_references() end, { desc = 'Go to references' })
-            vim.keymap.set('n', '<space>gI',   function() Snacks.picker.lsp_implementations() end, { desc = 'Go to implementations' })
-            vim.keymap.set('n', '<space>gy',   function() Snacks.picker.lsp_type_definitions() end, { desc = 'Go to type definitions' })
-            vim.keymap.set('n', '<space>ss',   function() Snacks.picker.lsp_symbols() end, { desc = 'LSP Symbols' })
-            vim.keymap.set('n', '<space>sS',   function() Snacks.picker.lsp_workspace_symbols() end, { desc = 'LSP Workspace symbols' })
+            vim.keymap.set('n', '<leader>gd',   function() Snacks.picker.lsp_definitions() end, { desc = 'Go to definitions' })
+            vim.keymap.set('n', '<leader>gD',   function() Snacks.picker.lsp_declaration() end, { desc = 'Go to definitions' })
+            vim.keymap.set('n', '<leader>gr',   function() Snacks.picker.lsp_references() end, { desc = 'Go to references' })
+            vim.keymap.set('n', '<leader>gI',   function() Snacks.picker.lsp_implementations() end, { desc = 'Go to implementations' })
+            vim.keymap.set('n', '<leader>gy',   function() Snacks.picker.lsp_type_definitions() end, { desc = 'Go to type definitions' })
+            vim.keymap.set('n', '<leader>ss',   function() Snacks.picker.lsp_symbols() end, { desc = 'LSP Symbols' })
+            vim.keymap.set('n', '<leader>sS',   function() Snacks.picker.lsp_workspace_symbols() end, { desc = 'LSP Workspace symbols' })
             vim.keymap.set('n', '<C-n>',       function() Snacks.picker.explorer() end, { desc = 'File explorer' })
 
-            vim.keymap.set('n', '<space>km', function() Snacks.picker.pick('keymaps') end, { desc = 'show keymaps' })
+            vim.keymap.set('n', '<leader>km', function() Snacks.picker.pick('keymaps') end, { desc = 'show keymaps' })
 
             function copyFullPathToClipboard()
               filename = vim.fn.expand('%:p')
@@ -170,8 +168,7 @@ in {
               vim.fn.setreg('+', filename)
               Snacks.notifier.notify("Path copied: " .. filename)
             end
-            vim.keymap.set('n', '<space>cp', copyFullPathToClipboard, { desc = 'Copy filename' })
-
+            vim.keymap.set('n', '<leader>cp', copyFullPathToClipboard, { desc = 'Copy filename' })
             '';
         }
         # {
@@ -191,7 +188,7 @@ in {
                 enable = false,
               },
             })
-            vim.keymap.set('n', '<space>mv', '<cmd>Markview<cr>', { desc = "Markdown Miewer toggle" })
+            vim.keymap.set('n', '<leader>mv', '<cmd>Markview<cr>', { desc = "Markdown Miewer toggle" })
           '';
         }
         {
@@ -243,10 +240,27 @@ in {
           plugin = vim-tmux-navigator;
           type = "lua";
           config = ''
-            -- local opts = {buffer = 0}
-            -- vim.keymap.set('t', '<C-k>', "<Cmd>TmuxNavigateUp<CR>", opts)
-            -- vim.keymap.set('t', '<C-j>', "<Cmd>TmuxNavigateDown<CR>", opts)
-          '';
+            -- Disable default tmux navigator mappings
+            vim.g.tmux_navigator_no_mappings = 1
+
+            -- Define custom tmux navigator mappings
+            local tmux_nav_opts = { silent = true, desc = "Tmux Navigate" }
+
+            -- Write all buffers before navigating from Vim to tmux pane
+            vim.g.tmux_navigator_save_on_switch = 2
+
+            -- Normal mode mappings
+            vim.keymap.set('n', '<C-h>', '<cmd>TmuxNavigateLeft<cr>', vim.tbl_extend("force", tmux_nav_opts, { desc = "Navigate Left" }))
+            vim.keymap.set('n', '<C-j>', '<cmd>TmuxNavigateDown<cr>', vim.tbl_extend("force", tmux_nav_opts, { desc = "Navigate Down" }))
+            vim.keymap.set('n', '<C-k>', '<cmd>TmuxNavigateUp<cr>', vim.tbl_extend("force", tmux_nav_opts, { desc = "Navigate Up" }))
+            vim.keymap.set('n', '<C-l>', '<cmd>TmuxNavigateRight<cr>', vim.tbl_extend("force", tmux_nav_opts, { desc = "Navigate Right" }))
+            vim.keymap.set('n', '<C-\\>', '<cmd>TmuxNavigatePrevious<cr>', vim.tbl_extend("force", tmux_nav_opts, { desc = "Navigate Previous" }))
+
+            -- Terminal mode mappings
+            vim.keymap.set('t', '<C-h>', '<C-\\><C-n><cmd>TmuxNavigateLeft<cr>', vim.tbl_extend("force", tmux_nav_opts, { desc = "Terminal Navigate Left" }))
+            vim.keymap.set('t', '<C-j>', '<C-\\><C-n><cmd>TmuxNavigateDown<cr>', vim.tbl_extend("force", tmux_nav_opts, { desc = "Terminal Navigate Down" }))
+            vim.keymap.set('t', '<C-k>', '<C-\\><C-n><cmd>TmuxNavigateUp<cr>', vim.tbl_extend("force", tmux_nav_opts, { desc = "Terminal Navigate Up" }))
+            vim.keymap.set('t', '<C-l>', '<C-\\><C-n><cmd>TmuxNavigateRight<cr>', vim.tbl_extend("force", tmux_nav_opts, { desc = "Terminal Navigate Right" }))          '';
         }
         supertab
         cmp-nvim-lsp
@@ -265,7 +279,6 @@ in {
         undotree
         zoxide-vim
         vim-fugitive
-        vim-tmux-navigator
         fzf-lsp-nvim
         lazy-nvim
         vim-helm
@@ -360,8 +373,7 @@ in {
               -- increase for noisy servers
               debounce_ms = 50,
             })
-            vim.keymap.set("n", "<space>dw", "<cmd>lua require('diaglist').open_all_diagnostics()<cr>")
-            vim.keymap.set("n", "<space>d0", "<cmd>lua require('diaglist').open_all_diagnostics()<cr>")
+            vim.keymap.set("n", "<leader>dw", "<cmd>lua require('diaglist').open_all_diagnostics()<cr>")
           '';
         }
         {
@@ -449,13 +461,6 @@ in {
             })
           '';
         }
-        # {
-        #   plugin = trouble-nvim;
-        #   type = "lua";
-        #   config = ''
-        #     vim.keymap.set("n", "<space>t", "<cmd>TroubleToggle<CR>")
-        #   '';
-        # }
         {
            plugin = fzf-lua;
            type = "lua";
@@ -533,7 +538,7 @@ in {
               vim.opt_local.updatetime = 15
             end,
             })
-            vim.keymap.set({'n', 't'}, '<space>tt', '<cmd>ToggleTerm<CR>')
+            vim.keymap.set({'n', 't'}, '<leader>tt', '<cmd>ToggleTerm<CR>')
           '';
         }
         {
@@ -568,7 +573,7 @@ in {
                 },
               },
             })
-            vim.keymap.set({'n','t'}, '<space>ai', function()
+            vim.keymap.set({'n','t'}, '<leader>ai', function()
               require("claude-code").toggle()
             end, { desc = 'Toggle AI' })
           '';
@@ -616,7 +621,7 @@ in {
         -- TODO test
         vim.keymap.set('n', '<C-n>', '<Cmd>NvimTreeToggle<CR>')
 
-        -- vim.keymap.set('n', '<leader>rg', 'yiw:Rg<Space><C-r>0<CR>')
+        -- vim.keymap.set('n', '<leader>rg', 'yiw:Rg<leader><C-r>0<CR>')
 
         local prefix = vim.env.XDG_CONFIG_HOME or vim.fn.expand("~/.config")
         vim.opt.undodir = { prefix .. "/nvim/.undodir//"}
