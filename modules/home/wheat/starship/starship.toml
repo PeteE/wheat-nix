@@ -8,7 +8,7 @@
 
 # Commands may be slower in restricted environments, e.g. containers
 
-format = """$hostname$directory$git_branch$git_commit$git_state$git_status\
+format = """$hostname$directory$git_branch$azure$git_commit$git_state$git_status\
 $fill\
 $jobs$status$cmd_duration\
 $nix_shell$terraform$kubernetes$python$aws$nodejs$docker_context$golang$time$os
@@ -117,6 +117,13 @@ format = "([ ❮ ](#767676)[$symbol($version)]($style))"
 disabled = true
 symbol = " "
 format = '([ ❮ ](#767676)[${symbol}${pyenv_prefix}(${version}) ([\($virtualenv\)](#306998))]($style))'
+
+[azure]
+disabled = false
+symbol = "󰠅 "
+format = "[ ❯ ](#767676)[$symbol$subscription]($style)"
+# style = "#89b4fa"
+style = "blue"
 
 [aws]
 disabled = true
