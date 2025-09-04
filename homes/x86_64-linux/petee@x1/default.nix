@@ -11,6 +11,7 @@
       ollamaHost = "192.168.1.115"; # m4
     };
     rofi.enable = true;
+    work.enable = true;
   };
   home.stateVersion = "25.11";
 }
