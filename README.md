@@ -29,7 +29,7 @@ alternatively you can set, _which_ filetypes should be shaded by setting
 
 - [X] upgrade claude-code
 - [ ] setup https://github.com/iannuttall/claude-sessions
-- [ ] setup tmuxinator (or something else to)
+- [X] setup tmuxinator (or something else to)
   - tmux per project 
   - dedicated claude window/pane
 - [ ] tmux ~~finger~~ thumbs / extrackto / fuzzback?
