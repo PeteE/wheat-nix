@@ -7,6 +7,11 @@
 with lib; let
   cfg = config.wheat.ai;
 in {
+
+  imports  = [
+    ./mcp.nix
+  ];
+
   options.wheat.ai = {
     enable = mkEnableOption "Enable";
     ollamaHost = mkOption {
