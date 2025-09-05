@@ -560,6 +560,18 @@ in {
           '';
         }
         {
+          plugin = codecompanion-history-nvim;
+          type = "lua";
+          config = ''
+          '';
+        }
+        {
+          plugin = codecompanion-nvim;
+          type = "lua";
+          config = ''
+          '';
+        }
+        {
           plugin = claude-code-nvim;
           type = "lua";
           config = ''

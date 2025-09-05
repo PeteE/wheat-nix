@@ -154,7 +154,8 @@
     homes.modules = with inputs; [
       sops-nix.homeManagerModules.sops
       catppuccin.homeModules.catppuccin
-      plasma-manager.homeManagerModules.plasma-manager
+      # plasma-manager.homeManagerModules.plasma-manager
+      plasma-manager.homeModules.plasma-manager
     ];
 
     systems = {

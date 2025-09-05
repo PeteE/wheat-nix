@@ -23,3 +23,7 @@ windows:
     start_directory: ~/dev/opaque-systems/terragrunt-application-stacks
     panes:
       - blank
+  - window_name: ama
+    start_directory: ~/dev/opaque-systems/azure-managed-app
+    panes:
+      - blank

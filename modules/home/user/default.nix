@@ -48,6 +48,8 @@
 
   programs.home-manager.enable = true;
   home.packages = with pkgs; [
+    zip
+    unzip
     repomix  # packages a repo for use with AI tooling
     ugrep-indexer
     fx # json TUI
