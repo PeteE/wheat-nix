@@ -1,0 +1,51 @@
+"mcpServers": {
+    "slack": {
+      "type": "stdio",
+      "command": "slack-mcp-server",
+      "args": [],
+      "env": {
+        "SLACK_MCP_USERS_CACHE": "/tmp/slack-mcp/.users_cache.json",
+        "SLACK_MCP_CHANNELS_CACHE": "/tmp/slack-mcp/.channels_cache_v2.json",
+        "SLACK_MCP_XOXP_TOKEN": "",
+        "SLACK_MCP_ADD_MESSAGE_TOOL": "1",
+        "SLACK_MCP_LOG_LEVEL": "info"
+      }
+    },
+    "github": {
+      "type": "stdio",
+      "command": "github-mcp-server",
+      "args": [
+        "stdio",
+        "--toolsets",
+        "context,pull_requests,users"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": ""
+      }
+    },
+    "nixos": {
+      "type": "stdio",
+      "command": "mcp-nixos",
+      "args": [],
+      "env": {}
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "mcp-server-playwright",
+      "args": [
+        "--output-dir",
+        "/home/petee/.local/share/playwright-mcp",
+        "--executable-path",
+        "/home/petee/.nix-profile/bin/chromium",
+        "--browser",
+        "chrome",
+        "--user-data-dir",
+        "/home/petee/.local/share/playwright-mcp/user-data",
+        "--storage-state",
+        "/home/petee/.local/share/playwright-mcp/storage-state",
+        "--viewport-size",
+        "1920, 1080"
+      ],
+      "env": {}
+    }
+  },

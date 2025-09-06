@@ -6,10 +6,10 @@
 }:
 with lib; let
   cfg = config.wheat.ai;
+  ccr = pkgs.callPackage ./ccr/ccr.nix {};
 in {
-
   imports  = [
-    ./mcp.nix
+    ./mcp/mcp.nix
   ];
 
   options.wheat.ai = {
@@ -29,6 +29,7 @@ in {
           sha256 = "sha256-l7KiRp+V/eFVV6n1pv7tZv/VjXXWGPJnIcnicO5DGfA=";
         };
       }))
+      ccr
       ollama
       opencommit
     ];
@@ -50,6 +51,10 @@ in {
         OCO_TEST_MOCK_TYPE=commit-message
         OCO_GITPUSH=true
       '';
+    };
+
+    home.file.".claude-code-router/config.json" = {
+      source = ./ccr/config.json;
     };
     # sops.secrets."aichat" = {
     #   path = "${config.home.homeDirectory}/.config/aichat/config.yaml";

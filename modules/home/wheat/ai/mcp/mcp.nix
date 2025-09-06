@@ -4,7 +4,7 @@
   lib,
   ...
 }: let
-  slack-mcp-server = pkgs.callPackage ./mcp/package-slack-mcp-server.nix {};
+  slack-mcp-server = pkgs.callPackage ./slack-mcp-server/package.nix {};
 in
 with lib; let
   cfg = config.wheat.ai.mcp;

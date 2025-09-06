@@ -1,0 +1,17 @@
+{
+  "OPENAI_API_KEY": "$OPENAI_API_KEY",
+  "Providers": [
+    {
+      "name": "openai",
+      "api_base_url": "https://api.openai.com/v1/chat/completions",
+      "api_key": "$OPENAI_API_KEY",
+      "models": ["gpt-5", "gpt-5-mini"]
+    },
+    {
+      "name": "ollama",
+      "api_base_url": "http://m4:11434/v1/chat/completions",
+      "api_key": "ollama",
+      "models": ["qwen2.5-coder:latest"]
+    }
+  ]
+}
