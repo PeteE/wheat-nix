@@ -28,13 +28,12 @@ alternatively you can set, _which_ filetypes should be shaded by setting
 ```
 
 - [X] upgrade claude-code
-- [ ] setup https://github.com/iannuttall/claude-sessions
+- [X] setup https://github.com/iannuttall/claude-sessions
 - [X] setup tmuxinator (or something else to)
   - tmux per project 
   - dedicated claude window/pane
 - [ ] tmux ~~finger~~ thumbs / extrackto / fuzzback?
 - [ ] learn undotree
-- [ ] create an fzf switcher for azure
 - [ ] spend more time on nushell
 - [ ] dynamic clipboard (rofi)
 - [X] markview disable by default

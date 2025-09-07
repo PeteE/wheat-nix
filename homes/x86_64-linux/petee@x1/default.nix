@@ -7,6 +7,7 @@
       enable = true;
       ollamaHost = "192.168.1.115"; # m4
       mcp.enable = true;
+      claude-sessions.enable = true;
       aichat.enable = false;
       opencommit.enable = false;
       ccr.enable = false;

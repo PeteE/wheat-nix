@@ -50,11 +50,11 @@ in {
     sops.defaultSymlinkPath = cfg.defaultSymlinkPath;
 
     # generic secrets: TODO(pete): refactor
-    sops.secrets.headscale-api-key = { };
-    programs.zsh = {
-      envExtra = ''
-        export HEADSCALE_CLI_API_KEY=$(cat ${config.sops.secrets.headscale-api-key.path})
-      '';
-    };
+    # sops.secrets.headscale-api-key = { };
+    # programs.zsh = {
+    #   envExtra = ''
+    #     export HEADSCALE_CLI_API_KEY=$(cat ${config.sops.secrets.headscale-api-key.path})
+    #   '';
+    # };
   };
 }

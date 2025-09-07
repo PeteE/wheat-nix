@@ -4,3 +4,6 @@ node_modules
 
 # SSH private keys
 id_ed25519
+
+# claude-sessions
+sessions/
