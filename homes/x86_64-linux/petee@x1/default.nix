@@ -1,7 +1,4 @@
-{
-    home,
-    ...
-}:
+{ ... }:
 {
   wheat = {
     ollama.enable = false;
@@ -10,6 +7,9 @@
       enable = true;
       ollamaHost = "192.168.1.115"; # m4
       mcp.enable = true;
+      aichat.enable = false;
+      opencommit.enable = false;
+      ccr.enable = false;
     };
     rofi.enable = true;
     work.enable = true;

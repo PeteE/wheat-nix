@@ -13,5 +13,11 @@
       "api_key": "ollama",
       "models": ["qwen2.5-coder:latest"]
     }
-  ]
+  ],
+  "Router": {
+    "default": "claude,sonnet",
+    "background": "ollama,qwen2.5-coder:latest",
+    "longContextThreshold": 60000,
+    "webSearch": "openai,gpt-5"
+  }
 }
