@@ -40,12 +40,13 @@
       libvirtUri = "qemu+ssh://petee@ripper/system";
     };
 
+
     libvirt-vms.enable = true;
     services.podman.enable = true;
+    services.clipcat.enable = true;
     remote-builder-client = {
       enable = true;
     };
-    services.redis.enable = true;
   };
   environment.systemPackages = with pkgs; [
     bridge-utils

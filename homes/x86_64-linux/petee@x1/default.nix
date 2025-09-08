@@ -12,8 +12,11 @@
       opencommit.enable = false;
       ccr.enable = false;
     };
-    rofi.enable = true;
+
     work.enable = true;
+    rofi.enable = true;
+    clipcat.enable = true;
   };
   home.stateVersion = "25.11";
+
 }

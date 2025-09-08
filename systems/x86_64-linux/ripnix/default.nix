@@ -49,7 +49,6 @@
       libvirtUri = "qemu+ssh://petee@ripper/system";
     };
     libvirt-vms.enable = true;
-    services.redis.enable = true;
     services.nats.enable = true;
     services.clickhouse.enable = true;
     services.suricata = {
