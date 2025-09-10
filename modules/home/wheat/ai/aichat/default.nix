@@ -12,6 +12,9 @@ in {
     enable = mkEnableOption "Enable";
   };
   config = mkIf cfg.enable {
+    home.packages = with pkgs; [
+      wl-copy
+    ];
     programs.aichat = {
       enable = true;
     };

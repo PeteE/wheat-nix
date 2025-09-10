@@ -14,7 +14,6 @@
     ...
 }:
 {
-
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     (../../../modules/shared/wheat/default.nix)
@@ -29,7 +28,6 @@
     };
 
     secrets.enable = true;
-    plasma.enable = true;
     wifi.enable = true;
     sudo.enable = true;
 
@@ -48,6 +46,19 @@
       enable = true;
     };
   };
+
+  hardware.graphics.enable = true;
+  console.useXkbConfig = true;
+  services.xserver = {
+    enable = true;
+    xkb = {
+      options = "caps:escape";
+    };
+  };
+  services.desktopManager.plasma6.enable = true;
+  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
+
   environment.systemPackages = with pkgs; [
     bridge-utils
     cloud-hypervisor

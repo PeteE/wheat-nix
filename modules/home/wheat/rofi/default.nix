@@ -6,7 +6,7 @@
     ...
 }:
 with lib; let
-  cfg = config.wheat.ripgrep;
+  cfg = config.wheat.rofi;
 in {
   options.wheat.rofi = {
     enable = mkEnableOption "Enable";
@@ -14,14 +14,13 @@ in {
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       rofi-wayland
-      cliphist
+      pkgs.wheat.rofi-scripts
     ];
     xdg.configFile."rofi/themes/" = {
       source = "${pkgs.wheat.catppuccin-rofi}/themes/";
     };
     xdg.configFile."rofi/config.rasi" = {
-      source = "${pkgs.wheat.catppuccin-rofi}/catppuccin-default.rasi";
+      source = ./config.rasi;
     };
   };
-
 }

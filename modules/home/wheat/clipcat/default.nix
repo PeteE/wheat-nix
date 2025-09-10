@@ -15,5 +15,12 @@ in {
     xdg.configFile."clipcat/clipcatd.toml" = {
       source = ./clipcatd.toml;
     };
+    xdg.configFile."clipcat/clipcatctl.toml" = {
+      source = ./clipcatctl.toml;
+    };
+    xdg.configFile."clipcat/clipcat-menu.toml" = {
+      source = ./clipcat-menu.toml;
+    };
+
   };
 }

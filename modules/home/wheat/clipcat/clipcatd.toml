@@ -1,5 +1,4 @@
 daemonize = true
-# pid_file = "/run/user/1000/clipcatd.pid"
 primary_threshold_ms = 5000
 max_history = 100
 synchronize_selection_with_clipboard = true
@@ -24,11 +23,7 @@ capture_image = true
 filter_image_max_size = 5242880
 
 [grpc]
-# enable_http = true
 enable_local_socket = true
-# host = "127.0.0.1"
-# port = 45045
-# local_socket = "/run/user/1000/clipcat/grpc.sock"
 
 [dbus]
 enable = true
