@@ -24,38 +24,22 @@ in {
     # programs.elisa.enable = true;
 
     # make it pretty
-    home.packages = with pkgs; [
-      catppuccin-qt5ct
-      catppuccin
-      catppuccin-kde
-      catppuccin-sddm
-      catppuccin-sddm-corners
-      catppuccin-grub
-      catppuccin-cursors
-      # kdePackages.kconfig
-      # kconfig
-    ];
+    # home.packages = with pkgs; [
+    #   catppuccin-qt5ct
+    #   catppuccin
+    #   catppuccin-kde
+    #   catppuccin-sddm
+    #   catppuccin-sddm-corners
+    #   catppuccin-grub
+    #   catppuccin-cursors
+    #   # kdePackages.kconfig
+    #   # kconfig
+    # ];
 
     programs.plasma = {
-      enable = true;
-      workspace = {
-        # clickItemTo = "open";
-        # lookAndFeel = "org.kde.breezedark.desktop";
-        # cursor = {
-        #   theme = "Bibata-Modern-Ice";
-        #   size = 32;
-        # };
-        # iconTheme = "Papirus-Dark";
-        # wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/Patak/contents/images/1080x1920.png";
-      };
-
+      enable = false;
       hotkeys = {
         commands = {
-          "launch-konsole" = {
-            name = "Launch Konsole";
-            key = "Meta+Alt+Z";
-            command = "konsole";
-          };
           # "rofi-clipboard" = {
           #   name = "Rofi Clipboard";
           #   key = "Meta+Shift+S";
