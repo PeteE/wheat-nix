@@ -575,25 +575,25 @@ in {
           plugin = claude-code-nvim;
           type = "lua";
           config = ''
-            require("claude-code").setup({
-              window = {
-                position = "float",
-                float = {
-                  width = "90%",
-                  height = "90%",
-                },
-              },
-              refresh = {
-                updatetime = 20,
-              },
-              command = "claude --continue",
-              keymaps = {
-                toggle = {
-                  normal = false,
-                  terminal = false,
-                },
-              },
-            })
+            -- require("claude-code").setup({
+            --   window = {
+            --     position = "float",
+            --     float = {
+            --       width = "90%",
+            --       height = "90%",
+            --     },
+            --   },
+            --   refresh = {
+            --     updatetime = 20,
+            --   },
+            --   command = "claude --continue",
+            --   keymaps = {
+            --     toggle = {
+            --       normal = false,
+            --       terminal = false,
+            --     },
+            --   },
+            -- })
             vim.keymap.set({'n','t'}, '<leader>ai', function()
               require("claude-code").toggle()
             end, { desc = 'Toggle AI' })
@@ -619,7 +619,7 @@ in {
         vim.o.spelllang = 'en_us'
         -- vim.o.spellsuggest = 'base,9'
         vim.o.laststatus = 2
-        vim.o.updatetime = 150
+        vim.o.updatetime = 75
         vim.o.guifont = 'Fira Code:h10'
 
         -- Enable fold persistence

@@ -16,7 +16,6 @@
     work.enable = true;
     rofi.enable = true;
     clipcat.enable = true;
-    plasma.enable = true;
   };
   home.stateVersion = "25.11";
 }

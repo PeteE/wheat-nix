@@ -24,11 +24,6 @@
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    plasma-manager = {
-      url = "github:nix-community/plasma-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-    };
     # Hardware Configuration
     nixos-hardware = {
       url = "github:nixos/nixos-hardware";
@@ -154,8 +149,6 @@
     homes.modules = with inputs; [
       sops-nix.homeManagerModules.sops
       catppuccin.homeModules.catppuccin
-      # plasma-manager.homeManagerModules.plasma-manager
-      plasma-manager.homeModules.plasma-manager
     ];
 
     systems = {

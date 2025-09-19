@@ -2,18 +2,26 @@
 {
     lib,
     pkgs,
+    inputs,
+    namespace,
+    system,
+    target,
+    format,
+    virtual,
+    systems,
     config,
+    modulesPath,
     ...
 }:
 with lib; let
-  cfg = config.wheat.choose-gui;
+  cfg = config.wheat.mitmproxy;
 in {
-  options.wheat.choose-gui = {
+  options.wheat.mitmproxy = {
     enable = mkEnableOption "Enable";
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      choose-gui
+      mitmproxy
     ];
   };
 }
