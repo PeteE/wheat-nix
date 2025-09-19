@@ -24,9 +24,25 @@
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
     # Hardware Configuration
     nixos-hardware = {
       url = "github:nixos/nixos-hardware";
+    };
+
+    waybar.url = "github:Alexays/Waybar/0.14.0";
+    hyprland.url = "github:hyprwm/Hyprland/v0.50.0";
+    hyprshell = {
+      url = "github:H3rmt/hyprshell/v4.6.3";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    grim-hyprland = {
+      url = "github:eriedaberrie/grim-hyprland/4a3d6f5b87b01e92c404b9393b79057b85f58c60";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # Generate System Images
@@ -49,15 +65,10 @@
       url = "github:nix-community/nix-vscode-extensions/1a1442e13dc1730de0443f80dcf02658365e999a";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     catppuccin = {
       url = "github:catppuccin/nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # mozilla = {
-    #   url = "github:mozilla/nixpkgs-mozilla";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
     nixvirt = {
       url = "github:AshleyYakeley/NixVirt/v0.6.0";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -135,6 +146,8 @@
     # overlays
     overlays = with inputs; [
       nix-vscode-extensions.overlays.default
+      grim-hyprland.overlays.default
+      waybar.overlays.default
       # mozilla.overlays.firefox
       # flake.overlays.default
     ];
@@ -149,6 +162,8 @@
     homes.modules = with inputs; [
       sops-nix.homeManagerModules.sops
       catppuccin.homeModules.catppuccin
+      plasma-manager.homeModules.plasma-manager
+      hyprshell.homeModules.default
     ];
 
     systems = {
@@ -165,6 +180,7 @@
           nixos-generators.nixosModules.all-formats
           nixvirt.nixosModules.default
           microvm.nixosModules.host
+
         ];
       };
 
