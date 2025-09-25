@@ -29,7 +29,7 @@ in {
   options.wheat.tmux = {
     enable = mkEnableOption "Enable";
     terminal = mkOption {
-      default = "xterm-kitty";
+      default = "tmux-256color";
       type = types.str;
     };
     historyLimit = mkOption {

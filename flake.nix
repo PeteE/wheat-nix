@@ -33,8 +33,10 @@
     nixos-hardware = {
       url = "github:nixos/nixos-hardware";
     };
-
-    waybar.url = "github:Alexays/Waybar/0.14.0";
+    nur = {
+      url = "github:nix-community/NUR/0c542bbbd8fe18b031fd8587c891b793647472b8";
+    };
+    waybar.url = "github:Alexays/Waybar/41de8964f1e3278edf07902ad68ca5e01e7abeeb";
     hyprland.url = "github:hyprwm/Hyprland/v0.50.0";
     hyprshell = {
       url = "github:H3rmt/hyprshell/v4.6.3";
@@ -148,7 +150,7 @@
       nix-vscode-extensions.overlays.default
       grim-hyprland.overlays.default
       waybar.overlays.default
-      # mozilla.overlays.firefox
+      nur.overlays.default
       # flake.overlays.default
     ];
 

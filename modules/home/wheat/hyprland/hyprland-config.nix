@@ -4,26 +4,13 @@
 }:
 let 
   text = ''
-    # This is an example Hyprland config file.
-    # Refer to the wiki for more information.
-    # https://wiki.hypr.land/Configuring/
-
-    # Please note not all available settings / options are set here.
-    # For a full list, see the wiki
-
-    # You can split this configuration into multiple files
-    # Create your files separately and then link them to this file like this:
-    # source = ~/.config/hypr/myColors.conf
-
-
+    source = ~/.config/hypr/catppuccin.conf
     ################
     ### MONITORS ###
     ################
 
     # See https://wiki.hypr.land/Configuring/Monitors/
-    monitor=,preferred,auto,1.25
-
-
+    monitor=,preferred,auto,1.6
 
     ###################
     ### MY PROGRAMS ###
@@ -208,9 +195,9 @@ let
     }
 
     # https://wiki.hypr.land/Configuring/Variables/#gestures
-    gestures {
-        workspace_swipe = false
-    }
+    # gestures {
+    #     workspace_swipe = false
+    # }
 
     # Example per-device config
     # See https://wiki.hypr.land/Configuring/Keywords/#per-device-input-configs for more
@@ -230,7 +217,6 @@ let
     # Example binds, see https://wiki.hypr.land/Configuring/Binds/ for more
     bind = $mainMod, Return, exec, $terminal
     bind = $mainMod SHIFT, C, killactive,
-    bind = $mainMod, M, exit,
     bind = $mainMod SHIFT, Q, exec, $fileManager
 
     bind = $mainMod CONTROL_L, SPACE, togglefloating
@@ -302,7 +288,8 @@ let
     bind = $mainMod SHIFT, F, exec, ${pkgs.wheat.rofi-scripts}/bin/rofi-window
 
     # fullscreen
-    bind = $mainMod,F,fullscreen
+    bind = $mainMod,F,fullscreen, 0
+    bind = $mainMod,M,fullscreen, 1
 
     # Laptop multimedia keys for volume and LCD brightness
     # bindel = ,XF86AudioRaiseVolume, exec, wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+

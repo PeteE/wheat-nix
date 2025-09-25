@@ -19,8 +19,7 @@ in {
   };
   config = mkIf cfg.enable {
     programs.firefox = {
-      enable = false;
-      package = pkgs.firefox-bin;
+      enable = true;
       profiles.default = {
         id = 0;
         isDefault = true;
@@ -110,6 +109,13 @@ in {
           "dom.battery.enabled" = false; # you don't need to see my battery...
           "dom.private-attribution.submission.enabled" = false; # No PPA for me pls
         };
+        extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
+          ublock-origin
+          darkreader
+          bitwarden
+          vimium
+          foxyproxy-standard
+        ];
       };
       profiles.alt = {
         id = 1;

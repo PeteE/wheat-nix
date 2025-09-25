@@ -28,7 +28,7 @@ stdenv.mkDerivation {
       # Wrap scripts to ensure dependencies are in PATH
       wrapProgram "$out/bin/$script_name" \
         --prefix PATH : ${lib.makeBinPath [ 
-          pkgs.rofi-wayland 
+          pkgs.rofi
           pkgs.clipcat
         ]}
     done

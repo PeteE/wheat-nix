@@ -18,6 +18,8 @@
     zsh-fzf-tab
     fzf
     sqlite
+    eza
+    fd
   ];
 
   programs.zsh = {
@@ -77,6 +79,9 @@
 
       # enable fzf-tab
       source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
+      
+      # source local zsh config for testing
+      [[ -f ~/.config/zsh/zsh-local.zsh ]] && source ~/.config/zsh/zsh-local.zsh
     '';
   };
 }

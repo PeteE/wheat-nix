@@ -151,11 +151,35 @@ in {
       "root"
       "petee"
     ];
-    programs.firefox.enable = true;
-
     # environment.sessionVariables = {
     #   TERM = "screen-256color";
     # };
+
+    # Add mitmproxy CA to trusted certificates on Linux systems
+    security.pki.certificates = [
+      ''
+        -----BEGIN CERTIFICATE-----
+        MIIDNTCCAh2gAwIBAgIUIKZOGdc9vHy+Z+M/zUIBk6lQkUowDQYJKoZIhvcNAQEL
+        BQAwKDESMBAGA1UEAwwJbWl0bXByb3h5MRIwEAYDVQQKDAltaXRtcHJveHkwHhcN
+        MjUwOTE2MjI0MzA1WhcNMzUwOTE2MjI0MzA1WjAoMRIwEAYDVQQDDAltaXRtcHJv
+        eHkxEjAQBgNVBAoMCW1pdG1wcm94eTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC
+        AQoCggEBANkgPoNtXhCDJ+xY1fDEWR28P/cZsyf/2SdOSeG5G+lmlln26iGR5niL
+        kgtkliBvs76/UaC0PEToQIjsKIlAXErJe6XDPkNqRlt9jtT68UI7rD+bp90i5KuF
+        GHkqkDDkgttZwtvM50y3tYyurMcbkkpWp4/sGKVCgbwiNItniMFt9ieVjtQpIYNj
+        Gs8mK9kpmNbkaLvyKg1UEwCdDGXDhZKjDe2XrZI1y3OnDS3oDeyT1u03NuPlM/Ba
+        dXoo/3Fp1/Jt7UvWFPk7sQuJuUabh0z1bUBLdeoeXugDD7afq7ObadtQhJwESEFG
+        nHMMw2E/3x2l2oQtFeZoPWQoGEK9zpMCAwEAAaNXMFUwDwYDVR0TAQH/BAUwAwEB
+        /zATBgNVHSUEDDAKBggrBgEFBQcDATAOBgNVHQ8BAf8EBAMCAQYwHQYDVR0OBBYE
+        FIE17woKq+gJv+kqnJFq+qx5ge4JMA0GCSqGSIb3DQEBCwUAA4IBAQAYm4yT1Z6C
+        W5vA47C9h8AA8RddlkbT5+Rmk2/CtUNig+lIMRMGOFP4sOW2A/M5piScSmwdKrvy
+        Q3C0wJW+yQtcuwRaO3Asjbvp0wIi9gmSHUah+JpUgV6SuenZTnc1EUU8kOUH93QW
+        fgiuKZ0Y7Eyiq62Le21JIIIKu6JRy8cJm78GFd4Th7CuF9s/4VuCZDXcSI9coNno
+        +54ylFKJSX0TBGde2/DfHRA+KPPshzHgm87/8YXBUXvt9R57n10XeJauEjssjTxO
+        S9dmkEU7QsrwLpfz3lzygBsk8u6ZNSsx9Pocx+s5amYiE+UJkc714GnDPi0ll5I7
+        6/l4Cm3eXAS6
+        -----END CERTIFICATE-----
+      ''
+    ];
 
     system.stateVersion = "25.11";
   };

@@ -35,13 +35,11 @@
     btop.enable = true;
     k9s.enable = true;
     attic-client.enable = true;
-    firefox.enable = true;
     dev-tools.enable = true;
     ai.enable = true;
     k8s.enable = true;
     gcloud.enable = true;
-    # firefox.enable = true;
-
+    mitmproxy.enable = true;
     # TODO: only enable on m4, x1
     embedded.enable = true;
   };
@@ -70,27 +68,18 @@
     fd
     bc
     attic-client
-    # yazi
-    # stylua
     yq-go
     glow
     delve
     links2
     presenterm
     asciinema
-    # attic-server
-    # clusterctl
-    # mpv
-    # clapper
-    # nitrogen
-    # lua5_3
-    firefox
     vim
     tree
-    slack
     slack-term
     cachix
     unixtools.netstat
     htop
+    gcc
   ];
 }
