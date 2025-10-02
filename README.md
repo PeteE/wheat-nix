@@ -2,12 +2,10 @@
 This repo contains the config for all my Nix boxes.
 
 # TODO
-Work:
-- [ ] AI workload to diagnose sandbox
-
 Shield:
 - 
 QOL:
+- [ ] switch to skim for fuzzy search (nvim, zsh, rofi?)
 - [ ]  ToggleTerm tweak: `:help toggleterm.txt`
 ```
 - [ ] learn undotree

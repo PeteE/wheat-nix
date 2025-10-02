@@ -42,7 +42,7 @@ in {
     programs.neovim = {
       enable = true;
       defaultEditor = true;
-      plugins= with pkgs.vimPlugins; [
+      plugins = with pkgs.vimPlugins; [
         { 
           plugin = trouble-nvim;
           type = "lua";
@@ -198,7 +198,7 @@ in {
         zoxide-vim
         vim-fugitive
         fzf-lsp-nvim
-        # lazy-nvim
+        lazy-nvim
         vim-helm
         vim-indentwise
         {

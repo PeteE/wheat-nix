@@ -58,7 +58,7 @@ let
     #   enforce_permissions = 1
     # }
 
-    # permission = /usr/(bin|local/bin)/grim, screencopy, allow
+    permission = ${pkgs.grim-hyprland}/bin/grim, screencopy, allow
     # permission = /usr/(lib|libexec|lib64)/xdg-desktop-portal-hyprland, screencopy, allow
     # permission = /usr/(bin|local/bin)/hyprpm, plugin, allow
 

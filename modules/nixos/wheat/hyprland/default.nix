@@ -73,6 +73,9 @@ in
       pciutils # pci utils
 
       grim-hyprland
+      libnotify
+      grimblast
+      slurp
       bluez
       bluez-tools
       blueman

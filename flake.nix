@@ -68,7 +68,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin = {
-      url = "github:catppuccin/nix";
+      url = "github:catppuccin/nix/02dee881c3e644e2b561f407742f1fd927c40b83";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvirt = {

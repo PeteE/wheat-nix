@@ -42,6 +42,7 @@
     mitmproxy.enable = true;
     # TODO: only enable on m4, x1
     embedded.enable = true;
+    yazi.enable = true;
   };
 
   programs.home-manager.enable = true;

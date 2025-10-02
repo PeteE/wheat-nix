@@ -21,7 +21,7 @@
 
     zoom.enable = true;
     work.enable = true;
-    rofi.enable = false;
+    rofi.enable = true;
     clipcat.enable = true;
     firefox.enable = true;
     hyprland.enable = true;
