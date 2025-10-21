@@ -25,6 +25,9 @@
     clipcat.enable = true;
     firefox.enable = true;
     hyprland.enable = true;
+    minikube.enable = true;
+    devenv.enable = true;
+    zed-editor.enable = true;
   };
 
   services.hyprsunset.enable = true;

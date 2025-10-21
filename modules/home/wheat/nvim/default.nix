@@ -26,6 +26,7 @@ in {
       tflint
       alejandra
       kubectl
+      starlark-rust
     ];
 
     programs.zsh = {
@@ -73,6 +74,7 @@ in {
             })
           '';
         }
+        
         {
           plugin = cmp-fuzzy-path;
           type = "lua";
@@ -190,6 +192,7 @@ in {
         nvim-treesitter-parsers.just
         nvim-treesitter-parsers.rust
         nvim-treesitter-parsers.yaml
+        nvim-treesitter-parsers.starlark
         nvim-treesitter-textobjects
         nvim-treesitter-refactor
         rustaceanvim
@@ -280,6 +283,7 @@ in {
             })
             require('lspconfig').terraformls.setup({})
             require('lspconfig').tflint.setup({})
+            -- require('lspconfig').starlark_rust.setup({})
           '';
         }
         {

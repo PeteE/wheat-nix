@@ -25,7 +25,9 @@ in {
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       fzf
+      argocd
       work_scripts
+      tilt
     ];
   };
 }
