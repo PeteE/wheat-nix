@@ -28,6 +28,7 @@ in {
       argocd
       work_scripts
       tilt
+      k6
     ];
   };
 }

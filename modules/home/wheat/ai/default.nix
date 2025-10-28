@@ -21,13 +21,7 @@ in {
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      (claude-code.overrideAttrs (oldAttrs: rec {
-        version = "1.0.102";
-        src = pkgs.fetchzip {
-          url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${version}.tgz";
-          sha256 = "sha256-l7KiRp+V/eFVV6n1pv7tZv/VjXXWGPJnIcnicO5DGfA=";
-        };
-      }))
+      claude-code
       ollama
     ];
     sops.secrets.openaiApiKey = { };

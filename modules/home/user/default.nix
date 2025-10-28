@@ -23,7 +23,7 @@
     };
     tmux.enable = true;
     kitty.enable = true;
-    nushell.enable = true;
+    nushell.enable = false;
     nvim.enable = true;
     ripgrep.enable = true;
     secrets.enable = true;
