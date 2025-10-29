@@ -1,0 +1,190 @@
+#!/usr/bin/env bash
+
+# Azure subscription switcher with fzf
+# Usage: az-switch [-r]
+# -r: refresh cache (force reload from Azure)
+
+set -e
+
+# Parse command line arguments
+REFRESH_CACHE=false
+while getopts "r" opt; do
+    case $opt in
+        r)
+            REFRESH_CACHE=true
+            ;;
+        \?)
+            echo "Usage: $0 [-r]" >&2
+            echo "  -r: refresh cache (force reload from Azure)" >&2
+            exit 1
+            ;;
+    esac
+done
+
+# Cache configuration
+CACHE_DIR="$HOME/.local/share/az-switch"
+CACHE_FILE="$CACHE_DIR/subscriptions.cache"
+TENANT_CACHE_FILE="$CACHE_DIR/tenant.cache"
+
+# Check if az CLI is available
+if ! command -v az &> /dev/null; then
+    echo "Error: Azure CLI (az) is not installed or not in PATH"
+    exit 1
+fi
+
+# Check if fzf is available
+if ! command -v fzf &> /dev/null; then
+    echo "Error: fzf is not installed or not in PATH"
+    exit 1
+fi
+
+
+# Default tenant ID
+DEFAULT_TENANT="54cfb60f-4d31-4218-9807-a898de3cad7c"
+
+# Create cache directory if it doesn't exist
+mkdir -p "$CACHE_DIR"
+
+# Build or update tenant list
+TENANT_LIST_FILE="$CACHE_DIR/tenants.list"
+if [ "$REFRESH_CACHE" = true ] || [ ! -f "$TENANT_LIST_FILE" ]; then
+    # Create initial tenant list with default
+    echo "$DEFAULT_TENANT" > "$TENANT_LIST_FILE"
+fi
+
+# Add current input to tenant list if not already there
+update_tenant_list() {
+    local tenant="$1"
+    if ! grep -Fxq "$tenant" "$TENANT_LIST_FILE"; then
+        echo "$tenant" >> "$TENANT_LIST_FILE"
+    fi
+}
+
+# Get tenant ID using fzf
+if [ "$REFRESH_CACHE" = true ] || [ ! -f "$TENANT_CACHE_FILE" ]; then
+    echo "Select tenant ID:"
+    # Put cached tenant at top of list if it exists
+    CACHED_TENANT=""
+    if [ -f "$TENANT_CACHE_FILE" ]; then
+        CACHED_TENANT=$(cat "$TENANT_CACHE_FILE")
+    fi
+    
+    TENANT_LIST=$(cat "$TENANT_LIST_FILE")
+    if [ -n "$CACHED_TENANT" ] && echo "$TENANT_LIST" | grep -Fxq "$CACHED_TENANT"; then
+        # Move cached tenant to top
+        TENANT_LIST=$(echo -e "$CACHED_TENANT\n$(echo "$TENANT_LIST" | grep -Fxv "$CACHED_TENANT")")
+    fi
+    
+    TENANT_ID=$(echo "$TENANT_LIST" | fzf --height=40% --layout=reverse --border --prompt="Select tenant: ")
+    if [ -z "$TENANT_ID" ]; then
+        echo "No tenant selected"
+        exit 1
+    fi
+    update_tenant_list "$TENANT_ID"
+    echo "$TENANT_ID" > "$TENANT_CACHE_FILE"
+else
+    TENANT_ID=$(cat "$TENANT_CACHE_FILE")
+    echo "Using cached tenant: $TENANT_ID"
+fi
+
+# Cache current Azure session info
+CURRENT_TENANT_CACHE="$CACHE_DIR/current_tenant.cache"
+CURRENT_SUB_CACHE="$CACHE_DIR/current_sub.cache"
+
+# Check if we need to validate/refresh Azure session
+if [ "$REFRESH_CACHE" = true ] || [ ! -f "$CURRENT_TENANT_CACHE" ] || [ ! -f "$CURRENT_SUB_CACHE" ]; then
+    # Check if user is logged in to the specified tenant
+    CURRENT_TENANT=$(az account show --query tenantId -o tsv 2>/dev/null || echo "")
+    if [ "$CURRENT_TENANT" != "$TENANT_ID" ]; then
+        echo "Not logged into tenant $TENANT_ID. Attempting login..."
+        az login --tenant "$TENANT_ID"
+        CURRENT_TENANT="$TENANT_ID"
+    fi
+    
+    # Get current subscription and cache both values
+    CURRENT_SUB=$(az account show --query id -o tsv 2>/dev/null || echo "")
+    echo "$CURRENT_TENANT" > "$CURRENT_TENANT_CACHE"
+    echo "$CURRENT_SUB" > "$CURRENT_SUB_CACHE"
+else
+    # Use cached values
+    CURRENT_TENANT=$(cat "$CURRENT_TENANT_CACHE")
+    CURRENT_SUB=$(cat "$CURRENT_SUB_CACHE")
+    
+    # Only check if cached tenant doesn't match desired tenant
+    if [ "$CURRENT_TENANT" != "$TENANT_ID" ]; then
+        echo "Cached tenant ($CURRENT_TENANT) doesn't match desired ($TENANT_ID). Logging in..."
+        az login --tenant "$TENANT_ID"
+        # Update caches
+        CURRENT_SUB=$(az account show --query id -o tsv 2>/dev/null || echo "")
+        echo "$TENANT_ID" > "$CURRENT_TENANT_CACHE"
+        echo "$CURRENT_SUB" > "$CURRENT_SUB_CACHE"
+    fi
+fi
+
+# Function to get subscriptions from Azure
+get_subscriptions_from_azure() {
+    echo "Fetching subscriptions from Azure..." >&2
+    az account list --query '[].{name:name,id:id,state:state}' -o tsv > "$CACHE_FILE"
+}
+
+# Get subscriptions (from cache or Azure)
+if [ "$REFRESH_CACHE" = true ] || [ ! -f "$CACHE_FILE" ]; then
+    get_subscriptions_from_azure
+else
+    echo "Using cached subscriptions..."
+fi
+
+# Verify cache file exists and has content
+if [ ! -s "$CACHE_FILE" ]; then
+    echo "Cache file is empty or missing, fetching from Azure..."
+    get_subscriptions_from_azure
+fi
+
+# Get all subscriptions and format for fzf
+# Create temp files for current and other subscriptions
+CURRENT_SUBS_TEMP=$(mktemp)
+OTHER_SUBS_TEMP=$(mktemp)
+
+while IFS=$'\t' read -r name id state; do
+    if [ "$id" = "$CURRENT_SUB" ]; then
+        printf "* %s\t%s\t%s\n" "$name" "$id" "$state" >> "$CURRENT_SUBS_TEMP"
+    else
+        printf "  %s\t%s\t%s\n" "$name" "$id" "$state" >> "$OTHER_SUBS_TEMP"
+    fi
+done < "$CACHE_FILE"
+
+# Combine current subscription at top, then others
+SUBSCRIPTIONS=$(cat "$CURRENT_SUBS_TEMP" "$OTHER_SUBS_TEMP" 2>/dev/null)
+
+# Clean up temp files
+rm -f "$CURRENT_SUBS_TEMP" "$OTHER_SUBS_TEMP"
+
+if [ -z "$SUBSCRIPTIONS" ]; then
+    echo "No Azure subscriptions found"
+    exit 1
+fi
+
+# Use fzf to select subscription
+SELECTED=$(echo "$SUBSCRIPTIONS" | \
+    fzf --height=40% \
+        --layout=reverse \
+        --border \
+        --prompt="Select subscription: " \
+        --header="Azure Subscriptions (* = current)" \
+        --with-nth=1 \
+        --delimiter='\t')
+
+if [ -z "$SELECTED" ]; then
+    echo "No subscription selected"
+    exit 0
+fi
+
+# Extract subscription ID from selected line
+SUB_ID=$(echo "$SELECTED" | cut -f2)
+SUB_NAME=$(echo "$SELECTED" | cut -f1 | sed 's/^[* ] *//')
+
+# Switch to selected subscription
+echo "Switching to subscription: $SUB_NAME"
+az account set --subscription "$SUB_ID"
+
+echo "✓ Successfully switched to: $SUB_NAME ($SUB_ID)"

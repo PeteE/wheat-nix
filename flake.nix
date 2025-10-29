@@ -12,6 +12,10 @@
       url = "github:snowfallorg/lib";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    microvm = {
+      url = "github:microvm-nix/microvm.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -20,27 +24,36 @@
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    plasma-manager = {
-      url = "github:nix-community/plasma-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-    };
     # Hardware Configuration
     nixos-hardware = {
       url = "github:nixos/nixos-hardware";
     };
+    nur = {
+      url = "github:nix-community/NUR/0c542bbbd8fe18b031fd8587c891b793647472b8";
+    };
+    waybar.url = "github:Alexays/Waybar/41de8964f1e3278edf07902ad68ca5e01e7abeeb";
+    hyprland.url = "github:hyprwm/Hyprland/v0.50.0";
+    hyprshell = {
+      url = "github:H3rmt/hyprshell/v4.6.3";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    grim-hyprland = {
+      url = "github:eriedaberrie/grim-hyprland/4a3d6f5b87b01e92c404b9393b79057b85f58c60";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-    # # Generate System Images
-    # nixos-generators = {
-    #   url = "github:nix-community/nixos-generators";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    # Generate System Images
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # System Deployment
-    # deploy-rs = {
-    #   url = "github:serokell/deploy-rs";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     virby = {
       url = "github:quinneden/virby-nix-darwin?ref=be19793779852006fe6bc498f8670c954b4adf96";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -49,19 +62,14 @@
       url = "github:nix-community/nix-vscode-extensions/1a1442e13dc1730de0443f80dcf02658365e999a";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     catppuccin = {
-      url = "github:catppuccin/nix";
+      url = "github:catppuccin/nix/02dee881c3e644e2b561f407742f1fd927c40b83";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # mozilla = {
-    #   url = "github:mozilla/nixpkgs-mozilla";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-    # nixvirt = {
-    #   url = "github:AshleyYakeley/NixVirt/v0.6.0";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    nixvirt = {
+      url = "github:AshleyYakeley/NixVirt/v0.6.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = { self, ... }@inputs: inputs.snowfall-lib.mkFlake {
     inherit inputs;
@@ -76,41 +84,68 @@
       };
     };
 
-    # deploy = {
-    #   # remoteBuild = true; # Uncomment in case the system you're deploying from is not darwin
-    #   nodes.x1 = {
-    #     hostname = "192.168.1.7";
-    #     fastConnection = true;
-    #     interactiveSudo = false;
-    #     profiles = {
-    #       system = {
-    #         sshUser = "petee";
-    #         path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.x1;
-    #         user = "petee";
-    #       };
-    #     };
-    #   };
-    #   nodes.m4 = {
-    #     hostname = "m4";
-    #     fastConnection = true;
-    #     interactiveSudo = false;
-    #     remoteBuild = true;
-    #     profiles = {
-    #       system = {
-    #         path = inputs.deploy-rs.lib.aarch64-darwin.activate.darwin self.darwinConfigurations.m4;
-    #         user = "root";
-    #         sshUser = "pete";
-    #       };
-    #     };
-    #   };
-    # };
     # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
+    deploy = {
+      nodes.x1 = {
+        hostname = "192.168.1.7";
+        fastConnection = true;
+        interactiveSudo = false;
+        remoteBuild = false;
+        profiles = {
+          system = {
+            sshUser = "petee";
+            path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.x1;
+            user = "root";
+          };
+        };
+      };
+      nodes.ripnix = {
+        hostname = "192.168.1.143";
+        fastConnection = true;
+        interactiveSudo = false;
+        remoteBuild = true;
+        profiles = {
+          system = {
+            sshUser = "petee";
+            path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.ripnix;
+            user = "root";
+          };
+        };
+      };
+      nodes.m4 = {
+        hostname = "192.168.1.115";
+        fastConnection = true;
+        interactiveSudo = false;
+        remoteBuild = true;
+        profiles = {
+          system = {
+            path = inputs.deploy-rs.lib.aarch64-darwin.activate.darwin self.darwinConfigurations.m4;
+            user = "root";
+            sshUser = "pete";
+          };
+        };
+      };
+      nodes.m3p = {
+        hostname = "192.168.1.209";
+        fastConnection = true;
+        interactiveSudo = false;
+        remoteBuild = true;
+        profiles = {
+          system = {
+            path = inputs.deploy-rs.lib.aarch64-darwin.activate.darwin self.darwinConfigurations.m3p;
+            user = "root";
+            sshUser = "petee";
+          };
+        };
+      };
+    };
 
     # overlays
     overlays = with inputs; [
-      # deploy-rs.overlays.default
       nix-vscode-extensions.overlays.default
-      # mozilla.overlays.firefox
+      grim-hyprland.overlays.default
+      waybar.overlays.default
+      nur.overlays.default
       # flake.overlays.default
     ];
 
@@ -124,8 +159,7 @@
     homes.modules = with inputs; [
       sops-nix.homeManagerModules.sops
       catppuccin.homeModules.catppuccin
-      plasma-manager.homeManagerModules.plasma-manager
-      # nixvirt.homeModules.default
+      hyprshell.homeModules.default
     ];
 
     systems = {
@@ -139,6 +173,10 @@
         ];
         nixos = with inputs; [
           home-manager.nixosModules.home-manager
+          nixos-generators.nixosModules.all-formats
+          nixvirt.nixosModules.default
+          microvm.nixosModules.host
+
         ];
       };
 
@@ -146,11 +184,15 @@
         x1.modules = with inputs; [
           nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
         ];
-        pishield.modules = with inputs; [
-          nixos-hardware.nixosModules.raspberry-pi-4
-        ];
+        # pishield.modules = with inputs; [
+        #   nixos-hardware.nixosModules.raspberry-pi-4
+        # ];
         m4.modules = with inputs; [ ];
         m3p.modules = with inputs; [ ];
+        shield.modules = with inputs; [ ];
+        microvm-poc.modules = with inputs; [
+          microvm.nixosModules.microvm
+        ];
       };
     };
   };

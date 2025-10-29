@@ -19,8 +19,7 @@ in {
   };
   config = mkIf cfg.enable {
     programs.firefox = {
-      enable = false;
-      package = pkgs.firefox-bin;
+      enable = true;
       profiles.default = {
         id = 0;
         isDefault = true;
@@ -110,6 +109,70 @@ in {
           "dom.battery.enabled" = false; # you don't need to see my battery...
           "dom.private-attribution.submission.enabled" = false; # No PPA for me pls
         };
+        extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
+          ublock-origin
+          darkreader
+          bitwarden
+          vimium
+          foxyproxy-standard
+        ];
+        # search = {
+        #   default = "ddg";
+        #   engines = {
+        #     "NixOS Options" = {
+        #       urls = [{
+        #         template = "https://search.nixos.org/options";
+        #         params = [
+        #           { name = "channel"; value = "unstable"; }
+        #           { name = "query"; value = "{searchTerms}"; }
+        #         ];
+        #       }];
+        #       icon = "https://nixos.org/favicon.png";
+        #       definedAliases = [ "nixos" ];
+        #     };
+        #     "NixOS Packages" = {
+        #       urls = [{
+        #         template = "https://search.nixos.org/packages";
+        #         params = [
+        #           { name = "channel"; value = "unstable"; }
+        #           { name = "query"; value = "{searchTerms}"; }
+        #         ];
+        #       }];
+        #       icon = "https://nixos.org/favicon.png";
+        #       definedAliases = [ "nixpkgs" ];
+        #     };
+        #     "Home Manager Options" = {
+        #       urls = [{
+        #         template = "https://home-manager-options.extranix.com/";
+        #         params = [
+        #           { name = "query"; value = "{searchTerms}"; }
+        #           { name = "release"; value = "unstable"; }
+        #         ];
+        #       }];
+        #       definedAliases = [ "hm" ];
+        #     };
+        #     "google" = {
+        #       urls = [{
+        #         template = "https://www.google.com/search";
+        #         params = [
+        #           { name = "q"; value = "{searchTerms}"; }
+        #         ];
+        #       }];
+        #       icon = "https://www.google.com/favicon.ico";
+        #       definedAliases = [ "g" ];
+        #     };
+        #     "Wikipedia" = {
+        #       urls = [{
+        #         template = "https://en.wikipedia.org/wiki/Special:Search";
+        #         params = [
+        #           { name = "search"; value = "{searchTerms}"; }
+        #         ];
+        #       }];
+        #       icon = "https://en.wikipedia.org/favicon.ico";
+        #       definedAliases = [ "wiki" ];
+        #     };
+        #   };
+        # };
       };
       profiles.alt = {
         id = 1;

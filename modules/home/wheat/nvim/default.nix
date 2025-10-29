@@ -2,15 +2,7 @@
 {
     lib,
     pkgs,
-    inputs,
-    namespace,
-    system,
-    target,
-    format,
-    virtual,
-    systems,
     config,
-    modulesPath,
     ...
 }:
 with lib; let
@@ -21,6 +13,8 @@ in {
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
+      terraform-ls
+      nixpkgs-fmt
       lazygit
       nodePackages.eslint
       lua-language-server
@@ -29,9 +23,10 @@ in {
       yaml-language-server
       pyright
       nil
-      terraform-ls
       tflint
       alejandra
+      kubectl
+      starlark-rust
     ];
 
     programs.zsh = {
@@ -49,6 +44,13 @@ in {
       enable = true;
       defaultEditor = true;
       plugins = with pkgs.vimPlugins; [
+        { 
+          plugin = trouble-nvim;
+          type = "lua";
+          config = ''
+            -- require('trouble').setup({})
+          '';
+        }
         {
           plugin = nvim-surround;
           type = "lua";
@@ -72,6 +74,7 @@ in {
             })
           '';
         }
+        
         {
           plugin = cmp-fuzzy-path;
           type = "lua";
@@ -81,97 +84,29 @@ in {
           type = "lua";
         }
         {
-          plugin = mini-nvim;
-          type = "lua";
-        }
-        # {
-        #   plugin = CopilotChat-nvim;
-        #   type = "lua";
-        # }
-        # {
-        #   plugin = copilot-lua;
-        #   type = "lua";
-        # }
-        # {
-        #   plugin = copilot-lualine;
-        #   type = "lua";
-        # }
-        {
           plugin = snacks-nvim;
           type = "lua";
           config = ''
-            require('snacks').setup({
-              indent = { enabled = true },
-              terminal = { enabled = true },
-              zen = { enabled = true },
-              bufdelete = { enabled = true },
-              dim = { enabled = true },
-              debug = { enabled = true },
-              layout = { enabled = true },
-              notifier = { enabled = true },
-              explorer = {
-                  replace_netrw = true,
-                  hidden = true,
-                  ignored = true,
-                  git_untracked = true,
-                  follow_file = false,
-              },
-              dashboard = {
-                  enabled = true,
-                  sections = {
-                    { section = "header" },
-                    { key = "s", desc = "Smart picker", action = ":lua Snacks.dashboard.picker.smart()" },
-                    { icon = " ", key = "s", desc = "Restore Session", section = "session" },
-                    { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
-                    { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep', { hidden = true, ignored = true, fuzzy = true })" },
-
-                    -- { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
-                    { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
-                    { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
-                    { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
-                    { section = "startup" },
-                  },
-              },
-            })
-            vim.keymap.set('n', '<space>da', ":lua Snacks.dashboard()<CR>")
-            vim.keymap.set('n', '<space>ff', ":lua Snacks.picker.smart()<CR>")
-            vim.keymap.set('n', '<space>fg', ":lua Snacks.picker.git_files()<CR>")
-            vim.keymap.set('n', '<space>fb', ":lua Snacks.picker.buffers()<CR>")
-            vim.keymap.set('n', '<space>fc', ":lua Snacks.picker.command_history()<CR>")
-            vim.keymap.set('n', '<space>fn', ":lua Snacks.picker.notifications()<CR>")
-            vim.keymap.set('n', '<space>fw', ":lua Snacks.picker.oldfiles()<CR>")
-            vim.keymap.set('n', '<space>gb', ":lua Snacks.picker.git_branches()<CR>")
-            vim.keymap.set('n', '<space>gl', ":lua Snacks.picker.git_log()<CR>")
-            vim.keymap.set({ "n", "x" }, "<leader>rg", function() Snacks.picker.grep_word() end)
-            -- old mapping, muscle memory
-            vim.keymap.set('n', '<leader>rg', "yiw:lua Snacks.picker.grep()<CR>")
-
-            vim.keymap.set('n', '<leader>ff', ":lua Snacks.picker.smart()<CR>")
-            vim.keymap.set("n", ":bd", ":lua Snacks.bufdelete()<CR>", { noremap = true, silent = true })
-            vim.keymap.set('n', '<space>dm', ":lua Snacks.dim()<CR>")
-
-            -- LSP
-            vim.keymap.set("n", "<space>gd", ":lua Snacks.picker.lsp_definitions()<CR>")
-            vim.keymap.set("n", "<space>gD", ":lua Snacks.picker.lsp_declarations()<CR>")
-            vim.keymap.set("n", "<space>gr", ":lua Snacks.picker.lsp_references()<CR>")
-            vim.keymap.set("n", "<space>gI", ":lua Snacks.picker.lsp_implementations()<CR>")
-            vim.keymap.set("n", "<space>gy", ":lua Snacks.picker.lsp_type_definitions()<CR>")
-            vim.keymap.set("n", "<leader>ss", ":lua Snacks.picker.lsp_symbols()<CR>")
-            vim.keymap.set("n", "<leader>sS", ":lua Snacks.picker.lsp_workspace_symbols()<CR>")
-            vim.keymap.set('n', "<C-n>", ":lua Snacks.picker.explorer()<CR>")
             '';
         }
         # {
         #   plugin = which-key-nvim;
         #   type = "lua";
         # }
+
         {
           plugin = markview-nvim;
           type = "lua";
           config = ''
-            require("markview.extras.checkboxes").setup();
-            require("markview.extras.headings").setup();
-            require("markview.extras.editor").setup();
+            require("markview.extras.checkboxes").setup()
+            require("markview.extras.headings").setup()
+            require("markview.extras.editor").setup()
+            require("markview").setup({
+              preview = { 
+                enable = false,
+              },
+            })
+            vim.keymap.set('n', '<leader>mv', '<cmd>Markview<cr>', { desc = "Markdown Miewer toggle" })
           '';
         }
         {
@@ -196,6 +131,20 @@ in {
           '';
         }
         {
+          plugin = pkgs.wheat.vim-kubernetes;
+          type = "lua";
+          config = ''
+            vim.api.nvim_create_autocmd("FileType", {
+              pattern = "yaml",
+              callback = function()
+                vim.keymap.set({'n', 'v'}, '<leader>ka', '<cmd>KubeApply<CR>', { buffer = true })
+                vim.keymap.set({'n', 'v'}, '<leader>kd', '<cmd>KubeDelete<CR>', { buffer = true })
+              end
+            })
+          '';
+          # provides KubeApply, KubeCreate, KubeDelete
+        }
+        {
           plugin = pkgs.wheat.yaml-companion-nvim;
           type = "lua";
           config = ''
@@ -205,7 +154,32 @@ in {
         vim-unimpaired
         vim-repeat
         vim-go
-        vim-tmux-navigator
+        {
+          plugin = vim-tmux-navigator;
+          type = "lua";
+          config = ''
+            -- Disable default tmux navigator mappings
+            vim.g.tmux_navigator_no_mappings = 1
+
+            -- Define custom tmux navigator mappings
+            local tmux_nav_opts = { silent = true, desc = "Tmux Navigate" }
+
+            -- Write all buffers before navigating from Vim to tmux pane
+            vim.g.tmux_navigator_save_on_switch = 2
+
+            -- Normal mode mappings
+            vim.keymap.set('n', '<C-h>', '<cmd>TmuxNavigateLeft<cr>', vim.tbl_extend("force", tmux_nav_opts, { desc = "Navigate Left" }))
+            vim.keymap.set('n', '<C-j>', '<cmd>TmuxNavigateDown<cr>', vim.tbl_extend("force", tmux_nav_opts, { desc = "Navigate Down" }))
+            vim.keymap.set('n', '<C-k>', '<cmd>TmuxNavigateUp<cr>', vim.tbl_extend("force", tmux_nav_opts, { desc = "Navigate Up" }))
+            vim.keymap.set('n', '<C-l>', '<cmd>TmuxNavigateRight<cr>', vim.tbl_extend("force", tmux_nav_opts, { desc = "Navigate Right" }))
+            vim.keymap.set('n', '<C-\\>', '<cmd>TmuxNavigatePrevious<cr>', vim.tbl_extend("force", tmux_nav_opts, { desc = "Navigate Previous" }))
+
+            -- Terminal mode mappings
+            vim.keymap.set('t', '<C-h>', '<C-\\><C-n><cmd>TmuxNavigateLeft<cr>', vim.tbl_extend("force", tmux_nav_opts, { desc = "Terminal Navigate Left" }))
+            vim.keymap.set('t', '<C-j>', '<C-\\><C-n><cmd>TmuxNavigateDown<cr>', vim.tbl_extend("force", tmux_nav_opts, { desc = "Terminal Navigate Down" }))
+            vim.keymap.set('t', '<C-k>', '<C-\\><C-n><cmd>TmuxNavigateUp<cr>', vim.tbl_extend("force", tmux_nav_opts, { desc = "Terminal Navigate Up" }))
+            vim.keymap.set('t', '<C-l>', '<C-\\><C-n><cmd>TmuxNavigateRight<cr>', vim.tbl_extend("force", tmux_nav_opts, { desc = "Terminal Navigate Right" }))          '';
+        }
         supertab
         cmp-nvim-lsp
         cmp-buffer
@@ -217,16 +191,16 @@ in {
         nvim-treesitter.withAllGrammars
         nvim-treesitter-parsers.just
         nvim-treesitter-parsers.rust
+        nvim-treesitter-parsers.yaml
+        nvim-treesitter-parsers.starlark
+        nvim-treesitter-textobjects
+        nvim-treesitter-refactor
         rustaceanvim
         nvim-dap
         undotree
         zoxide-vim
-        telescope-vim-bookmarks-nvim
-        telescope-symbols-nvim
         vim-fugitive
-        vim-tmux-navigator
         fzf-lsp-nvim
-        telescope-zoxide
         lazy-nvim
         vim-helm
         vim-indentwise
@@ -256,6 +230,25 @@ in {
           '';
         }
         {
+          plugin = auto-session;
+          type = "lua";
+          config = ''
+            require('auto-session').setup({
+              auto_session_suppress_dirs = { '~/Downloads', '/' },
+              auto_save_enabled = true,
+              auto_restore_enabled = true,
+              auto_session_use_git_branch = false,
+              -- This will save and restore folds automatically
+              session_lens = {
+                buftypes_to_ignore = {},
+                load_on_setup = true,
+                theme_conf = { border = true },
+                previewer = false,
+              },
+            })
+          '';
+        }
+        {
           plugin = catppuccin-nvim;
           config = ''
             colorscheme catppuccin-mocha
@@ -273,18 +266,24 @@ in {
               settings = {
                 ['nil'] = {
                   nix = {
+                    filetypes =  { "nix" },
+                    rootPatterns = { "flake.nix" },
                     flake = {
-                      autoEvalInputs = true,
+                      autoEvalInputs = false,
                     },
                   },
                   formatting = {
-                    command = { "alejandra" },
+                    command = { "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt" },
+                  },
+                  diagnostics = {
+                    excludedFiles = { "generated.nix" },
                   },
                 },
               },
             })
             require('lspconfig').terraformls.setup({})
             require('lspconfig').tflint.setup({})
+            -- require('lspconfig').starlark_rust.setup({})
           '';
         }
         {
@@ -296,8 +295,7 @@ in {
               -- increase for noisy servers
               debounce_ms = 50,
             })
-            vim.keymap.set("n", "<space>dw", "<cmd>lua require('diaglist').open_all_diagnostics()<cr>")
-            vim.keymap.set("n", "<space>d0", "<cmd>lua require('diaglist').open_all_diagnostics()<cr>")
+            vim.keymap.set("n", "<leader>dw", "<cmd>lua require('diaglist').open_all_diagnostics()<cr>")
           '';
         }
         {
@@ -320,14 +318,9 @@ in {
               matching = {
                 disallow_fuzzy_matching = false,
               },
-              sources = cmp.config.sources(
-                {
-                  { name = 'nvim_lsp' },
-                },
-                {
-                  { name = 'fuzzy_buffer' }
-                }
-              )
+              sources = cmp.config.sources({
+                { name = 'nvim_lsp' },
+              })
             })
 
             -- Set configuration for specific filetype.
@@ -343,26 +336,14 @@ in {
             })
 
             cmp.setup.filetype('yaml', {
-              sources = cmp.config.sources(
-                {
-                  { name = 'nvim_lsp' },
-                },
-                {
-                  { name = 'git' },
-                }, {
-                  { name = 'fuzzy_buffer' },
-                }
-              )
+              sources = cmp.config.sources({
+                { name = 'nvim_lsp' },
+              })
             })
             cmp.setup.filetype('py', {
-              sources = cmp.config.sources(
-                {
-                  { name = 'nvim_lsp' },
-                },
-                {
-                  { name = 'fuzzy_buffer' },
-                }
-              )
+              sources = cmp.config.sources({
+                { name = 'nvim_lsp' },
+              })
             })
 
 
@@ -379,48 +360,10 @@ in {
               mapping = cmp.mapping.preset.cmdline(),
               sources = cmp.config.sources(
                {
-                 { name = 'fuzzy_path' }
-               },
-               {
                 { name = 'cmdline' }
                }
               )
             })
-          '';
-        }
-        {
-          plugin = trouble-nvim;
-          type = "lua";
-          config = ''
-            vim.keymap.set("n", "<space>t", "<cmd>TroubleToggle<CR>")
-          '';
-        }
-        {
-          plugin = telescope-nvim;
-          type = "lua";
-        }
-        {
-          plugin = telescope-fzf-native-nvim;
-          type = "lua";
-          config = ''
-            require('telescope').load_extension('fzf')
-          '';
-
-        }
-        {
-          plugin = telescope-file-browser-nvim;
-          type = "lua";
-          config = ''
-            -- require('telescope').load_extension('file_browser')
-            -- vim.keymap.set("n", "<space>f", "<cmd>Telescope file_browser select_buffer=true<CR>")
-          '';
-        }
-        {
-          plugin = telescope-undo-nvim;
-          type = "lua";
-          config = ''
-            require('telescope').load_extension('undo')
-            vim.keymap.set("n", "<leader>u", "<cmd>Telescope undo<CR>")
           '';
         }
         {
@@ -470,7 +413,7 @@ in {
           config = ''
             let g:gitgutter_enabled=1
             let g:gitgutter_terminal_reports_focus=0
-            let g:gitgutter_grep = 'rg'
+            let g:gitgutter_grep = 'rg --hidden'
             let g:gitgutter_map_keys = 1
             highlight GitGutterAdd    guifg=#a6e3a1 ctermfg=2
             highlight GitGutterChange guifg=#fab387 ctermfg=3
@@ -481,7 +424,7 @@ in {
           plugin = vim-better-whitespace;
           type = "lua";
           config = ''
-            vim.g.strip_whitespace_on_save = true
+            vim.g.strip_whitespace_on_save = false
             vim.g.better_whitespace_guicolor = "#eba0ac"
             vim.g.better_whitespace_enabled = 0
           '';
@@ -489,11 +432,68 @@ in {
         {
           plugin = toggleterm-nvim;
           type = "lua";
-          # config = ''
-          #   require("toggleterm").setup({
+          config = ''
+            require("toggleterm").setup({
+              shade_terminals = true;
+            })
 
-          #   })
-          # '';
+            -- Set updatetime for terminal buffers only
+            vim.api.nvim_create_autocmd("TermOpen", {
+            callback = function()
+              vim.opt_local.updatetime = 15
+            end,
+            })
+            vim.keymap.set({'n', 't'}, '<leader>tt', '<cmd>ToggleTerm<CR>')
+          '';
+        }
+        {
+          plugin = pkgs.wheat.nvim-base64;
+          type = "lua";
+          config = ''
+            require("nvim-base64").setup({})
+            vim.keymap.set('x', "<leader>b", "<Plug>(FromBase64)")
+            vim.keymap.set('x', "<leader>B", "<Plug>(ToBase64)")
+          '';
+        }
+        {
+          plugin = codecompanion-history-nvim;
+          type = "lua";
+          config = ''
+          '';
+        }
+        {
+          plugin = codecompanion-nvim;
+          type = "lua";
+          config = ''
+          '';
+        }
+        {
+          plugin = claude-code-nvim;
+          type = "lua";
+          config = ''
+            -- require("claude-code").setup({
+            --   window = {
+            --     position = "float",
+            --     float = {
+            --       width = "90%",
+            --       height = "90%",
+            --     },
+            --   },
+            --   refresh = {
+            --     updatetime = 20,
+            --   },
+            --   command = "claude --continue",
+            --   keymaps = {
+            --     toggle = {
+            --       normal = false,
+            --       terminal = false,
+            --     },
+            --   },
+            -- })
+            vim.keymap.set({'n','t'}, '<leader>ai', function()
+              require("claude-code").toggle()
+            end, { desc = 'Toggle AI' })
+          '';
         }
       ];
       withPython3 = true;
@@ -515,8 +515,15 @@ in {
         vim.o.spelllang = 'en_us'
         -- vim.o.spellsuggest = 'base,9'
         vim.o.laststatus = 2
-        vim.o.updatetime = 150
+        vim.o.updatetime = 75
         vim.o.guifont = 'Fira Code:h10'
+
+        -- Enable fold persistence
+        -- vim.o.foldmethod = 'manual'
+        vim.o.foldmethod = 'expr'
+        vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+        vim.o.foldlevelstart = 99
+        vim.o.viewoptions = 'folds,cursor'
 
         vim.api.nvim_create_autocmd("FileType", {
           pattern = "nix",
@@ -529,17 +536,33 @@ in {
         vim.keymap.set('n', 'Y', 'yy')
 
         -- TODO test
-        vim.keymap.set('n', '<C-n>', '<Cmd>NvimTreeToggle<CR>')
+        -- vim.keymap.set('n', '<C-n>', '<Cmd>NvimTreeToggle<CR>')
 
-        -- vim.keymap.set('n', '<leader>r', '<Cmd>NvimTreeRefresh<CR>')
-        -- vim.keymap.set('n', '<leader>n', '<Cmd>NvimTreeFindFile<CR>')
-        -- vim.keymap.set('n', '<leader>rg', 'yiw:Rg<Space><C-r>0<CR>')
-        -- vim.keymap.set('n', '<space>rg', '<Cmd>Telescope live_grep<CR>')
+        -- vim.keymap.set('n', '<leader>rg', 'yiw:Rg<leader><C-r>0<CR>')
 
         local prefix = vim.env.XDG_CONFIG_HOME or vim.fn.expand("~/.config")
         vim.opt.undodir = { prefix .. "/nvim/.undodir//"}
         vim.opt.backupdir = {prefix .. "/nvim/.backup//"}
         vim.opt.directory = { prefix .. "/nvim/.swp//"}
+
+        -- Auto-save and restore folds
+        vim.api.nvim_create_autocmd("BufWinLeave", {
+          pattern = "*",
+          callback = function()
+            if vim.bo.filetype ~= "" then
+              vim.cmd("silent! mkview")
+            end
+          end
+        })
+
+        vim.api.nvim_create_autocmd("BufWinEnter", {
+          pattern = "*",
+          callback = function()
+            if vim.bo.filetype ~= "" then
+              vim.cmd("silent! loadview")
+            end
+          end
+        })
 
         local local_init = vim.fn.expand("~/.config/nvim/init-local.lua")
         if vim.fn.filereadable(local_init) == 1 then

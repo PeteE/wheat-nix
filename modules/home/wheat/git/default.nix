@@ -39,28 +39,40 @@ in {
         core = {
           editor = "${pkgs.neovim}/bin/nvim";
         };
-        credential.helper = "${
-          pkgs.git.override { withLibsecret = true; }
-        }/bin/git-credential-libsecret";
+        # TODO(pete): This was a cluade suggested hack since i'm having issues with libsecret on macos
+        credential = {
+          "https://github.com" = {
+            helper = "!f() { echo username=petee; echo password=$(${pkgs.gh}/bin/gh auth token); }; f";
+          };
+        };
 
-        merge = {
-          # conflictstyle = "zdiff3";
-          tool = "meld";
-          path = "${pkgs.meld}/bin/meld";
-        };
-        diff = {
-          tool = "meld";
-          path = "${pkgs.meld}/bin/meld";
-        };
-        mergetool = {
-          tool = "meld";
-          path = "${pkgs.meld}/bin/meld";
-        };
+        # merge = {
+        #   conflictstyle = "zdiff3";
+        #   tool = "meld";
+        #   path = "${pkgs.meld}/bin/meld";
+        # };
+        # diff = {
+        #   tool = "meld";
+        #   path = "${pkgs.meld}/bin/meld";
+        # };
+        # mergetool = {
+        #   tool = "meld";
+        #   path = "${pkgs.meld}/bin/meld";
+        # };
 
         pull.rebase = "false";
+        push.default = "current";
 
+        # include = [
+        #   {
+        #     path = "${config.xdg.configHome}/${theme}";
+        #   }
+        #   {
+        #     path = "~/.config/git/config.local";
+        #   }
+        # ];
         include = {
-          path = "${config.xdg.configHome}/${theme}";
+          path = "~/.config/git/config.local";
         };
       };
 

@@ -11,17 +11,68 @@ with lib; let
   isDarwin = if lib.hasSuffix "darwin" system then true else false;
 
 in {
+  imports =
+    [
+      (./remote-builder.nix)
+      (./remote-builder-client.nix)
+    ];
+
   options = {
     wheat = with types; {
       enable = mkEnableOption "Enable";
       secrets.enable = mkEnableOption "Enable SOPS secrets";
       nameservers = mkOption {
         description = "DNS Servers";
-        type = types.listOf types.str;
+        type = listOf str;
         default = [
           "1.1.1.1"
           "1.0.0.1"
         ];
+      };
+      extraHosts = mkOption {
+        type = lines;
+        default = ''
+          # infra
+          192.168.1.33    gw         # router
+          192.168.1.3     switch0    # hp switch
+          192.168.1.4     ap0        # netgear AP
+          192.168.1.159   usw-petee  # switch
+          192.168.1.196   usw-sam    # switch
+
+          # computers
+          192.168.1.7     x1
+          192.168.1.143   ripnix
+          192.168.1.115   m4
+          192.168.1.50    hv
+          192.168.1.51    ripper
+          192.168.1.120   trunas
+
+          # devices
+          192.168.1.116   pixel-7a
+          192.168.1.186   joannas-ipad
+          192.168.1.185   petee-ipad
+          192.168.1.195   mariannes-air
+          192.168.1.209   m3p-wifi
+          192.168.1.210   m3p
+
+          # k8s nodes
+          192.168.1.202   k8s-master0
+          192.168.1.162   k8s-worker-100
+          192.168.1.133   k8s-worker-200
+
+          # misc / iot
+          192.168.1.32    printer
+          192.168.1.168   appletv
+          192.168.1.132   rachio
+          192.168.1.139   myq
+          192.168.1.125   nest-door
+          192.168.1.160   nest-driveway
+          192.168.1.150   nest-backyard
+          192.168.1.171   home-mini-bedroom
+          192.168.1.226   xboxone-fam
+          192.168.1.220   xboxone-sam
+          192.168.1.182   chromecast
+        '';
       };
       user = with types; {
         name = mkOption {
@@ -52,14 +103,6 @@ in {
           ];
         };
       };
-      fonts = mkOption {
-        description = "fonts";
-        type = types.listOf types.str;
-        default = with pkgs; [
-          nerd-fonts.fira-code
-          nerd-fonts.droid-sans-mono
-        ];
-      };
     };
   };
 
@@ -67,7 +110,7 @@ in {
     programs.zsh.enable = true;
     users.groups.${cfg.user.name} = {};
     users.users.${cfg.user.name} = {
-      inherit (cfg.user) name;
+      inherit (cfg.user) name extraGroups;
       home = if isDarwin then "/Users/${cfg.user.name}" else "/home/${cfg.user.name}";
       createHome = true;
       shell = "${pkgs.zsh}/bin/zsh";
@@ -75,6 +118,7 @@ in {
     } // lib.optionalAttrs isDarwin {
       isHidden = false;
     };
+    networking.extraHosts = cfg.extraHosts;
     services.openssh = {
       enable = true;
       ports = [ 22 ];
@@ -86,20 +130,57 @@ in {
         PermitRootLogin = "no";
       };
     };
+
+    console.useXkbConfig = true;
+    services.xserver = {
+      enable = true;
+      xkb = {
+        options = "caps:escape";
+      };
+    };
+
     fonts.packages = with pkgs.nerd-fonts; [
       fira-code
       droid-sans-mono
       symbols-only
       jetbrains-mono
     ];
-
     services.tailscale.enable = true;
     networking.nameservers = cfg.nameservers;
     nix.settings.trusted-users = [
-       "petee"
-       "root"
-       "pete"
+      "root"
+      "petee"
     ];
-    programs.firefox.enable = true;
+    # environment.sessionVariables = {
+    #   TERM = "screen-256color";
+    # };
+
+    # Add mitmproxy CA to trusted certificates on Linux systems
+    security.pki.certificates = [
+      ''
+        -----BEGIN CERTIFICATE-----
+        MIIDNTCCAh2gAwIBAgIUIKZOGdc9vHy+Z+M/zUIBk6lQkUowDQYJKoZIhvcNAQEL
+        BQAwKDESMBAGA1UEAwwJbWl0bXByb3h5MRIwEAYDVQQKDAltaXRtcHJveHkwHhcN
+        MjUwOTE2MjI0MzA1WhcNMzUwOTE2MjI0MzA1WjAoMRIwEAYDVQQDDAltaXRtcHJv
+        eHkxEjAQBgNVBAoMCW1pdG1wcm94eTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC
+        AQoCggEBANkgPoNtXhCDJ+xY1fDEWR28P/cZsyf/2SdOSeG5G+lmlln26iGR5niL
+        kgtkliBvs76/UaC0PEToQIjsKIlAXErJe6XDPkNqRlt9jtT68UI7rD+bp90i5KuF
+        GHkqkDDkgttZwtvM50y3tYyurMcbkkpWp4/sGKVCgbwiNItniMFt9ieVjtQpIYNj
+        Gs8mK9kpmNbkaLvyKg1UEwCdDGXDhZKjDe2XrZI1y3OnDS3oDeyT1u03NuPlM/Ba
+        dXoo/3Fp1/Jt7UvWFPk7sQuJuUabh0z1bUBLdeoeXugDD7afq7ObadtQhJwESEFG
+        nHMMw2E/3x2l2oQtFeZoPWQoGEK9zpMCAwEAAaNXMFUwDwYDVR0TAQH/BAUwAwEB
+        /zATBgNVHSUEDDAKBggrBgEFBQcDATAOBgNVHQ8BAf8EBAMCAQYwHQYDVR0OBBYE
+        FIE17woKq+gJv+kqnJFq+qx5ge4JMA0GCSqGSIb3DQEBCwUAA4IBAQAYm4yT1Z6C
+        W5vA47C9h8AA8RddlkbT5+Rmk2/CtUNig+lIMRMGOFP4sOW2A/M5piScSmwdKrvy
+        Q3C0wJW+yQtcuwRaO3Asjbvp0wIi9gmSHUah+JpUgV6SuenZTnc1EUU8kOUH93QW
+        fgiuKZ0Y7Eyiq62Le21JIIIKu6JRy8cJm78GFd4Th7CuF9s/4VuCZDXcSI9coNno
+        +54ylFKJSX0TBGde2/DfHRA+KPPshzHgm87/8YXBUXvt9R57n10XeJauEjssjTxO
+        S9dmkEU7QsrwLpfz3lzygBsk8u6ZNSsx9Pocx+s5amYiE+UJkc714GnDPi0ll5I7
+        6/l4Cm3eXAS6
+        -----END CERTIFICATE-----
+      ''
+    ];
+
+    system.stateVersion = "25.11";
   };
 }

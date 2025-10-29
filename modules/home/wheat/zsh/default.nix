@@ -15,19 +15,18 @@
     fasd
     zoxide
     zsh-histdb
-    nmap
+    zsh-fzf-tab
     fzf
     sqlite
+    eza
+    fd
   ];
 
   programs.zsh = {
     enable = true;
     oh-my-zsh = {
       enable = true;
-      # theme = "";
-      # custom = "$HOME/.oh-my-zsh/custom";
       plugins = [
-        # "aws"
         "argocd"
         "azure"
         "colored-man-pages"
@@ -39,16 +38,11 @@
         "aliases"
         "common-aliases"
         "direnv"
-        # "docker"
-        # "docker-compose"
-        # "dotenv"
-        # "emoji"      ONE of these 3 is slow
         "encode64"
         "extract"
         "zoxide"
         "fzf"
         "systemd"
-        "nmap"
       ];
     };
     shellAliases = {
@@ -58,10 +52,12 @@
       nos-delete = "sudo nix-env --delete-generations --profile /nix/var/nix/profiles/system $@";
       k = "kubectl";
       gd = "git diff";
+      gdu = "git diff origin main";
       gs = "git status";
       nd = "nix develop -c zsh";
       vi = "nvim";
       vim = "nvim";
+      j = "just";
     };
     enableCompletion = true;
     autocd = false;
@@ -77,6 +73,15 @@
 
       export PYTHONWARNINGS="ignore::FutureWarning"
       export PATH=$HOME/bin:$PATH
+
+      # Disable pager for systemd tools (journalctl, systemctl, etc.)
+      export SYSTEMD_PAGER=""
+
+      # enable fzf-tab
+      source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
+      
+      # source local zsh config for testing
+      [[ -f ~/.config/zsh/zsh-local.zsh ]] && source ~/.config/zsh/zsh-local.zsh
     '';
   };
 }

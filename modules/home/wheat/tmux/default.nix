@@ -29,7 +29,7 @@ in {
   options.wheat.tmux = {
     enable = mkEnableOption "Enable";
     terminal = mkOption {
-      default = "xterm-kitty";
+      default = "tmux-256color";
       type = types.str;
     };
     historyLimit = mkOption {
@@ -51,14 +51,17 @@ in {
       historyLimit = cfg.historyLimit;
       keyMode = cfg.keyMode;
       tmuxp.enable = true;
-      # tmuxinator.enable = true;
-
       plugins = with pkgs; [
         tmuxPlugins.sensible
-        { plugin = tmuxPlugins.tmux-fzf; }
+        { 
+          plugin = tmuxPlugins.tmux-fzf;
+          extraConfig = ''
+            #TMUX_FZF_ORDER="session|window|pane|command|keybinding|clipboard|process"
+            TMUX_FZF_ORDER="session|window|pane"
+          '';
+        }
         { plugin = tmuxPlugins.urlview; }
-        { plugin = tmuxPlugins.fuzzback; }
-        # { plugin = tmuxPlugins.extrakto; }
+        # { plugin = tmuxPlugins.fuzzback; }  # TODO(pete)
         {
           plugin = tmuxPlugins.yank;
           extraConfig = ''
@@ -70,10 +73,28 @@ in {
         tmuxPlugins.open
         tmuxPlugins.copycat
         {
+          plugin = tmuxPlugins.tmux-thumbs;
+          # extraConfig = ''
+          #   set -g @thumbs-key F
+          #   set -g @thumbs-osc52 1
+          # '';
+        }
+        {
           plugin = tmuxPlugins.catppuccin;
           extraConfig = ''
             set -g @catppuccin_flavor 'mocha'
             set -g @catppuccin_window_status_style "rounded"
+
+            set -g status-right-length 100
+            set -g status-left-length 100
+            set -g status-left ""
+            set -g status-right "#{E:@catppuccin_status_application}"
+            set -agF status-right "#{E:@catppuccin_status_cpu}"
+            set -ag status-right "#{E:@catppuccin_status_session}"
+            # set -ag status-right "#{E:@catppuccin_status_uptime}"
+            # set -agF status-right "#{E:@catppuccin_status_battery}"
+
+
           '';
         }
         tmuxPlugins.better-mouse-mode
@@ -83,7 +104,6 @@ in {
       ];
       shortcut = "a";  # Ctrl-a
       mouse = true;
-      # newSession = true;
       sensibleOnTop = true;
       extraConfig = ''
         # https://github.com/tmux/tmux/wiki/Clipboard#quick-summary
@@ -92,6 +112,10 @@ in {
         set-option -sa terminal-features ',xterm-kitty:Clipboard'
 
         set -g @scroll-without-changing-pane "on"
+
+        # Preserve window names from tmuxp
+        set -g allow-rename off
+        set -g automatic-rename off
 
         # split windows
         bind | split-window -h
@@ -108,13 +132,14 @@ in {
         bind-key T select-layout tiled
 
         # TOD(pete): can't remember why I added this...especially here....
-        setenv -g PATH "$HOME/bin:$PATH"
+        # setenv -g PATH "$HOME/bin:$PATH"
 
         # clear screen
         bind C-l send-keys 'C-l'
 
         # Smart pane switching with awareness of Vim splits.
         # See: https://github.com/christoomey/vim-tmux-navigator
+
         vim_pattern='(\S+/)?g?\.?(view|l?n?vim?x?|fzf)(diff)?(-wrapped)?'
         is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
             | grep -iqE '^[^TXZ ]+ +''\${vim_pattern}$'"
@@ -122,11 +147,7 @@ in {
         bind-key -n 'C-j' if-shell "$is_vim" 'send-keys C-j'  'select-pane -D'
         bind-key -n 'C-k' if-shell "$is_vim" 'send-keys C-k'  'select-pane -U'
         bind-key -n 'C-l' if-shell "$is_vim" 'send-keys C-l'  'select-pane -R'
-        tmux_version='$(tmux -V | sed -En "s/^tmux ([1-9]+(.[0-9]+)?).*/\1/p")'
-        if-shell -b '[ "$(echo "$tmux_version < 3.0" | bc)" = 1 ]' \
-            "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\'  'select-pane -l'"
-        if-shell -b '[ "$(echo "$tmux_version >= 3.0" | bc)" = 1 ]' \
-            "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\\\'  'select-pane -l'"
+        bind-key -n 'C-\' if-shell "$is_vim" 'send-keys C-\\' 'select-pane -l'
 
         bind-key -T copy-mode-vi 'C-h' select-pane -L
         bind-key -T copy-mode-vi 'C-j' select-pane -D
@@ -134,21 +155,23 @@ in {
         bind-key -T copy-mode-vi 'C-l' select-pane -R
         bind-key -T copy-mode-vi 'C-\' select-pane -l
 
-        set -g status-right-length 100
-        set -g status-left-length 100
-        set -g status-left ""
-        set -g status-right "#{E:@catppuccin_status_application}"
-        set -agF status-right "#{E:@catppuccin_status_cpu}"
-        set -ag status-right "#{E:@catppuccin_status_session}"
-        set -ag status-right "#{E:@catppuccin_status_uptime}"
-        set -agF status-right "#{E:@catppuccin_status_battery}"
+        # Source local config if it exists
+        if-shell "test -f ~/.config/tmux/tmux-local.conf" "source-file ~/.config/tmux/tmux-local.conf"
       '';
     };
+    xdg.configFile."tmuxp/wheat-nix.yaml" = {
+       source = ./tmuxp/wheat-nix.yaml;
+    };
+    xdg.configFile."tmuxp/opaque-systems.yaml" = {
+       source = ./tmuxp/opaque-systems.yaml;
+    };
+    programs.zsh.envExtra = ''
+      export DISABLE_AUTO_TITLE=true
+    '';
     home.packages = with pkgs; [
       lsof  # TODO(pete): probably not neccessary, can't remember
       file  # TODO(pete): probably not neccessary, can't remember
       fzf
-      # thumbs
     ];
   };
 }

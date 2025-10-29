@@ -16,6 +16,7 @@
 {
   wheat = {
     enable = true;
+    secrets.enable = true;
     user = {
       name = "pete";
       authorizedKeys = [
@@ -27,16 +28,13 @@
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEMv8uBStPXcU4V5+7L6TpP08HhpG5vumutAFogVd0ca pete@m4" # litle mac
       ];
     };
-    services.podman.enable = true;
+    # services.podman.enable = true;
   };
-
+  nix.settings.trusted-users = [
+    "pete"
+  ];
   # hack to workaround nix group id changes
   ids.gids.nixbld = 350;
 
   system.stateVersion = 4;
-  nix.settings.trusted-users = [
-     "@wheel"
-     "root"
-     "pete"
-  ];
 }

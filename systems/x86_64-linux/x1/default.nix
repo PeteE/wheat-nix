@@ -24,24 +24,89 @@
     user = {
       name = "petee";
       hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
-      extraGroups = ["wheel" "NetworkManager"];
+      extraGroups = ["wheel" "NetworkManager" "kvm"];
     };
 
     secrets.enable = true;
-    plasma.enable = true;
     wifi.enable = true;
     sudo.enable = true;
-    virtualisation.enable = true;
+
+    # todo(pete) : replace with VirtNix module
+    virtualisation = {
+      enable = false;
+      libvirtd.enable = false;
+      libvirtUri = "qemu+ssh://petee@ripper/system";
+    };
+
+    libvirt-vms.enable = true;
     services.podman.enable = true;
+    services.clipcat.enable = true;
+    remote-builder-client = {
+      enable = true;
+    };
+    services.hyprland.enable = true;
   };
 
-  # Host-specific config (old x1 carbon laptop)
+  hardware.graphics.enable = true;
+  console.useXkbConfig = true;
+  services.xserver = {
+    displayManager.lightdm.enable = false;
+    enable = true;
+    xkb = {
+      options = "caps:escape";
+    };
+  };
+  environment.systemPackages = with pkgs; [
+    intel-gpu-tools
+  ];
+  networking.useDHCP = true;
+  networking.useNetworkd = true;
   networking.hostName = "x1";
+  systemd.network.enable = true;
+  systemd.network.networks."10-lan" = {
+    matchConfig.Name = ["enp0s31f6" "vm-*"];
+    networkConfig = {
+      Bridge = "br0";
+    };
+  };
+
+  # bridge device for VMs
+  systemd.network.netdevs."br0" = {
+    netdevConfig = {
+      Name = "br0";
+      Kind = "bridge";
+    };
+  };
+  systemd.network.networks."10-lan-bridge" = {
+    matchConfig.Name = "br0";
+    networkConfig = {
+      Address = ["192.168.100.1/24"];
+      DNS = [
+        "192.168.1.249"
+        "1.1.1.1"
+      ];
+      IPv6AcceptRA = false;
+    };
+    linkConfig.RequiredForOnline = "routable";
+  };
+
+  networking.nat = {
+    enable = true;
+    enableIPv6 = true;
+    externalInterface = "wlp2s0";
+    internalInterfaces = [ "br0" ];
+  };
 
   time.timeZone = "America/Chicago";
-
-  boot.loader.systemd-boot.enable = true;
+  boot.loader = {
+    systemd-boot = {
+      enable = true;
+      consoleMode = "auto";
+      editor = true;
+    };
+  };
   boot.loader.efi.canTouchEfiVariables = true;
+
   boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "uas" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
@@ -60,7 +125,7 @@
       device = "/dev/disk/by-uuid/6bacfc99-1805-42fb-9797-3593255c1dff";
     }
   ];
-  networking.useDHCP = true;
+
   hardware.cpu.intel.updateMicrocode = true;
   hardware.bluetooth.enable = true;
   services.printing.enable = true;
@@ -71,7 +136,10 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+    wireplumber.enable = true;
   };
+  services.blueman.enable = true;
+
   services.libinput.enable = true;
 
   powerManagement = {
@@ -81,5 +149,13 @@
     };
     cpuFreqGovernor = "performance";
   };
+
+  # Micro VMs
+  microvm.vms = {
+    # microvm-poc = {
+    #   flake = inputs.self;
+    # };
+  };
   system.stateVersion = "25.11";
+
 }

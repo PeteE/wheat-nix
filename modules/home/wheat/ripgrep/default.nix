@@ -24,7 +24,8 @@ in {
       enable = true;
       arguments = [
         "--smart-case"
-        "--hidden"
+        "--no-ignore"
+        # "--hidden"
       ];
     };
   };
