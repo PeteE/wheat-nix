@@ -36,7 +36,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home-manager.backupFileExtension = "hm-backup";
+    home-manager.backupFileExtension = ".hm-backup";
     programs.zsh.enable = true;
     users.groups.${cfg.user.name} = {};
     users.users.${cfg.user.name} = {

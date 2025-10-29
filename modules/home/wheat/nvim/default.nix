@@ -285,6 +285,7 @@ in {
         nvim-treesitter-refactor
         rustaceanvim
         nvim-dap
+        diffview-nvim
         undotree
         zoxide-vim
         vim-fugitive

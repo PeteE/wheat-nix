@@ -44,6 +44,8 @@
       ];
     };
     shellAliases = {
+      g = "git";
+      tg = "terragrunt";
       ll = "ls -l";
       nos-update = "sudo nixos-rebuild switch --flake .#x1";
       nos-list = "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system";

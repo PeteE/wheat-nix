@@ -14,6 +14,7 @@
     ...
 }:
 {
+  nix.enable = false;
   wheat = {
     enable = true;
     user = {

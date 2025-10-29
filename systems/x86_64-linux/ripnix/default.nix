@@ -27,7 +27,6 @@
   {
   imports =
     [
-      (modulesPath + "/profiles/qemu-guest.nix")
       (../../../modules/shared/wheat/default.nix)
     ];
 

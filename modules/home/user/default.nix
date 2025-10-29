@@ -1,14 +1,8 @@
 # vim: ts=2:sw=2:et
 {
-    lib,
     pkgs,
     inputs,
-    namespace,
     system,
-    target,
-    format,
-    virtual,
-    systems,
     config,
     ...
 }:
@@ -48,6 +42,7 @@
 
   programs.home-manager.enable = true;
   home.packages = with pkgs; [
+    wheat.sclient
     zip
     unzip
     repomix  # packages a repo for use with AI tooling

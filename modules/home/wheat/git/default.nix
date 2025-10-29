@@ -27,6 +27,10 @@ in {
     home.packages = mkIf cfg.openCommit [
       pkgs.opencommit
     ];
+    home.sessionVariables = {
+      GIT_EDITOR = "${pkgs.neovim}/bin/nvim";
+    };
+    
     programs.git = {
       enable = true;
       lfs.enable = true;

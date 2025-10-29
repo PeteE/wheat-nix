@@ -8,6 +8,7 @@
       enable = true;
     };
     work.enable = true;
+    minikube.enable = true;
     secrets = {
       enable = true;
     };
