@@ -26,6 +26,18 @@ in
       package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
       portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
     };
+    # home.pointerCursor = {
+    #   package = pkgs.apple-cursor;
+    #   name = "Apple Cursor";
+    #   size = 24;
+
+    #   hyprcursor = {
+    #     enable = true;
+    #     size = 18;
+    #   };
+
+    #   gtk.enable = true;
+    # };
 
     xdg.configFile."hypr/hyprland.conf" = {
       text = import ./hyprland-config.nix {

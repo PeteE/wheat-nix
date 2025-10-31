@@ -66,6 +66,7 @@ in
       cloud-hypervisor
       wheat.rofi-scripts
 
+      catppuccin-cursors
       ntfs3g
       exfat
       libinput # libinput library
