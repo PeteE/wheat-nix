@@ -18,7 +18,7 @@ in {
       lazygit
       nodePackages.eslint
       lua-language-server
-      rust-analyzer
+      # rust-analyzer
       helm-ls
       yaml-language-server
       pyright
@@ -66,15 +66,14 @@ in {
               cd_type = "tab",
               global_cd = false,
               auto_open = false,
-              hooks = {
-                open = {
-                  "lua Snacks.picker.smart()",
-                }
-              }
+              -- hooks = {
+              --   open = {
+              --     "lua Snacks.picker.smart()",
+              --   }
+              -- }
             })
           '';
         }
-        
         {
           plugin = cmp-fuzzy-path;
           type = "lua";
@@ -195,7 +194,7 @@ in {
         nvim-treesitter-parsers.starlark
         nvim-treesitter-textobjects
         nvim-treesitter-refactor
-        rustaceanvim
+        # rustaceanvim
         nvim-dap
         undotree
         zoxide-vim
@@ -258,10 +257,10 @@ in {
           plugin = nvim-lspconfig;
           type = "lua";
           config = ''
-            require('lspconfig').lua_ls.setup({
+            vim.lsp.config("lua_ls", {
               capabilities = require('cmp_nvim_lsp').default_capabilities()
             })
-            require('lspconfig').nil_ls.setup({
+            vim.lsp.config("nil_ls", {
               capabilities = require('cmp_nvim_lsp').default_capabilities(),
               settings = {
                 ['nil'] = {
@@ -281,9 +280,8 @@ in {
                 },
               },
             })
-            require('lspconfig').terraformls.setup({})
-            require('lspconfig').tflint.setup({})
-            -- require('lspconfig').starlark_rust.setup({})
+            vim.lsp.config("terraformls", {})
+            vim.lsp.config("tflint", {})
           '';
         }
         {
