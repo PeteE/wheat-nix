@@ -39,7 +39,7 @@
     ai.enable = true;
     k8s.enable = true;
     gcloud.enable = true;
-    mitmproxy.enable = true;
+    mitmproxy.enable = false;
     # TODO: only enable on m4, x1
     embedded.enable = true;
     yazi.enable = true;

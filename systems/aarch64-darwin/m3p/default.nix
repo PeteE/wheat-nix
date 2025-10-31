@@ -48,5 +48,5 @@
   # hack to workaround nix group id changes
   ids.gids.nixbld = 350;
   system.stateVersion = 4;
-
+  nix.enable = false;
 }

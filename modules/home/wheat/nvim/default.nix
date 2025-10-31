@@ -200,6 +200,7 @@ in {
         undotree
         zoxide-vim
         vim-fugitive
+        vim-rhubarb
         fzf-lsp-nvim
         lazy-nvim
         vim-helm
