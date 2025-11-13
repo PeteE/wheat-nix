@@ -44,6 +44,7 @@ in {
       enable = true;
       defaultEditor = true;
       plugins = with pkgs.vimPlugins; [
+        diffview-nvim
         { 
           plugin = trouble-nvim;
           type = "lua";

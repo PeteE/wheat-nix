@@ -63,6 +63,7 @@
     openbao
     direnv
     curl
+    go_1_24
     wget
     nh
     git
