@@ -58,6 +58,7 @@
   };
   environment.systemPackages = with pkgs; [
     intel-gpu-tools
+    minikube
   ];
   networking.useDHCP = true;
   networking.useNetworkd = true;

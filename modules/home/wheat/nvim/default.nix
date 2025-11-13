@@ -44,6 +44,7 @@ in {
       enable = true;
       defaultEditor = true;
       plugins = with pkgs.vimPlugins; [
+        diffview-nvim
         { 
           plugin = trouble-nvim;
           type = "lua";
@@ -199,6 +200,7 @@ in {
         undotree
         zoxide-vim
         vim-fugitive
+        vim-rhubarb
         fzf-lsp-nvim
         lazy-nvim
         vim-helm
