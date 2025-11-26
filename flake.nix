@@ -138,6 +138,19 @@
           };
         };
       };
+      nodes.rpi4 = {
+        hostname = "192.168.1.173";
+        fastConnection = true;
+        interactiveSudo = false;
+        remoteBuild = true;
+        profiles = {
+          system = {
+            path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.rip4;
+            user = "root";
+            sshUser = "nixos";
+          };
+        };
+      };
     };
 
     # overlays
@@ -151,6 +164,7 @@
 
     channels-config = {
       allowUnfree = true;
+      android_sdk.accept_license = true;
       permittedInsecurePackages = [
         # "electron-25.9.0"
       ];
@@ -184,12 +198,11 @@
         x1.modules = with inputs; [
           nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
         ];
-        # pishield.modules = with inputs; [
-        #   nixos-hardware.nixosModules.raspberry-pi-4
-        # ];
+        rpi4.modules = with inputs; [
+          nixos-hardware.nixosModules.raspberry-pi-4
+        ];
         m4.modules = with inputs; [ ];
         m3p.modules = with inputs; [ ];
-        shield.modules = with inputs; [ ];
         microvm-poc.modules = with inputs; [
           microvm.nixosModules.microvm
         ];

@@ -24,7 +24,12 @@
     user = {
       name = "petee";
       hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
-      extraGroups = ["wheel" "NetworkManager" "kvm"];
+      extraGroups = [
+        "wheel"
+        "NetworkManager"
+        "kvm"
+        "dialout"
+      ];
     };
 
     secrets.enable = true;
@@ -59,6 +64,14 @@
   environment.systemPackages = with pkgs; [
     intel-gpu-tools
     minikube
+    gthumb
+    shotwell
+    dvdplusrwtools
+    dvdauthor
+    vlc
+    cdrkit
+    androidsdk
+    android-backup-extractor
   ];
   networking.useDHCP = true;
   networking.useNetworkd = true;
@@ -157,6 +170,6 @@
     #   flake = inputs.self;
     # };
   };
+  programs.adb.enable = true;
   system.stateVersion = "25.11";
-
 }
