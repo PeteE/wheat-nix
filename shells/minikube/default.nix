@@ -9,7 +9,7 @@ pkgs.mkShell {
   # Create your shell
   packages = with pkgs; [
     minikube
-    helm
+    # helm
     k9s
     kubectl
   ];

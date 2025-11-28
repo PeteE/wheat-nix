@@ -23,26 +23,15 @@
     };
     tmux.enable = true;
     kitty.enable = true;
-    nushell.enable = false;
     nvim.enable = true;
     ripgrep.enable = true;
     secrets.enable = true;
     starship.enable = true;
-    vscode.enable = true;
     zoxide.enable = true;
-    azure.enable = true;
     carapace.enable = true;
     btop.enable = true;
     k9s.enable = true;
-    attic-client.enable = true;
-    dev-tools.enable = true;
-    ai.enable = true;
     k8s.enable = true;
-    gcloud.enable = true;
-    mitmproxy.enable = false;
-    # TODO: only enable on m4, x1
-    embedded.enable = true;
-    yazi.enable = true;
   };
 
   programs.home-manager.enable = true;
@@ -50,37 +39,19 @@
   home.packages = with pkgs; [
     zip
     unzip
-    repomix  # packages a repo for use with AI tooling
-    ugrep-indexer
-    fx # json TUI
-    meld # 3 way visual diff
-    inputs.deploy-rs.packages."${system}".deploy-rs # https://github.com/serokell/deploy-rs
-    headscale
     tailscale
-    ollama
     dig
     bat
-    openbao
     direnv
     curl
-    go_1_24
     wget
     nh
     git
     git-credential-manager
     fd
     bc
-    attic-client
     yq-go
-    glow
-    delve
-    links2
-    presenterm
-    asciinema
-    vim
     tree
-    slack-term
-    cachix
     unixtools.netstat
     htop
     gcc

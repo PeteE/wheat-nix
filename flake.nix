@@ -59,7 +59,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-vscode-extensions = {
-      url = "github:nix-community/nix-vscode-extensions/1a1442e13dc1730de0443f80dcf02658365e999a";
+      url = "github:nix-community/nix-vscode-extensions/4b5d357fd9b7ffce8fded947e3e4e883ed1b2109";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin = {
@@ -145,9 +145,9 @@
         remoteBuild = true;
         profiles = {
           system = {
-            path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.rip4;
+            path = inputs.deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.rpi4;
             user = "root";
-            sshUser = "nixos";
+            sshUser = "petee";
           };
         };
       };
@@ -168,6 +168,7 @@
       permittedInsecurePackages = [
         # "electron-25.9.0"
       ];
+
     };
 
     homes.modules = with inputs; [
@@ -178,7 +179,6 @@
 
     systems = {
       overlays = with inputs; [ ];
-
       modules = {
         darwin = with inputs; [
           sops-nix.darwinModules.sops
@@ -190,17 +190,26 @@
           nixos-generators.nixosModules.all-formats
           nixvirt.nixosModules.default
           microvm.nixosModules.host
-
         ];
       };
 
       hosts = {
-        x1.modules = with inputs; [
-          nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
-        ];
+        x1 = {
+          modules = with inputs; [
+            nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
+            {
+              boot.binfmt.emulatedSystems = [ "armv6l-linux" "aarch64-linux"];
+              nixpkgs.config.allowUnsupportedSystem = true;
+              nixpkgs.hostPlatform.system = "armv6l-linux";
+              nixpkgs.buildPlatform.system = "x86_64-linux"; #If you build on x86 other wise changes this.
+            }
+          ];
+        };
+
         rpi4.modules = with inputs; [
           nixos-hardware.nixosModules.raspberry-pi-4
         ];
+        rpiw.modules = with inputs; [ ];
         m4.modules = with inputs; [ ];
         m3p.modules = with inputs; [ ];
         microvm-poc.modules = with inputs; [

@@ -19,6 +19,7 @@
       ccr.enable = false;
     };
 
+    misc.enable = true;
     zoom.enable = true;
     work.enable = true;
     rofi.enable = true;
@@ -28,6 +29,12 @@
     minikube.enable = true;
     devenv.enable = true;
     zed-editor.enable = true;
+    vscode.enable = true;
+    azure.enable = true;
+    dev-tools.enable = true;
+    gcloud.enable = true;
+    embedded.enable = true;
+    attic-client.enable = true;
   };
 
   services.hyprsunset.enable = true;

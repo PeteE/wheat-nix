@@ -16,7 +16,17 @@
   imports = [ 
     (modulesPath + "/installer/scan/not-detected.nix")
     (../../../modules/shared/wheat/default.nix)
+    <nixpks/modules/installer/cd-dvd/sd-image-raspberrypi.nix>
   ];
+
+  sdImage = {
+    compressImage = false;
+  };
+  nixpkgs.crossSystem = {
+    system = "armv6l-linux";
+    platform = lib.systems.platforms.raspberrypi;
+  };
+
   fileSystems = { 
     "/" = {
       device = "/dev/disk/by-label/NIXOS_SD";
@@ -25,23 +35,20 @@
   };
   swapDevices = [ ];
 
-  boot.kernelPackages = pkgs.linuxPackages_rpi4;
-  boot.initrd.allowMissingModules = true;
-  boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" ];
-  boot.kernelModules = [ ];
-  boot.extraModulePackages = [ ];
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_rpi1;
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;
+  boot.initrd.allowMissingModules = true;
 
   networking.useDHCP = lib.mkDefault true;
   networking.firewall.enable = false;
-  networking.hostName = "rpi4";
-  nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
+  networking.hostName = "rpiw";
+  nixpkgs.hostPlatform = lib.mkDefault "armv6l-linux";
 
   time.timeZone = "America/Chicago";
 
   wheat = {
-    enable = true;
+    enable = false;
     user = {
       name = "petee";
       hashedPassword = "$y$j9T$ysACyCk2sIkE4gjt8JfgK0$ZS1H7jaFrrMbZj1QGX2xm/omN8rGAwl6cAcZbfKQykC";

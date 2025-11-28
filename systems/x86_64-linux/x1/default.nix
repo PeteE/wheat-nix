@@ -32,6 +32,7 @@
       ];
     };
 
+    xserver.enable = true;
     secrets.enable = true;
     wifi.enable = true;
     sudo.enable = true;
@@ -42,7 +43,7 @@
       libvirtd.enable = false;
       libvirtUri = "qemu+ssh://petee@ripper/system";
     };
-
+    thermald.enable = true;
     libvirt-vms.enable = true;
     services.podman.enable = true;
     services.clipcat.enable = true;
@@ -70,8 +71,8 @@
     dvdauthor
     vlc
     cdrkit
-    androidsdk
-    android-backup-extractor
+    # androidsdk
+    # android-backup-extractor
   ];
   networking.useDHCP = true;
   networking.useNetworkd = true;

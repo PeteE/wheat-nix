@@ -205,17 +205,17 @@ in {
         lazy-nvim
         vim-helm
         vim-indentwise
-        {
-          plugin = lualine-nvim;
-          type = "lua";
-          config = ''
-            require('lualine').setup(
-              {
-                theme = 'onedark',
-              }
-            )
-          '';
-        }
+        # {
+        #   plugin = lualine-nvim;
+        #   type = "lua";
+        #   config = ''
+        #     require('lualine').setup(
+        #       {
+        #         theme = 'onedark',
+        #       }
+        #     )
+        #   '';
+        # }
         {
           plugin = dashboard-nvim;
           type = "lua";
