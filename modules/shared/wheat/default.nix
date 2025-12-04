@@ -47,9 +47,12 @@ in {
           192.168.1.50    hv
           192.168.1.51    ripper
           192.168.1.120   trunas
+          192.168.1.222   rpi0
+          192.168.1.173   rpi4
 
           # devices
           192.168.1.116   pixel-7a
+          192.168.1.140   pixel10
           192.168.1.186   joannas-ipad
           192.168.1.185   petee-ipad
           192.168.1.195   mariannes-air

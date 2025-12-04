@@ -16,7 +16,7 @@
     dev-tools.enable = true;
     ai.enable = true;
     gcloud.enable = true;
-    embedded.enable = true;
+    embedded.enable = false;
     yazi.enable = true;
     attic-client.enable = true;
   };

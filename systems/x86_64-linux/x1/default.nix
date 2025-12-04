@@ -29,6 +29,7 @@
         "NetworkManager"
         "kvm"
         "dialout"
+        "disk"
       ];
     };
 
@@ -63,6 +64,7 @@
     };
   };
   environment.systemPackages = with pkgs; [
+    rpi-imager
     intel-gpu-tools
     minikube
     gthumb

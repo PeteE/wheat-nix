@@ -34,7 +34,7 @@
     waybar.url = "github:Alexays/Waybar/41de8964f1e3278edf07902ad68ca5e01e7abeeb";
     hyprland.url = "github:hyprwm/Hyprland/v0.50.0";
     hyprshell = {
-      url = "github:H3rmt/hyprshell/v4.6.3";
+      url = "github:H3rmt/hyprshell/4567017e5dc0ed03b9762fb0736e877917884d40";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     grim-hyprland = {
