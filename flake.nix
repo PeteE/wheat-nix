@@ -5,7 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.05";
     home-manager = {
-      url = "github:nix-community/home-manager/master";
+      url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     snowfall-lib = {
@@ -29,19 +29,22 @@
       url = "github:nixos/nixos-hardware";
     };
     nur = {
-      url = "github:nix-community/NUR/0c542bbbd8fe18b031fd8587c891b793647472b8";
+      url = "github:nix-community/NUR";
     };
-    waybar.url = "github:Alexays/Waybar/41de8964f1e3278edf07902ad68ca5e01e7abeeb";
-    hyprland.url = "github:hyprwm/Hyprland/v0.50.0";
+    waybar.url = "github:Alexays/Waybar";
+    hyprland.url = "github:hyprwm/Hyprland";
     hyprshell = {
-      url = "github:H3rmt/hyprshell/4567017e5dc0ed03b9762fb0736e877917884d40";
+      url = "github:H3rmt/hyprshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     grim-hyprland = {
       url = "github:eriedaberrie/grim-hyprland/4a3d6f5b87b01e92c404b9393b79057b85f58c60";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
+    niri-flake = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # Generate System Images
     nixos-generators = {
       url = "github:nix-community/nixos-generators";

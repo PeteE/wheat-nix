@@ -73,6 +73,7 @@
     dvdauthor
     vlc
     cdrkit
+    minicom
     # androidsdk
     # android-backup-extractor
   ];

@@ -58,6 +58,9 @@ in {
           192.168.1.195   mariannes-air
           192.168.1.209   m3p-wifi
           192.168.1.210   m3p
+          192.168.1.221   meshtastic0
+          192.168.1.151   meshtastic1-v4
+          192.168.1.155   redboard
 
           # k8s nodes
           192.168.1.202   k8s-master0
