@@ -27,6 +27,7 @@ in {
       alejandra
       kubectl
       starlark-rust
+      hclfmt
     ];
 
     programs.zsh = {
@@ -282,7 +283,9 @@ in {
                 },
               },
             })
-            vim.lsp.config("terraformls", {})
+            vim.lsp.config("terraformls", {
+              filetypes = { "terraform", "hcl" },
+            })
             vim.lsp.config("tflint", {})
           '';
         }
@@ -500,6 +503,7 @@ in {
       withNodeJs = true;
       extraLuaConfig = ''
         vim.o.clipboard = "unnamedplus"
+        -- vim.o.diffopt:append("iwhiteall")
         vim.g.mapleader = ","
         vim.o.syntax = 'on'
         vim.o.number = true
@@ -529,6 +533,14 @@ in {
           pattern = "nix",
           callback = function(args)
             vim.opt.commentstring = "# %s"
+          end
+        })
+
+        -- Format HCL files with hclfmt on save
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          pattern = "*.hcl",
+          callback = function()
+            vim.cmd("silent! %!${pkgs.hclfmt}/bin/hclfmt")
           end
         })
 

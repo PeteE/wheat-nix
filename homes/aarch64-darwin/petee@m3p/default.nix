@@ -1,5 +1,6 @@
 {
   home,
+  pkgs,
   ...
 }:
 {
@@ -12,5 +13,9 @@
       enable = true;
     };
   };
+  home.packages = with pkgs; [
+    minikube
+    vault
+  ];
   home.stateVersion = "25.11";
 }

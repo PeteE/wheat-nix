@@ -70,6 +70,9 @@
       url = "github:AshleyYakeley/NixVirt/v0.6.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    claude-code = {
+      url = "github:sadjow/claude-code-nix";
+    };
   };
   outputs = { self, ... }@inputs: inputs.snowfall-lib.mkFlake {
     inherit inputs;
@@ -146,6 +149,7 @@
       grim-hyprland.overlays.default
       waybar.overlays.default
       nur.overlays.default
+      claude-code.overlays.default
       # flake.overlays.default
     ];
 

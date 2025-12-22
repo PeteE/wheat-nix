@@ -29,6 +29,7 @@ in {
       work_scripts
       tilt
       k6
+      ngrok
     ];
   };
 }
