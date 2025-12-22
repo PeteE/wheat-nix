@@ -18,8 +18,6 @@ in {
     services.headscale = {
       enable = true;
     };
-    environment.systemPackages = with pkgs; [
-      tailscale
-    ];
+    environment.systemPackages = with pkgs; [ ];
   };
 }

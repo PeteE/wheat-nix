@@ -151,7 +151,6 @@ in {
       symbols-only
       jetbrains-mono
     ];
-    services.tailscale.enable = true;
     networking.nameservers = cfg.nameservers;
     nix.settings.trusted-users = [
       "root"

@@ -35,7 +35,6 @@
     mqttx-cli
     zip
     unzip
-    tailscale
     dig
     bat
     direnv
