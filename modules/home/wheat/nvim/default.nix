@@ -88,7 +88,7 @@ in {
           plugin = snacks-nvim;
           type = "lua";
           config = ''
-            require('snacks').setup({
+           require('snacks').setup({
               indent = { enabled = true },
               terminal = { enabled = true },
               zen = { enabled = true },
@@ -178,7 +178,7 @@ in {
               vim.fn.setreg('+', filename)
               Snacks.notifier.notify("Path copied: " .. filename)
             end
-            vim.keymap.set('n', '<leader>cp', copyFullPathToClipboard, { desc = 'Copy filename' })
+            vim.keymap.set('n', '<leader>cp', copyFullPathToClipboard, { desc = 'Copy filename' }) 
             '';
         }
         # {
