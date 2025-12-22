@@ -455,18 +455,18 @@ in {
             vim.keymap.set('x', "<leader>B", "<Plug>(ToBase64)")
           '';
         }
-        {
-          plugin = codecompanion-history-nvim;
-          type = "lua";
-          config = ''
-          '';
-        }
-        {
-          plugin = codecompanion-nvim;
-          type = "lua";
-          config = ''
-          '';
-        }
+        # {
+        #   plugin = codecompanion-history-nvim;
+        #   type = "lua";
+        #   config = ''
+        #   '';
+        # }
+        # {
+        #   plugin = codecompanion-nvim;
+        #   type = "lua";
+        #   config = ''
+        #   '';
+        # }
         {
           plugin = claude-code-nvim;
           type = "lua";

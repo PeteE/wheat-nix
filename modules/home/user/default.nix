@@ -37,6 +37,9 @@
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
+    arduino
+    mosquitto
+    mqttx-cli
     zip
     unzip
     tailscale

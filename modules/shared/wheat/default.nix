@@ -61,6 +61,7 @@ in {
           192.168.1.221   meshtastic0
           192.168.1.151   meshtastic1-v4
           192.168.1.155   redboard
+          192.168.1.131   esp32mini
 
           # k8s nodes
           192.168.1.202   k8s-master0
