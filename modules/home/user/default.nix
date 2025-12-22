@@ -17,7 +17,7 @@
     };
     tmux.enable = true;
     kitty.enable = true;
-    nushell.enable = true;
+    nushell.enable = false;
     nvim.enable = true;
     ripgrep.enable = true;
     secrets.enable = true;
@@ -29,18 +29,18 @@
     btop.enable = true;
     k9s.enable = true;
     attic-client.enable = true;
-    firefox.enable = true;
     dev-tools.enable = true;
     ai.enable = true;
     k8s.enable = true;
     gcloud.enable = true;
-    # firefox.enable = true;
-
+    mitmproxy.enable = false;
     # TODO: only enable on m4, x1
     embedded.enable = true;
+    yazi.enable = true;
   };
 
   programs.home-manager.enable = true;
+
   home.packages = with pkgs; [
     wheat.sclient
     zip
@@ -58,6 +58,7 @@
     openbao
     direnv
     curl
+    go_1_24
     wget
     nh
     git
@@ -65,27 +66,18 @@
     fd
     bc
     attic-client
-    # yazi
-    # stylua
     yq-go
     glow
     delve
     links2
     presenterm
     asciinema
-    # attic-server
-    # clusterctl
-    # mpv
-    # clapper
-    # nitrogen
-    # lua5_3
-    firefox
     vim
     tree
-    slack
     slack-term
     cachix
     unixtools.netstat
     htop
+    gcc
   ];
 }

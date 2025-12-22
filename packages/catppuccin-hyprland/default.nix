@@ -7,16 +7,18 @@
     ...
 }:
 stdenvNoCC.mkDerivation {
-  name = "catppuccin-rofi";
+  name = "catppuccin-hyprland";
   src = pkgs.fetchFromGitHub {
     owner = "catppuccin";
-    repo = "rofi";
-    rev = "71fb15577ccb091df2f4fc1f65710edbc61b5a53";
-    hash =  "sha256-81eeFjwM/haPjIEWkZPp1JSDwhWbWDAuKtWiCg7P9Q0=";
+    repo = "hyprland";
+    rev = "c388ac55563ddeea0afe9df79d4bfff0096b146b";
+    hash =  "sha256-p9qxjoD9G1Sx27iLK4lqpY3+S2RClS8FDByo84U8MEc=";
+    sparseCheckout = [
+      "themes"
+    ];
   };
   installPhase = ''
     mkdir -p $out/themes
     cp -r themes/ $out/
-    cp catppuccin-default.rasi $out/
   '';
 }

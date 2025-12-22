@@ -24,17 +24,14 @@
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    plasma-manager = {
-      url = "github:nix-community/plasma-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-    };
     # Hardware Configuration
     nixos-hardware = {
       url = "github:nixos/nixos-hardware";
     };
-
-    waybar.url = "github:Alexays/Waybar/0.14.0";
+    nur = {
+      url = "github:nix-community/NUR/0c542bbbd8fe18b031fd8587c891b793647472b8";
+    };
+    waybar.url = "github:Alexays/Waybar/41de8964f1e3278edf07902ad68ca5e01e7abeeb";
     hyprland.url = "github:hyprwm/Hyprland/v0.50.0";
     hyprshell = {
       url = "github:H3rmt/hyprshell/v4.6.3";
@@ -66,12 +63,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin = {
-      url = "github:catppuccin/nix";
+      url = "github:catppuccin/nix/02dee881c3e644e2b561f407742f1fd927c40b83";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvirt = {
       url = "github:AshleyYakeley/NixVirt/v0.6.0";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    claude-code = {
+      url = "github:sadjow/claude-code-nix";
     };
   };
   outputs = { self, ... }@inputs: inputs.snowfall-lib.mkFlake {
@@ -148,7 +148,8 @@
       nix-vscode-extensions.overlays.default
       grim-hyprland.overlays.default
       waybar.overlays.default
-      # mozilla.overlays.firefox
+      nur.overlays.default
+      claude-code.overlays.default
       # flake.overlays.default
     ];
 
@@ -162,7 +163,6 @@
     homes.modules = with inputs; [
       sops-nix.homeManagerModules.sops
       catppuccin.homeModules.catppuccin
-      plasma-manager.homeModules.plasma-manager
       hyprshell.homeModules.default
     ];
 

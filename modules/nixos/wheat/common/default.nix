@@ -16,5 +16,10 @@
 {
   environment.systemPackages = with pkgs; [
     bridge-utils
+    ffmpeg
+    dvdplusrwtools
+    dvdauthor
+    vlc
+    cdrkit
   ];
 }

@@ -2,40 +2,20 @@
 This repo contains the config for all my Nix boxes.
 
 # TODO
-Work:
-- [ ] AI workload to diagnose sandbox
-
 Shield:
 - 
 QOL:
+- [ ] switch to skim for fuzzy search (nvim, zsh, rofi?)
 - [ ]  ToggleTerm tweak: `:help toggleterm.txt`
 ```
-This plugin automatically shades terminal filetypes to be darker than other
-window you can disable this by setting `shade_terminals = false` in the setup
-object
->lua
-    require'toggleterm'.setup {
-      shade_terminals = false
-    }
-<
-alternatively you can set, _which_ filetypes should be shaded by setting
-
->lua
-    -- fzf is just an example
-    require'toggleterm'.setup {
-      shade_filetypes = { "none", "fzf" }
-    }
-```
-
-- [X] upgrade claude-code
+- [ ] learn undotree
+- [ ] spend more time on nushell
 - [X] setup https://github.com/iannuttall/claude-sessions
 - [X] setup tmuxinator (or something else to)
   - tmux per project 
   - dedicated claude window/pane
-- [ ] tmux ~~finger~~ thumbs / extrackto / fuzzback?
-- [ ] learn undotree
-- [ ] spend more time on nushell
-- [ ] dynamic clipboard (rofi)
+- [x] tmux ~~finger~~ thumbs / extrackto / fuzzback?
+- [x] dynamic clipboard (rofi)
 - [X] markview disable by default
 - [X] vim terminal delay when useing `<Space>` key (likely due to keybindings)
 - [X] persistent folding
@@ -53,5 +33,3 @@ alternatively you can set, _which_ filetypes should be shaded by setting
 - [ ] pi-zero
 - [ ] hv - decommission from existing k3s cluster and migrate
 - [ ] ripper - ugh not sure, too many VMs
-- [x] ripper-nos - nixos VM -- probably don't need anymore
-    - renamed to `ripnix` and updated. Need more NVMe drives.

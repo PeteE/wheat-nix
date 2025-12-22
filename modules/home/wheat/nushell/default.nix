@@ -31,7 +31,7 @@ in {
         nushellPlugins.skim
         nushellPlugins.query
         nushellPlugins.polars
-        nushellPlugins.highlight
+        # nushellPlugins.highlight
         nushellPlugins.hcl
         #nushellPlugins.units
         nushellPlugins.query

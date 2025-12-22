@@ -13,7 +13,7 @@ in {
 
   config = mkIf cfg.enable {
     nix.settings = {
-      builders = mkForce "@/etc/nix/machines";
+      # builders = mkForce "@/etc/nix/machines";
     };
     nix.buildMachines = [
       {
