@@ -73,6 +73,9 @@
       url = "github:AshleyYakeley/NixVirt/v0.6.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    vscode-server = {
+      url = "github:nix-community/nixos-vscode-server";
+    };
   };
   outputs = { self, ... }@inputs: inputs.snowfall-lib.mkFlake {
     inherit inputs;
@@ -180,7 +183,7 @@
           nixos-generators.nixosModules.all-formats
           nixvirt.nixosModules.default
           microvm.nixosModules.host
-
+          vscode-server.nixosModules.default
         ];
       };
 

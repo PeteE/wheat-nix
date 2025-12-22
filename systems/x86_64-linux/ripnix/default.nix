@@ -31,6 +31,10 @@
       (../../../modules/shared/wheat/default.nix)
     ];
 
+  services.vscode-server = { 
+    enable = true;
+    enableFHS = true;
+  };
   wheat = {
     enable = true;
     user = {
