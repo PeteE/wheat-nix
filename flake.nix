@@ -29,19 +29,22 @@
       url = "github:nixos/nixos-hardware";
     };
     nur = {
-      url = "github:nix-community/NUR/0c542bbbd8fe18b031fd8587c891b793647472b8";
+      url = "github:nix-community/NUR";
     };
-    waybar.url = "github:Alexays/Waybar/41de8964f1e3278edf07902ad68ca5e01e7abeeb";
-    hyprland.url = "github:hyprwm/Hyprland/v0.50.0";
+    waybar.url = "github:Alexays/Waybar";
+    hyprland.url = "github:hyprwm/Hyprland";
     hyprshell = {
-      url = "github:H3rmt/hyprshell/v4.6.3";
+      url = "github:H3rmt/hyprshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     grim-hyprland = {
       url = "github:eriedaberrie/grim-hyprland/4a3d6f5b87b01e92c404b9393b79057b85f58c60";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
+    niri-flake = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # Generate System Images
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
@@ -59,7 +62,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-vscode-extensions = {
-      url = "github:nix-community/nix-vscode-extensions/1a1442e13dc1730de0443f80dcf02658365e999a";
+      url = "github:nix-community/nix-vscode-extensions/4b5d357fd9b7ffce8fded947e3e4e883ed1b2109";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin = {
@@ -141,6 +144,19 @@
           };
         };
       };
+      nodes.rpi4 = {
+        hostname = "192.168.1.173";
+        fastConnection = true;
+        interactiveSudo = false;
+        remoteBuild = true;
+        profiles = {
+          system = {
+            path = inputs.deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.rpi4;
+            user = "root";
+            sshUser = "petee";
+          };
+        };
+      };
     };
 
     # overlays
@@ -155,9 +171,11 @@
 
     channels-config = {
       allowUnfree = true;
+      android_sdk.accept_license = true;
       permittedInsecurePackages = [
         # "electron-25.9.0"
       ];
+
     };
 
     homes.modules = with inputs; [
@@ -168,7 +186,6 @@
 
     systems = {
       overlays = with inputs; [ ];
-
       modules = {
         darwin = with inputs; [
           sops-nix.darwinModules.sops
@@ -180,20 +197,28 @@
           nixos-generators.nixosModules.all-formats
           nixvirt.nixosModules.default
           microvm.nixosModules.host
-
         ];
       };
 
       hosts = {
-        x1.modules = with inputs; [
-          nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
+        x1 = {
+          modules = with inputs; [
+            nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
+            {
+              boot.binfmt.emulatedSystems = [ "armv6l-linux" "aarch64-linux"];
+              nixpkgs.config.allowUnsupportedSystem = true;
+              nixpkgs.hostPlatform.system = "armv6l-linux";
+              nixpkgs.buildPlatform.system = "x86_64-linux"; #If you build on x86 other wise changes this.
+            }
+          ];
+        };
+
+        rpi4.modules = with inputs; [
+          nixos-hardware.nixosModules.raspberry-pi-4
         ];
-        # pishield.modules = with inputs; [
-        #   nixos-hardware.nixosModules.raspberry-pi-4
-        # ];
+        rpiw.modules = with inputs; [ ];
         m4.modules = with inputs; [ ];
         m3p.modules = with inputs; [ ];
-        shield.modules = with inputs; [ ];
         microvm-poc.modules = with inputs; [
           microvm.nixosModules.microvm
         ];

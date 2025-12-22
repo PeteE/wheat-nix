@@ -24,9 +24,16 @@
     user = {
       name = "petee";
       hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
-      extraGroups = ["wheel" "NetworkManager" "kvm"];
+      extraGroups = [
+        "wheel"
+        "NetworkManager"
+        "kvm"
+        "dialout"
+        "disk"
+      ];
     };
 
+    xserver.enable = true;
     secrets.enable = true;
     wifi.enable = true;
     sudo.enable = true;
@@ -37,7 +44,7 @@
       libvirtd.enable = false;
       libvirtUri = "qemu+ssh://petee@ripper/system";
     };
-
+    thermald.enable = true;
     libvirt-vms.enable = true;
     services.podman.enable = true;
     services.clipcat.enable = true;
@@ -57,8 +64,18 @@
     };
   };
   environment.systemPackages = with pkgs; [
+    rpi-imager
     intel-gpu-tools
     minikube
+    gthumb
+    shotwell
+    dvdplusrwtools
+    dvdauthor
+    vlc
+    cdrkit
+    minicom
+    # androidsdk
+    # android-backup-extractor
   ];
   networking.useDHCP = true;
   networking.useNetworkd = true;
@@ -157,6 +174,6 @@
     #   flake = inputs.self;
     # };
   };
+  programs.adb.enable = true;
   system.stateVersion = "25.11";
-
 }

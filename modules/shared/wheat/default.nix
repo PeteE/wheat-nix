@@ -21,6 +21,7 @@ in {
     wheat = with types; {
       enable = mkEnableOption "Enable";
       secrets.enable = mkEnableOption "Enable SOPS secrets";
+      xserver.enable = mkEnableOption "Enable xserver";
       nameservers = mkOption {
         description = "DNS Servers";
         type = listOf str;
@@ -46,14 +47,21 @@ in {
           192.168.1.50    hv
           192.168.1.51    ripper
           192.168.1.120   trunas
+          192.168.1.222   rpi0
+          192.168.1.173   rpi4
 
           # devices
           192.168.1.116   pixel-7a
+          192.168.1.140   pixel10
           192.168.1.186   joannas-ipad
           192.168.1.185   petee-ipad
           192.168.1.195   mariannes-air
           192.168.1.209   m3p-wifi
           192.168.1.210   m3p
+          192.168.1.221   meshtastic0
+          192.168.1.151   meshtastic1-v4
+          192.168.1.155   redboard
+          192.168.1.131   esp32mini
 
           # k8s nodes
           192.168.1.202   k8s-master0
@@ -94,11 +102,8 @@ in {
           type = listOf str;
           default = [
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ3x/dtivaU+bPMRYzY1O+XQPEGnBahNnh9sBZMrJrIX petee"  # x1
-            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBaGYqqLKVikzCKsRJqfPu4zsTCKCfCz9xnWYQJNep+v petee@x1"  # prob dead
-            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAMShYQQ6RsCgYUXKxaVYjjGcjvdB533v/wsdrYq7G/7 JuiceSSH"  # phone
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMjd2zJEmRiuqMJz2kC4ABIiSVE2HWdRPkZTmcAxp6GS petee@nixos" # nixos vm (ripper)
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL1SMCMFF12YYwlYGIi/UATCPTQ+PEdYOygGFouYrd5N petee@m3p" # lappy
-            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC1Xr2ircu0B1j+fmj8r1P5xtRi+LstqeXCJ7XIdhpyI nixos@nixos" # rpi?
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEMv8uBStPXcU4V5+7L6TpP08HhpG5vumutAFogVd0ca pete@m4" # litle mac
           ];
         };
@@ -132,8 +137,9 @@ in {
     };
 
     console.useXkbConfig = true;
+
     services.xserver = {
-      enable = true;
+      enable = cfg.xserver.enable;
       xkb = {
         options = "caps:escape";
       };

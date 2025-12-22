@@ -10,7 +10,11 @@ let
     ################
 
     # See https://wiki.hypr.land/Configuring/Monitors/
-    monitor=,preferred,auto,1.6
+    monitor=eDP-1, 2560x1440@60, 0x0, 1.6
+    monitor=HDMI-A-1, 1920x1080, 0x-1080, 1
+
+    # fallback
+    monitor=, preferred, auto, 1
 
     ###################
     ### MY PROGRAMS ###

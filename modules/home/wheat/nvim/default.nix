@@ -207,17 +207,17 @@ in {
         lazy-nvim
         vim-helm
         vim-indentwise
-        {
-          plugin = lualine-nvim;
-          type = "lua";
-          config = ''
-            require('lualine').setup(
-              {
-                theme = 'onedark',
-              }
-            )
-          '';
-        }
+        # {
+        #   plugin = lualine-nvim;
+        #   type = "lua";
+        #   config = ''
+        #     require('lualine').setup(
+        #       {
+        #         theme = 'onedark',
+        #       }
+        #     )
+        #   '';
+        # }
         {
           plugin = dashboard-nvim;
           type = "lua";
@@ -459,18 +459,18 @@ in {
             vim.keymap.set('x', "<leader>B", "<Plug>(ToBase64)")
           '';
         }
-        {
-          plugin = codecompanion-history-nvim;
-          type = "lua";
-          config = ''
-          '';
-        }
-        {
-          plugin = codecompanion-nvim;
-          type = "lua";
-          config = ''
-          '';
-        }
+        # {
+        #   plugin = codecompanion-history-nvim;
+        #   type = "lua";
+        #   config = ''
+        #   '';
+        # }
+        # {
+        #   plugin = codecompanion-nvim;
+        #   type = "lua";
+        #   config = ''
+        #   '';
+        # }
         {
           plugin = claude-code-nvim;
           type = "lua";
