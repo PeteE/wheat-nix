@@ -4,26 +4,17 @@
 }:
 let 
   text = ''
-    # This is an example Hyprland config file.
-    # Refer to the wiki for more information.
-    # https://wiki.hypr.land/Configuring/
-
-    # Please note not all available settings / options are set here.
-    # For a full list, see the wiki
-
-    # You can split this configuration into multiple files
-    # Create your files separately and then link them to this file like this:
-    # source = ~/.config/hypr/myColors.conf
-
-
+    source = ~/.config/hypr/catppuccin.conf
     ################
     ### MONITORS ###
     ################
 
     # See https://wiki.hypr.land/Configuring/Monitors/
-    monitor=,preferred,auto,1.25
+    monitor=eDP-1, 2560x1440@60, 0x0, 1.6
+    monitor=HDMI-A-1, 1920x1080, 0x-1080, 1
 
-
+    # fallback
+    monitor=, preferred, auto, 1
 
     ###################
     ### MY PROGRAMS ###
@@ -71,7 +62,7 @@ let
     #   enforce_permissions = 1
     # }
 
-    # permission = /usr/(bin|local/bin)/grim, screencopy, allow
+    permission = ${pkgs.grim-hyprland}/bin/grim, screencopy, allow
     # permission = /usr/(lib|libexec|lib64)/xdg-desktop-portal-hyprland, screencopy, allow
     # permission = /usr/(bin|local/bin)/hyprpm, plugin, allow
 
@@ -208,9 +199,9 @@ let
     }
 
     # https://wiki.hypr.land/Configuring/Variables/#gestures
-    gestures {
-        workspace_swipe = false
-    }
+    # gestures {
+    #     workspace_swipe = false
+    # }
 
     # Example per-device config
     # See https://wiki.hypr.land/Configuring/Keywords/#per-device-input-configs for more
@@ -230,7 +221,6 @@ let
     # Example binds, see https://wiki.hypr.land/Configuring/Binds/ for more
     bind = $mainMod, Return, exec, $terminal
     bind = $mainMod SHIFT, C, killactive,
-    bind = $mainMod, M, exit,
     bind = $mainMod SHIFT, Q, exec, $fileManager
 
     bind = $mainMod CONTROL_L, SPACE, togglefloating
@@ -302,7 +292,8 @@ let
     bind = $mainMod SHIFT, F, exec, ${pkgs.wheat.rofi-scripts}/bin/rofi-window
 
     # fullscreen
-    bind = $mainMod,F,fullscreen
+    bind = $mainMod,F,fullscreen, 0
+    bind = $mainMod,M,fullscreen, 1
 
     # Laptop multimedia keys for volume and LCD brightness
     # bindel = ,XF86AudioRaiseVolume, exec, wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+

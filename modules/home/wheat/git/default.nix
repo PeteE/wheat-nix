@@ -27,11 +27,15 @@ in {
     home.packages = mkIf cfg.openCommit [
       pkgs.opencommit
     ];
+    home.sessionVariables = {
+      GIT_EDITOR = "${pkgs.neovim}/bin/nvim";
+    };
+    
     programs.git = {
       enable = true;
       lfs.enable = true;
 
-      extraConfig = {
+      settings = {
         user = {
           email = "pete.perickson@gmail.com";
           name = "PeteE";
@@ -39,6 +43,7 @@ in {
         core = {
           editor = "${pkgs.neovim}/bin/nvim";
         };
+
         # TODO(pete): This was a cluade suggested hack since i'm having issues with libsecret on macos
         credential = {
           "https://github.com" = {
@@ -83,13 +88,16 @@ in {
       # TODO: gpg signing
 
       # Pretty diffs: https://github.com/dandavison/delta
-      delta = {
-        enable = false;
-        options = {
-          navigate = true;
-          dark = true;
-        };
-      };
+      # delta = {
+      #   enable = false;
+      #   options = {
+      #     navigate = true;
+      #     dark = true;
+      #   };
+      # };
+    };
+    programs.delta = {
+      enable = true;
     };
   };
 }

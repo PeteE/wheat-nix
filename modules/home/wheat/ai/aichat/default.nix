@@ -13,7 +13,7 @@ in {
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      wl-copy
+      wl-clipboard
     ];
     programs.aichat = {
       enable = true;
@@ -30,7 +30,7 @@ in {
           fi
         }
         zle -N _aichat_zsh
-        wl-copy
+        ${pkgs.wl-clipboard}/bin/wl-copy
         bindkey '\ee' _aichat_zsh
       '';
     };

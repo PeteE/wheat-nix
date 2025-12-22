@@ -18,6 +18,9 @@ in {
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       platformio
+      esptool
+      python313Packages.meshtastic
+      arduino
     ];
   };
 }

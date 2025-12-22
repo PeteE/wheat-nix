@@ -15,6 +15,7 @@ in {
      kubectx
      kubernetes-helm
      kubectl
+     krew
    ];
  };
 }

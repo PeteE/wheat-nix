@@ -27,7 +27,6 @@
   {
   imports =
     [
-      (modulesPath + "/profiles/qemu-guest.nix")
       (../../../modules/shared/wheat/default.nix)
     ];
 
@@ -35,6 +34,7 @@
     enable = true;
     enableFHS = true;
   };
+  services.tailscale.enable = true;
   wheat = {
     enable = true;
     user = {
@@ -43,6 +43,7 @@
       extraGroups = ["wheel" "NetworkManager"];
     };
     sudo.enable = true;
+    xserver.enable = true;
     secrets.enable = true;
     services.podman.enable = true;
     remote-builder.enable = true;
@@ -52,6 +53,7 @@
       libvirtd.enable = false;
       libvirtUri = "qemu+ssh://petee@ripper/system";
     };
+    thermald.enable = true;
     libvirt-vms.enable = true;
     services.nats.enable = true;
     services.clickhouse.enable = true;

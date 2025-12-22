@@ -14,6 +14,7 @@
     ...
 }:
 {
+  nix.enable = false;
   wheat = {
     enable = true;
     user = {
@@ -48,5 +49,4 @@
   # hack to workaround nix group id changes
   ids.gids.nixbld = 350;
   system.stateVersion = 4;
-
 }

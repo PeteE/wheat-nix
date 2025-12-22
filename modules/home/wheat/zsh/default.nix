@@ -18,6 +18,8 @@
     zsh-fzf-tab
     fzf
     sqlite
+    eza
+    fd
   ];
 
   programs.zsh = {
@@ -44,6 +46,8 @@
       ];
     };
     shellAliases = {
+      g = "git";
+      tg = "terragrunt";
       ll = "ls -l";
       nos-update = "sudo nixos-rebuild switch --flake .#x1";
       nos-list = "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system";
@@ -77,6 +81,9 @@
 
       # enable fzf-tab
       source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
+      
+      # source local zsh config for testing
+      [[ -f ~/.config/zsh/zsh-local.zsh ]] && source ~/.config/zsh/zsh-local.zsh
     '';
   };
 }

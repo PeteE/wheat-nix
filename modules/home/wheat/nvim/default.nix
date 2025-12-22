@@ -18,7 +18,7 @@ in {
       lazygit
       nodePackages.eslint
       lua-language-server
-      rust-analyzer
+      # rust-analyzer
       helm-ls
       yaml-language-server
       pyright
@@ -26,6 +26,8 @@ in {
       tflint
       alejandra
       kubectl
+      starlark-rust
+      hclfmt
     ];
 
     programs.zsh = {
@@ -42,7 +44,8 @@ in {
     programs.neovim = {
       enable = true;
       defaultEditor = true;
-      plugins= with pkgs.vimPlugins; [
+      plugins = with pkgs.vimPlugins; [
+        diffview-nvim
         { 
           plugin = trouble-nvim;
           type = "lua";
@@ -65,11 +68,11 @@ in {
               cd_type = "tab",
               global_cd = false,
               auto_open = false,
-              hooks = {
-                open = {
-                  "lua Snacks.picker.smart()",
-                }
-              }
+              -- hooks = {
+              --   open = {
+              --     "lua Snacks.picker.smart()",
+              --   }
+              -- }
             })
           '';
         }
@@ -85,97 +88,6 @@ in {
           plugin = snacks-nvim;
           type = "lua";
           config = ''
-            require('snacks').setup({
-              indent = { enabled = true },
-              terminal = { enabled = true },
-              zen = { enabled = true },
-              bigfile = { enabled = true },
-              bufdelete = { enabled = true },
-              dim = { enabled = true },
-              debug = { enabled = true },
-              layout = { enabled = true },
-              notifier = { enabled = true },
-              scratch = { enabled = true },
-              scroll = { enabled = true },
-              statuscolumn = { enabled = true },
-              explorer = {
-                enabled = true,
-                replace_netrw = true,
-              },
-              picker = {
-                sources = {
-                  explorer = {
-                    hidden = true,
-                    ignored = true,
-                    git_untracked = true,
-                    follow_file = false,
-                  },
-                },
-              },
-              gitbrowse = { enabled = true },
-              diagnostics = { enabled = true },
-              dashboard = {
-                enabled = true,
-                sections = {
-                  { section = "header" },
-                  { key = "s", desc = "Smart picker", action = ":lua Snacks.dashboard.picker.smart()" },
-                  { icon = " ", key = "s", desc = "Restore Session", section = "session" },
-                  { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
-                  { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep', { hidden = true, ignored = true, fuzzy = true })" },
-
-                  { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
-                  { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
-                  { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
-                  { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
-                  { section = "startup" },
-                },
-              },
-            })
-
-            -- Snacks keymaps
-            vim.keymap.set('n', '<leader>sd', function() Snacks.picker.diagnostics() end, { desc = "Diagnostics" })
-            vim.keymap.set('n', '<leader>sD', function() Snacks.picker.diagnostics_buffer() end, { desc = "Buffer Diagnostics"})
-
-            vim.keymap.set('n', '<leader>z',   function() Snacks.zen.zoom() end, { desc = 'Toggle Zoom' })
-            vim.keymap.set('n', '<leader>Z',   function() Snacks.zen() end, { desc = 'Toggle Zen Mode' })
-            vim.keymap.set('n', '<leader>.',   function() Snacks.scratch() end, { desc = 'Toggle Scratch Buffer' })
-            vim.keymap.set('n', '<leader>S',   function() Snacks.scratch.select() end, { desc = 'Select Scratch Buffer' })
-            vim.keymap.set('n', '<leader>bd',  function() Snacks.bufdelete() end, { desc = 'Delete Buffer' })
-            vim.keymap.set('n', '<c-/>',       function() Snacks.terminal() end, { desc = 'Toggle Terminal' })
-            vim.keymap.set({'n', 't'}, ']]',   function() Snacks.words.jump(vim.v.count1) end, { desc = 'Next Reference' })
-            vim.keymap.set({'n', 't'}, '[[',   function() Snacks.words.jump(-vim.v.count1) end, { desc = 'Prev Reference' })
-
-            vim.keymap.set('n', '<leader>da',   function() Snacks.dashboard() end, { desc = 'Show dashboard' })
-            vim.keymap.set('n', '<leader>ff',   function() Snacks.picker.smart() end, { desc = 'Open File' })
-            vim.keymap.set('n', '<leader>fb',   function() Snacks.picker.buffers() end, { desc = 'Open Buffer' })
-            vim.keymap.set('n', '<leader>fr',   function() Snacks.picker.registers() end, { desc = 'Show Registers' })
-            vim.keymap.set('n', '<leader>fc',   function() Snacks.picker.command_history() end, { desc = 'Command history' })
-            vim.keymap.set('n', 'q:',          function() Snacks.picker.command_history() end, { desc = 'Command history' })
-
-            vim.keymap.set('n', '<leader>fn',   function() Snacks.picker.notifications() end, { desc = 'Show notifications' })
-            vim.keymap.set('n', '<leader>gb',   function() Snacks.picker.git_branches() end, { desc = 'Show Git branches' })
-            vim.keymap.set('n', '<leader>rg',   function() Snacks.picker.grep_word() end, { desc = 'Search' })
-            -- vim.keymap.set('n', '<leader>dm',   function() Snacks.dim() end, { desc = 'Toggle Dim' })
-
-            -- LSP
-            vim.keymap.set('n', '<leader>gd',   function() Snacks.picker.lsp_definitions() end, { desc = 'Go to definitions' })
-            vim.keymap.set('n', '<leader>gD',   function() Snacks.picker.lsp_declaration() end, { desc = 'Go to definitions' })
-            vim.keymap.set('n', '<leader>gr',   function() Snacks.picker.lsp_references() end, { desc = 'Go to references' })
-            vim.keymap.set('n', '<leader>gI',   function() Snacks.picker.lsp_implementations() end, { desc = 'Go to implementations' })
-            vim.keymap.set('n', '<leader>gy',   function() Snacks.picker.lsp_type_definitions() end, { desc = 'Go to type definitions' })
-            vim.keymap.set('n', '<leader>ss',   function() Snacks.picker.lsp_symbols() end, { desc = 'LSP Symbols' })
-            vim.keymap.set('n', '<leader>sS',   function() Snacks.picker.lsp_workspace_symbols() end, { desc = 'LSP Workspace symbols' })
-            vim.keymap.set('n', '<C-n>',       function() Snacks.picker.explorer() end, { desc = 'File explorer' })
-
-            vim.keymap.set('n', '<leader>km', function() Snacks.picker.pick('keymaps') end, { desc = 'show keymaps' })
-
-            function copyFullPathToClipboard()
-              filename = vim.fn.expand('%:p')
-              -- copy to plus register
-              vim.fn.setreg('+', filename)
-              Snacks.notifier.notify("Path copied: " .. filename)
-            end
-            vim.keymap.set('n', '<leader>cp', copyFullPathToClipboard, { desc = 'Copy filename' })
             '';
         }
         # {
@@ -281,28 +193,31 @@ in {
         nvim-treesitter-parsers.just
         nvim-treesitter-parsers.rust
         nvim-treesitter-parsers.yaml
+        nvim-treesitter-parsers.starlark
         nvim-treesitter-textobjects
         nvim-treesitter-refactor
-        rustaceanvim
+        # rustaceanvim
         nvim-dap
+        diffview-nvim
         undotree
         zoxide-vim
         vim-fugitive
+        vim-rhubarb
         fzf-lsp-nvim
         lazy-nvim
         vim-helm
         vim-indentwise
-        {
-          plugin = lualine-nvim;
-          type = "lua";
-          config = ''
-            require('lualine').setup(
-              {
-                theme = 'onedark',
-              }
-            )
-          '';
-        }
+        # {
+        #   plugin = lualine-nvim;
+        #   type = "lua";
+        #   config = ''
+        #     require('lualine').setup(
+        #       {
+        #         theme = 'onedark',
+        #       }
+        #     )
+        #   '';
+        # }
         {
           plugin = dashboard-nvim;
           type = "lua";
@@ -346,10 +261,10 @@ in {
           plugin = nvim-lspconfig;
           type = "lua";
           config = ''
-            require('lspconfig').lua_ls.setup({
+            vim.lsp.config("lua_ls", {
               capabilities = require('cmp_nvim_lsp').default_capabilities()
             })
-            require('lspconfig').nil_ls.setup({
+            vim.lsp.config("nil_ls", {
               capabilities = require('cmp_nvim_lsp').default_capabilities(),
               settings = {
                 ['nil'] = {
@@ -369,8 +284,10 @@ in {
                 },
               },
             })
-            require('lspconfig').terraformls.setup({})
-            require('lspconfig').tflint.setup({})
+            vim.lsp.config("terraformls", {
+              filetypes = { "terraform", "hcl" },
+            })
+            vim.lsp.config("tflint", {})
           '';
         }
         {
@@ -405,14 +322,9 @@ in {
               matching = {
                 disallow_fuzzy_matching = false,
               },
-              sources = cmp.config.sources(
-                {
-                  { name = 'nvim_lsp' },
-                },
-                {
-                  { name = 'fuzzy_buffer' }
-                }
-              )
+              sources = cmp.config.sources({
+                { name = 'nvim_lsp' },
+              })
             })
 
             -- Set configuration for specific filetype.
@@ -428,26 +340,14 @@ in {
             })
 
             cmp.setup.filetype('yaml', {
-              sources = cmp.config.sources(
-                {
-                  { name = 'nvim_lsp' },
-                },
-                {
-                  { name = 'git' },
-                }, {
-                  { name = 'fuzzy_buffer' },
-                }
-              )
+              sources = cmp.config.sources({
+                { name = 'nvim_lsp' },
+              })
             })
             cmp.setup.filetype('py', {
-              sources = cmp.config.sources(
-                {
-                  { name = 'nvim_lsp' },
-                },
-                {
-                  { name = 'fuzzy_buffer' },
-                }
-              )
+              sources = cmp.config.sources({
+                { name = 'nvim_lsp' },
+              })
             })
 
 
@@ -559,18 +459,18 @@ in {
             vim.keymap.set('x', "<leader>B", "<Plug>(ToBase64)")
           '';
         }
-        {
-          plugin = codecompanion-history-nvim;
-          type = "lua";
-          config = ''
-          '';
-        }
-        {
-          plugin = codecompanion-nvim;
-          type = "lua";
-          config = ''
-          '';
-        }
+        # {
+        #   plugin = codecompanion-history-nvim;
+        #   type = "lua";
+        #   config = ''
+        #   '';
+        # }
+        # {
+        #   plugin = codecompanion-nvim;
+        #   type = "lua";
+        #   config = ''
+        #   '';
+        # }
         {
           plugin = claude-code-nvim;
           type = "lua";
@@ -604,6 +504,7 @@ in {
       withNodeJs = true;
       extraLuaConfig = ''
         vim.o.clipboard = "unnamedplus"
+        -- vim.o.diffopt:append("iwhiteall")
         vim.g.mapleader = ","
         vim.o.syntax = 'on'
         vim.o.number = true
@@ -633,6 +534,14 @@ in {
           pattern = "nix",
           callback = function(args)
             vim.opt.commentstring = "# %s"
+          end
+        })
+
+        -- Format HCL files with hclfmt on save
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          pattern = "*.hcl",
+          callback = function()
+            vim.cmd("silent! %!${pkgs.hclfmt}/bin/hclfmt")
           end
         })
 

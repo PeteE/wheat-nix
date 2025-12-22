@@ -1,14 +1,8 @@
 # vim: ts=2:sw=2:et
 {
-    lib,
     pkgs,
     inputs,
-    namespace,
     system,
-    target,
-    format,
-    virtual,
-    systems,
     config,
     ...
 }:
@@ -23,44 +17,26 @@
     };
     tmux.enable = true;
     kitty.enable = true;
-    nushell.enable = true;
     nvim.enable = true;
     ripgrep.enable = true;
     secrets.enable = true;
     starship.enable = true;
-    vscode.enable = true;
     zoxide.enable = true;
-    azure.enable = true;
     carapace.enable = true;
     btop.enable = true;
     k9s.enable = true;
-    attic-client.enable = true;
-    firefox.enable = true;
-    dev-tools.enable = true;
-    ai.enable = true;
     k8s.enable = true;
-    gcloud.enable = true;
-    # firefox.enable = true;
-
-    # TODO: only enable on m4, x1
-    embedded.enable = true;
   };
 
   programs.home-manager.enable = true;
+
   home.packages = with pkgs; [
+    mosquitto
+    mqttx-cli
     zip
     unzip
-    repomix  # packages a repo for use with AI tooling
-    ugrep-indexer
-    fx # json TUI
-    meld # 3 way visual diff
-    inputs.deploy-rs.packages."${system}".deploy-rs # https://github.com/serokell/deploy-rs
-    headscale
-    tailscale
-    ollama
     dig
     bat
-    openbao
     direnv
     curl
     wget
@@ -69,28 +45,10 @@
     git-credential-manager
     fd
     bc
-    attic-client
-    # yazi
-    # stylua
     yq-go
-    glow
-    delve
-    links2
-    presenterm
-    asciinema
-    # attic-server
-    # clusterctl
-    # mpv
-    # clapper
-    # nitrogen
-    # lua5_3
-    firefox
-    vim
     tree
-    slack
-    slack-term
-    cachix
     unixtools.netstat
     htop
+    gcc
   ];
 }

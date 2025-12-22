@@ -24,27 +24,27 @@
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    plasma-manager = {
-      url = "github:nix-community/plasma-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-    };
     # Hardware Configuration
     nixos-hardware = {
       url = "github:nixos/nixos-hardware";
     };
-
-    waybar.url = "github:Alexays/Waybar/0.14.0";
-    hyprland.url = "github:hyprwm/Hyprland/v0.50.0";
+    nur = {
+      url = "github:nix-community/NUR";
+    };
+    waybar.url = "github:Alexays/Waybar";
+    hyprland.url = "github:hyprwm/Hyprland";
     hyprshell = {
-      url = "github:H3rmt/hyprshell/v4.6.3";
+      url = "github:H3rmt/hyprshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     grim-hyprland = {
       url = "github:eriedaberrie/grim-hyprland/4a3d6f5b87b01e92c404b9393b79057b85f58c60";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
+    niri-flake = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # Generate System Images
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
@@ -62,11 +62,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-vscode-extensions = {
-      url = "github:nix-community/nix-vscode-extensions/1a1442e13dc1730de0443f80dcf02658365e999a";
+      url = "github:nix-community/nix-vscode-extensions/4b5d357fd9b7ffce8fded947e3e4e883ed1b2109";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin = {
-      url = "github:catppuccin/nix";
+      url = "github:catppuccin/nix/02dee881c3e644e2b561f407742f1fd927c40b83";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvirt = {
@@ -75,6 +75,9 @@
     };
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server";
+    };
+    claude-code = {
+      url = "github:sadjow/claude-code-nix";
     };
   };
   outputs = { self, ... }@inputs: inputs.snowfall-lib.mkFlake {
@@ -144,6 +147,19 @@
           };
         };
       };
+      nodes.rpi4 = {
+        hostname = "192.168.1.173";
+        fastConnection = true;
+        interactiveSudo = false;
+        remoteBuild = true;
+        profiles = {
+          system = {
+            path = inputs.deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.rpi4;
+            user = "root";
+            sshUser = "petee";
+          };
+        };
+      };
     };
 
     # overlays
@@ -151,27 +167,28 @@
       nix-vscode-extensions.overlays.default
       grim-hyprland.overlays.default
       waybar.overlays.default
-      # mozilla.overlays.firefox
+      nur.overlays.default
+      claude-code.overlays.default
       # flake.overlays.default
     ];
 
     channels-config = {
       allowUnfree = true;
+      android_sdk.accept_license = true;
       permittedInsecurePackages = [
         # "electron-25.9.0"
       ];
+
     };
 
     homes.modules = with inputs; [
       sops-nix.homeManagerModules.sops
       catppuccin.homeModules.catppuccin
-      plasma-manager.homeModules.plasma-manager
       hyprshell.homeModules.default
     ];
 
     systems = {
       overlays = with inputs; [ ];
-
       modules = {
         darwin = with inputs; [
           sops-nix.darwinModules.sops
@@ -188,15 +205,24 @@
       };
 
       hosts = {
-        x1.modules = with inputs; [
-          nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
+        x1 = {
+          modules = with inputs; [
+            nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
+            {
+              boot.binfmt.emulatedSystems = [ "armv6l-linux" "aarch64-linux"];
+              nixpkgs.config.allowUnsupportedSystem = true;
+              nixpkgs.hostPlatform.system = "armv6l-linux";
+              nixpkgs.buildPlatform.system = "x86_64-linux"; #If you build on x86 other wise changes this.
+            }
+          ];
+        };
+
+        rpi4.modules = with inputs; [
+          nixos-hardware.nixosModules.raspberry-pi-4
         ];
-        # pishield.modules = with inputs; [
-        #   nixos-hardware.nixosModules.raspberry-pi-4
-        # ];
+        rpiw.modules = with inputs; [ ];
         m4.modules = with inputs; [ ];
         m3p.modules = with inputs; [ ];
-        shield.modules = with inputs; [ ];
         microvm-poc.modules = with inputs; [
           microvm.nixosModules.microvm
         ];

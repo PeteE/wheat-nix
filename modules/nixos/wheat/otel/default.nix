@@ -13,7 +13,6 @@ in {
   };
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      go_1_23 # TODO(pete): refactor ocb
       opentelemetry-collector-builder
       gcc
     ];

@@ -13,8 +13,8 @@ in {
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      rofi-wayland
-      pkgs.wheat.rofi-scripts
+      rofi
+      wheat.rofi-scripts
     ];
     xdg.configFile."rofi/themes/" = {
       source = "${pkgs.wheat.catppuccin-rofi}/themes/";
