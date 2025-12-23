@@ -38,7 +38,6 @@
   };
 
   services.hyprsunset.enable = true;
-  services.tailscale.enable = true;
   services.mako = {
     enable = true;
   };
