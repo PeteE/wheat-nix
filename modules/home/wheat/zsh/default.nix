@@ -60,6 +60,7 @@
       vi = "nvim";
       vim = "nvim";
       j = "just";
+      netshoot = "kubectl run netshoot --rm -it --image=nicolaka/netshoot --restart=Never -- bash";
     };
     enableCompletion = true;
     autocd = false;

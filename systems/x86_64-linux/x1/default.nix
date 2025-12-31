@@ -74,6 +74,7 @@
     vlc
     cdrkit
     minicom
+    wireshark
     # androidsdk
     # android-backup-extractor
   ];
