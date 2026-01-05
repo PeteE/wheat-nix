@@ -154,6 +154,7 @@
       enable = true;
       consoleMode = "auto";
       editor = true;
+      configurationLimit = 10;
     };
   };
   boot.loader.efi.canTouchEfiVariables = true;
