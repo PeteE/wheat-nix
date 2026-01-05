@@ -45,48 +45,48 @@ in
       };
     };
     services.hyprsunset.enable = true;
-    programs.hyprshell = {
-      enable = true;
-      systemd.args = "-v";
-      settings = {
-        windows = {
-          enable = true;
-          items_per_row = 5;
-          overview = {
-            enable = true;
-            key = "super_l";
-            modifier = "alt";
-            launcher = {
-              width = 650;
-              max_items = 5;
-              default_terminal = "kitty";
-              show_when_empty = true;
-              plugins = {
-                websearch = {
-                  enable = true;
-                  engines = [{
-                    name = "DuckDuckGo";
-                    url = "https://duckduckgo.com/?q=%s";
-                    key = "d";
-                  }];
-                };
-                applications.enable = true;
-                calc.enable = true;
-                shell.enable = true;
-                terminal.enable = true;
-                path.enable = true;
-              };
-            };
-          };
-          switch = {
-            enable = false;
-            modifier = "alt";
-            switch_workspaces = true;
-          };
-        };
-      };
-      styleFile = ./hyprshell-styles.css;
-    };
+    # programs.hyprshell = {
+    #   enable = true;
+    #   systemd.args = "-v";
+    #   settings = {
+    #     windows = {
+    #       enable = true;
+    #       items_per_row = 5;
+    #       overview = {
+    #         enable = true;
+    #         key = "super_l";
+    #         modifier = "alt";
+    #         launcher = {
+    #           width = 650;
+    #           max_items = 5;
+    #           default_terminal = "kitty";
+    #           show_when_empty = true;
+    #           plugins = {
+    #             websearch = {
+    #               enable = true;
+    #               engines = [{
+    #                 name = "DuckDuckGo";
+    #                 url = "https://duckduckgo.com/?q=%s";
+    #                 key = "d";
+    #               }];
+    #             };
+    #             applications.enable = true;
+    #             calc.enable = true;
+    #             shell.enable = true;
+    #             terminal.enable = true;
+    #             path.enable = true;
+    #           };
+    #         };
+    #       };
+    #       switch = {
+    #         enable = false;
+    #         modifier = "alt";
+    #         switch_workspaces = true;
+    #       };
+    #     };
+    #   };
+    #   styleFile = ./hyprshell-styles.css;
+    # };
     programs.waybar = {
       enable = true;
       # style = "";

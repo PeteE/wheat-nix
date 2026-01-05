@@ -31,20 +31,24 @@
     nur = {
       url = "github:nix-community/NUR";
     };
-    waybar.url = "github:Alexays/Waybar";
-    hyprland.url = "github:hyprwm/Hyprland";
-    hyprshell = {
-      url = "github:H3rmt/hyprshell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    grim-hyprland = {
-      url = "github:eriedaberrie/grim-hyprland/4a3d6f5b87b01e92c404b9393b79057b85f58c60";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    niri-flake = {
+    niri = {
       url = "github:sodiboo/niri-flake";
+      # inputs.nixpkgs.follows = "nixpkgs";
+    };
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # waybar.url = "github:Alexays/Waybar";
+    # hyprland.url = "github:hyprwm/Hyprland";
+    # hyprshell = {
+    #   url = "github:H3rmt/hyprshell";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+    # grim-hyprland = {
+    #   url = "github:eriedaberrie/grim-hyprland/4a3d6f5b87b01e92c404b9393b79057b85f58c60";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
     # Generate System Images
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
@@ -165,8 +169,8 @@
     # overlays
     overlays = with inputs; [
       nix-vscode-extensions.overlays.default
-      grim-hyprland.overlays.default
-      waybar.overlays.default
+      # grim-hyprland.overlays.default
+      # waybar.overlays.default
       nur.overlays.default
       claude-code.overlays.default
       # flake.overlays.default
@@ -184,7 +188,8 @@
     homes.modules = with inputs; [
       sops-nix.homeManagerModules.sops
       catppuccin.homeModules.catppuccin
-      hyprshell.homeModules.default
+      # hyprshell.homeModules.default
+      noctalia.homeModules.default
     ];
 
     systems = {
@@ -208,6 +213,7 @@
         x1 = {
           modules = with inputs; [
             nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
+            niri.nixosModules.niri
             {
               boot.binfmt.emulatedSystems = [ "armv6l-linux" "aarch64-linux"];
               nixpkgs.config.allowUnsupportedSystem = true;

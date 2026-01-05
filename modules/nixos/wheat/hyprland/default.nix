@@ -62,8 +62,6 @@ in
       NIXOS_OZONE_WL = "1";
     };
     environment.systemPackages = with pkgs; [
-      bridge-utils
-      cloud-hypervisor
       wheat.rofi-scripts
 
       catppuccin-cursors
@@ -73,7 +71,7 @@ in
       lm_sensors # system sensors
       pciutils # pci utils
 
-      grim-hyprland
+      # grim-hyprland
       libnotify
       grimblast
       slurp
