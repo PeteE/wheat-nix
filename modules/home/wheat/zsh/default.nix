@@ -46,6 +46,8 @@
       ];
     };
     shellAliases = {
+      arduino ="_JAVA_AWT_WM_NONREPARENTING=1 arduino";
+      icat = "kitty +kitten icat";
       g = "git";
       tg = "terragrunt";
       ll = "ls -l";
@@ -82,7 +84,7 @@
 
       # enable fzf-tab
       source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
-      
+
       # source local zsh config for testing
       [[ -f ~/.config/zsh/zsh-local.zsh ]] && source ~/.config/zsh/zsh-local.zsh
     '';

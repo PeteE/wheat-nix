@@ -52,10 +52,12 @@
       enable = true;
     };
     services.hyprland.enable = true;
+    services.niri.enable = true;
   };
 
   hardware.graphics.enable = true;
   console.useXkbConfig = true;
+  services.upower.enable = true;
   services.xserver = {
     displayManager.lightdm.enable = false;
     enable = true;
@@ -64,6 +66,7 @@
     };
   };
   environment.systemPackages = with pkgs; [
+    wireshark
     rpi-imager
     intel-gpu-tools
     minikube
@@ -75,8 +78,37 @@
     cdrkit
     minicom
     wireshark
-    # androidsdk
-    # android-backup-extractor
+    cloud-hypervisor
+    ntfs3g
+    exfat
+    libinput
+    libnotify
+    slurp
+    bluez
+    bluez-tools
+    blueman
+    pavucontrol
+    pamixer
+    playerctl
+    libinput-gestures # actions touchpad gestures using libinput
+    brightnessctl # screen brightness control
+    lm_sensors # system sensors
+    pciutils # pci utils
+
+    # misc
+    libnotify # Desktop notification library
+    envsubst # Environment variable substitution utility
+    killall # Process termination utility
+    dbus # inter-process communication daemon
+    upower # power management/battery status daemon
+    mesa # OpenGL implementation and GPU drivers
+    dconf # configuration storage system
+    dconf-editor # dconf editor
+
+    xdg-utils # Collection of XDG desktop integration tools
+    desktop-file-utils # for updating desktop database
+    hicolor-icon-theme # Base fallback icon theme
+    xfce.thunar
   ];
   networking.useDHCP = true;
   networking.useNetworkd = true;
@@ -147,6 +179,7 @@
 
   hardware.cpu.intel.updateMicrocode = true;
   hardware.bluetooth.enable = true;
+  services.tailscale.enable = true;
   services.printing.enable = true;
   security.rtkit.enable = true;
   security.polkit.enable = true;
@@ -158,23 +191,28 @@
     wireplumber.enable = true;
   };
   services.blueman.enable = true;
-
   services.libinput.enable = true;
 
+  # Power management
   powerManagement = {
     enable = true;
     powertop = {
       enable = true;
     };
-    cpuFreqGovernor = "performance";
+    # cpuFreqGovernor = "performance";
+  };
+  services.tlp = {
+    enable = true;
+    settings = {
+      CPU_BOOST_ON_AC = 1;
+      CPU_BOOST_ON_BAT = 0;
+      CPU_SCALING_GOVERNOR_ON_AC = "performance";
+      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+      STOP_CHARGE_THRESH_BAT0 = 95;
+    };
   };
 
-  # Micro VMs
-  microvm.vms = {
-    # microvm-poc = {
-    #   flake = inputs.self;
-    # };
-  };
   programs.adb.enable = true;
+  programs.uwsm.enable = true;
   system.stateVersion = "25.11";
 }
