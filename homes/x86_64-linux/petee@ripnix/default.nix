@@ -8,6 +8,7 @@
     ai = {
       enable = true;
       ollamaHost = "192.168.1.115"; # m4
+      mcp.enable = true;
     };
     work.enable = true;
     misc.enable = true;

@@ -46,6 +46,7 @@
       ];
     };
     shellAliases = {
+      c = "claude";
       g = "git";
       tg = "terragrunt";
       ll = "ls -l";
