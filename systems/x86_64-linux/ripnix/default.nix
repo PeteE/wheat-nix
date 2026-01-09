@@ -104,9 +104,10 @@
   };
   services.displayManager.sddm.settings.General = {
     DisplayServer = "wayland";
-    # WESTON_DRM_DEVICE for Weston compositor, WLR_DRM_DEVICES for wlroots-based (niri)
-    GreeterEnvironment = "WESTON_DRM_DEVICE=/dev/dri/card0,WLR_DRM_DEVICES=/dev/dri/card0,QT_QPA_PLATFORM=wayland";
+    GreeterEnvironment = "WLR_DRM_DEVICES=/dev/dri/card0,QT_QPA_PLATFORM=wayland";
   };
+  # Tell Weston to use the AMD GPU (card0) for SDDM greeter
+  services.displayManager.sddm.wayland.compositorCommand = "weston --shell=kiosk --drm-device=card0";
 
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/vda";
