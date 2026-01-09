@@ -29,9 +29,6 @@ in
       enable = true;
       wayland.enable = true;
       settings = {
-        # General = {
-        #   DefaultSession = "hyprland-default.desktop";
- # };
         Wayland = {
           EnableHiDPI = true;
         };

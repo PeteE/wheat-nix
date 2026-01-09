@@ -48,6 +48,9 @@
     services.podman.enable = true;
     remote-builder.enable = true;
 
+    services.hyprland.enable = false;
+    services.niri.enable = true;
+
     virtualisation = {
       enable = true;
       libvirtd.enable = false;
@@ -56,7 +59,7 @@
     thermald.enable = true;
     libvirt-vms.enable = true;
     services.nats.enable = true;
-    services.clickhouse.enable = true;
+    services.clickhouse.enable = false;
     services.suricata = {
       enable = false;
       interface = bridgeInterface;
