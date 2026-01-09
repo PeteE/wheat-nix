@@ -13,7 +13,7 @@ in {
   };
   config = mkIf cfg.enable {
     virtualisation.podman.enable = true;
-    virtualisation.podman.dockerCompat = true;
-    virtualisation.podman.dockerSocket.enable = true;
+    virtualisation.podman.dockerCompat = false;
+    virtualisation.podman.dockerSocket.enable = false;
   };
 }

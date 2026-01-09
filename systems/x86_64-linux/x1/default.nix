@@ -37,16 +37,16 @@
     secrets.enable = true;
     wifi.enable = true;
     sudo.enable = true;
+    coco.enable = true;
 
-    # todo(pete) : replace with VirtNix module
-    virtualisation = {
-      enable = false;
-      libvirtd.enable = false;
-      libvirtUri = "qemu+ssh://petee@ripper/system";
-    };
+    # # todo(pete) : replace with VirtNix module
+    # virtualisation = {
+    #   enable = false;
+    #   libvirtd.enable = false;
+    #   libvirtUri = "qemu+ssh://petee@ripper/system";
+    # };
     thermald.enable = true;
     libvirt-vms.enable = true;
-    services.podman.enable = true;
     services.clipcat.enable = true;
     remote-builder-client = {
       enable = true;
@@ -69,7 +69,6 @@
     wireshark
     rpi-imager
     intel-gpu-tools
-    minikube
     gthumb
     shotwell
     dvdplusrwtools

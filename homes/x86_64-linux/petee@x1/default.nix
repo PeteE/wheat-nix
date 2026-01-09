@@ -26,7 +26,6 @@
     clipcat.enable = true;
     firefox.enable = true;
     hyprland.enable = false;
-    minikube.enable = true;
     devenv.enable = true;
     zed-editor.enable = true;
     vscode.enable = true;
