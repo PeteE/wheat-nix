@@ -104,7 +104,8 @@
   };
   services.displayManager.sddm.settings.General = {
     DisplayServer = "wayland";
-    GreeterEnvironment = "WLR_DRM_DEVICES=/dev/dri/card0,QT_QPA_PLATFORM=wayland";
+    # WESTON_DRM_DEVICE for Weston compositor, WLR_DRM_DEVICES for wlroots-based (niri)
+    GreeterEnvironment = "WESTON_DRM_DEVICE=/dev/dri/card0,WLR_DRM_DEVICES=/dev/dri/card0,QT_QPA_PLATFORM=wayland";
   };
 
   boot.loader.grub.enable = true;
