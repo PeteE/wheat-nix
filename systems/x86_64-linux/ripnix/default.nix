@@ -98,6 +98,15 @@
   boot.kernelModules = [ "amdgpu" ];
   boot.extraModulePackages = [ ];
 
+  # Force Wayland compositors to use the AMD GPU (card0) instead of QXL (card1)
+  environment.variables = {
+    WLR_DRM_DEVICES = "/dev/dri/card0";
+  };
+  services.displayManager.sddm.settings.General = {
+    DisplayServer = "wayland";
+    GreeterEnvironment = "WLR_DRM_DEVICES=/dev/dri/card0,QT_QPA_PLATFORM=wayland";
+  };
+
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/vda";
   boot.loader.grub.useOSProber = true;
