@@ -97,6 +97,7 @@
   boot.initrd.kernelModules = [ "amdgpu" "virtio_balloon" "virtio_console" "virtio_rng" ];
   boot.kernelModules = [ "amdgpu" ];
   boot.extraModulePackages = [ ];
+  boot.blacklistedKernelModules = [ "qxl" ];  # Prevent QXL from conflicting with GPU passthrough
 
   # Force Wayland compositors to use the AMD GPU (card0) instead of QXL (card1)
   environment.variables = {
@@ -107,7 +108,7 @@
     GreeterEnvironment = "WLR_DRM_DEVICES=/dev/dri/card0,QT_QPA_PLATFORM=wayland";
   };
   # Tell Weston to use the AMD GPU (card0) for SDDM greeter
-  services.displayManager.sddm.wayland.compositorCommand = "weston --shell=kiosk --drm-device=card0";
+  services.displayManager.sddm.wayland.compositorCommand = "${pkgs.weston}/bin/weston --shell=kiosk --drm-device=card0";
 
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/vda";

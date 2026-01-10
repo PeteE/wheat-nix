@@ -4,6 +4,7 @@
 }:
 {
   wheat = {
+    kitty.font.size = 10.0;  # Smaller for 1.5x scaled display
     ollama.enable = false;
     distrobox.enable = true;
     ai = {

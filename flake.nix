@@ -223,6 +223,9 @@
           ];
         };
 
+        ripnix.modules = with inputs; [
+          niri.nixosModules.niri
+        ];
         rpi4.modules = with inputs; [
           nixos-hardware.nixosModules.raspberry-pi-4
         ];

@@ -151,6 +151,18 @@ in {
       symbols-only
       jetbrains-mono
     ];
+    fonts.fontconfig = {
+      enable = true;
+      antialias = true;
+      hinting = {
+        enable = true;
+        style = "slight";  # slight, medium, or full
+      };
+      subpixel = {
+        rgba = "rgb";  # rgb for most LCD monitors
+        lcdfilter = "default";
+      };
+    };
     networking.nameservers = cfg.nameservers;
     nix.settings.trusted-users = [
       "root"
