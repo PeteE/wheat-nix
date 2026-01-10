@@ -50,5 +50,6 @@
     unixtools.netstat
     htop
     gcc
+    pgcli
   ];
 }
