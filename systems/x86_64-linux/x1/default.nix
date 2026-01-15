@@ -38,6 +38,7 @@
     wifi.enable = true;
     sudo.enable = true;
     coco.enable = true;
+    services.spire.enable = true;
 
     # # todo(pete) : replace with VirtNix module
     # virtualisation = {
