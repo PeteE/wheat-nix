@@ -4,7 +4,7 @@
 }:
 {
   wheat = {
-    kitty.font.size = 10.0;  # Smaller for 1.5x scaled display
+    kitty.font.size = 14.0;  # For scale 1.0 on ultrawide
     ollama.enable = false;
     distrobox.enable = true;
     ai = {
@@ -14,6 +14,7 @@
       claude-sessions.enable = true;
       aichat.enable = true;
     };
+    chromium.enable = true;
     misc.enable = true;
     zoom.enable = true;
     work.enable = true;

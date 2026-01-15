@@ -45,6 +45,7 @@
     sudo.enable = true;
     xserver.enable = true;
     secrets.enable = true;
+    fonts.subpixelRgba = "bgr";  # Samsung curved monitor
     services.podman.enable = true;
     remote-builder.enable = true;
 
@@ -102,10 +103,12 @@
   # Force Wayland compositors to use the AMD GPU (card0) instead of QXL (card1)
   environment.variables = {
     WLR_DRM_DEVICES = "/dev/dri/card0";
+    ELECTRON_OZONE_PLATFORM_HINT = "wayland";
   };
   services.displayManager.sddm.settings.General = {
     DisplayServer = "wayland";
     GreeterEnvironment = "WLR_DRM_DEVICES=/dev/dri/card0,QT_QPA_PLATFORM=wayland";
+    ELECTRON_FORCE_DEVICE_SCALE_FACTOR = "1";
   };
   # Tell Weston to use the AMD GPU (card0) for SDDM greeter
   services.displayManager.sddm.wayland.compositorCommand = "${pkgs.weston}/bin/weston --shell=kiosk --drm-device=card0";
@@ -124,6 +127,17 @@
   swapDevices = [ ];
 
   hardware.enableRedistributableFirmware = true;
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      # amdvlk
+      libva
+      libva-utils
+      libva-vdpau-driver
+      libvdpau-va-gl
+    ];
+  };
+
   networking.useDHCP = lib.mkDefault false;
 
 

@@ -22,6 +22,11 @@ in {
       enable = mkEnableOption "Enable";
       secrets.enable = mkEnableOption "Enable SOPS secrets";
       xserver.enable = mkEnableOption "Enable xserver";
+      fonts.subpixelRgba = mkOption {
+        description = "Subpixel rendering order (rgb for most LCDs, bgr for Samsung curved monitors)";
+        type = types.str;
+        default = "rgb";
+      };
       nameservers = mkOption {
         description = "DNS Servers";
         type = listOf str;
@@ -145,22 +150,30 @@ in {
       };
     };
 
-    fonts.packages = with pkgs.nerd-fonts; [
-      fira-code
-      droid-sans-mono
-      symbols-only
-      jetbrains-mono
+    fonts.packages = with pkgs; [
+      nerd-fonts.fira-code
+      nerd-fonts.droid-sans-mono
+      nerd-fonts.symbols-only
+      nerd-fonts.jetbrains-mono
+      noto-fonts
+      liberation_ttf
+      inter
     ];
     fonts.fontconfig = {
       enable = true;
       antialias = true;
       hinting = {
         enable = true;
-        style = "slight";  # slight, medium, or full
+        style = "slight";  # full for sharper edges at ~109 DPI
       };
       subpixel = {
-        rgba = "rgb";  # rgb for most LCD monitors
+        rgba = cfg.fonts.subpixelRgba;
         lcdfilter = "default";
+      };
+      defaultFonts = {
+        monospace = [ "FiraCode Nerd Font Mono" "Fira Code" "DejaVu Sans Mono" ];
+        sansSerif = [ "DejaVu Sans" ];
+        serif = [ "DejaVu Serif" ];
       };
     };
     networking.nameservers = cfg.nameservers;

@@ -20,7 +20,6 @@ in {
       mcp-nixos
       mcp-k8s-go
       slack-mcp-server
-      chromium  # for browser control
     ];
     sops.secrets.opaqueGithubToken = { };
     sops.secrets.slack-mcp-server-oauth-user-token = { };
