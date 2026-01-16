@@ -26,7 +26,7 @@ in {
       oras
       uv
       nodejs_22
-      postgresql_15
+      postgresql_18
       vim
       jq
     ];
