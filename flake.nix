@@ -30,30 +30,21 @@
     };
     nur = {
       url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     niri = {
       url = "github:sodiboo/niri-flake";
-      # inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # waybar.url = "github:Alexays/Waybar";
-    # hyprland.url = "github:hyprwm/Hyprland";
-    # hyprshell = {
-    #   url = "github:H3rmt/hyprshell";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-    # grim-hyprland = {
-    #   url = "github:eriedaberrie/grim-hyprland/4a3d6f5b87b01e92c404b9393b79057b85f58c60";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
     # Generate System Images
-    nixos-generators = {
-      url = "github:nix-community/nixos-generators";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # nixos-generators = {
+    #   url = "github:nix-community/nixos-generators";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     # System Deployment
     deploy-rs = {
@@ -79,9 +70,11 @@
     };
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     claude-code = {
       url = "github:sadjow/claude-code-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
   outputs = { self, ... }@inputs: inputs.snowfall-lib.mkFlake {
@@ -202,7 +195,7 @@
         ];
         nixos = with inputs; [
           home-manager.nixosModules.home-manager
-          nixos-generators.nixosModules.all-formats
+          # nixos-generators.nixosModules.all-formats
           nixvirt.nixosModules.default
           microvm.nixosModules.host
           vscode-server.nixosModules.default
@@ -216,9 +209,9 @@
             niri.nixosModules.niri
             {
               boot.binfmt.emulatedSystems = [ "armv6l-linux" "aarch64-linux"];
-              nixpkgs.config.allowUnsupportedSystem = true;
-              nixpkgs.hostPlatform.system = "armv6l-linux";
-              nixpkgs.buildPlatform.system = "x86_64-linux"; #If you build on x86 other wise changes this.
+              # nixpkgs.config.allowUnsupportedSystem = true;
+              # nixpkgs.hostPlatform.system = "armv6l-linux";
+              # nixpkgs.buildPlatform.system = "x86_64-linux"; #If you build on x86 other wise changes this.
             }
           ];
         };

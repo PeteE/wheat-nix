@@ -42,6 +42,21 @@
       hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
       extraGroups = ["wheel" "NetworkManager"];
     };
+
+    services.spire = {
+      enable = true;
+      trustDomain = "wheat-dn42.net";
+      server = {
+        enable = true;
+        x509pop = {
+          enable = true;
+          caBundlePath = "/etc/spire/x509pop-ca-bundle.pem";
+        };
+      };
+      agent = {
+        enable = false;  # Server-only node for now
+      };
+    };
     sudo.enable = true;
     xserver.enable = true;
     secrets.enable = true;
@@ -65,6 +80,13 @@
       enable = false;
       interface = bridgeInterface;
     };
+  };
+
+  # SPIRE x509pop CA certificate for node attestation
+  # This is the same CA cert used across all hosts in the trust domain
+  environment.etc."spire/x509pop-ca-bundle.pem" = {
+    source = ../x1/spire-x509pop-ca.pem;
+    mode = "0644";
   };
 
   networking.hostName = "ripnix";
