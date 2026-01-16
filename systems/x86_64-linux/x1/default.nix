@@ -33,12 +33,27 @@
       ];
     };
 
+    # SPIRE agent connecting to ripnix server
+    services.spire = {
+      enable = true;
+      trustDomain = "wheat-dn42.net";
+      server.enable = false;  # Server runs on ripnix
+      agent = {
+        enable = true;
+        serverAddress = "ripnix";  # Tailscale hostname
+        x509pop = {
+          enable = true;
+          privateKeyPath = config.sops.secrets."spire/nodes/x1/key".path;
+          certificatePath = "/etc/spire/x1-cert.pem";
+        };
+      };
+    };
+
     xserver.enable = true;
     secrets.enable = true;
     wifi.enable = true;
     sudo.enable = true;
     coco.enable = true;
-    services.spire.enable = true;
 
     # # todo(pete) : replace with VirtNix module
     # virtualisation = {
@@ -56,6 +71,27 @@
     services.niri.enable = true;
   };
 
+  # SPIRE x509pop certificates for node attestation
+  environment.etc."spire/x509pop-ca-bundle.pem" = {
+    source = ./spire-x509pop-ca.pem;
+    mode = "0644";
+  };
+
+  # NixOS-level sops secrets for SPIRE agent
+  sops.defaultSopsFile = ../../../modules/home/wheat/secrets/secrets.yaml;
+  sops.age.keyFile = "/home/petee/.config/sops/age/keys.txt";
+  sops.secrets."spire/nodes/x1/key" = {
+    mode = "0400";  # Only root can read
+  };
+  sops.secrets."spire/nodes/x1/cert" = {
+    mode = "0444";
+    path = "/etc/spire/x1-cert.pem";  # Deploy cert to expected location
+  };
+
+  # Ensure SPIRE agent starts after sops secrets are decrypted
+  systemd.services.spire-agent.after = [ "sops-nix.service" ];
+  systemd.services.spire-agent.wants = [ "sops-nix.service" ];
+
   hardware.graphics.enable = true;
   console.useXkbConfig = true;
   services.upower.enable = true;
@@ -67,6 +103,7 @@
     };
   };
   environment.systemPackages = with pkgs; [
+    wheat.spire-cert-generator
     wireshark
     rpi-imager
     intel-gpu-tools
