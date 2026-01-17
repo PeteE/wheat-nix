@@ -141,10 +141,6 @@
   };
 
   time.timeZone = "America/Chicago";
-
-  # build aarch64-linux
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-
   boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "nvme" "uas" "virtio_pci" "virtio_scsi" "virtio_blk" ];
   boot.initrd.kernelModules = [ "amdgpu" "virtio_balloon" "virtio_console" "virtio_rng" ];
   boot.kernelModules = [ "amdgpu" ];

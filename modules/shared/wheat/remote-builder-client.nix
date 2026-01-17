@@ -20,7 +20,7 @@ in {
         hostName = "ripnix";
         sshUser = "petee";
         protocol = "ssh-ng";
-        systems = [ "x86_64-linux" ];
+        systems = [ "x86_64-linux" "aarch64-linux" ];
         maxJobs = 24;
       }
     ];

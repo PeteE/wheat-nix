@@ -11,25 +11,15 @@
   ...
 }:
 with lib; let
-  cfg = config.wheat.aws;
+  cfg = config.wheat.tor;
   pkgs-stable = inputs.nixpkgs-stable.legacyPackages."${system}";
 in {
-  options.wheat.aws = {
+  options.wheat.tor = {
     enable = mkEnableOption "Enable";
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs-stable; [
-      awscli
-
+      arti
     ];
-    sops.secrets.aws-access-key-id = { };
-    sops.secrets.aws-secret-access-key = { };
-
-    programs.zsh = {
-      envExtra = ''
-        export AWS_ACCESS_KEY_ID=$(cat ${config.sops.secrets.aws-access-key-id.path})
-        export AWS_SECRET_ACCESS_KEY=$(cat ${config.sops.secrets.aws-secret-access-key.path})
-      '';
-    }
   };
 }
