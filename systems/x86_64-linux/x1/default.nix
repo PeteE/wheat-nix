@@ -41,6 +41,7 @@
       agent = {
         enable = true;
         serverAddress = "ripnix";  # Tailscale hostname
+        insecureBootstrap = true;  # Required for initial trust bundle fetch
         x509pop = {
           enable = true;
           privateKeyPath = config.sops.secrets."spire/nodes/x1/key".path;

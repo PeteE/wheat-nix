@@ -48,13 +48,21 @@
       trustDomain = "wheat-dn42.net";
       server = {
         enable = true;
+        bindAddress = "0.0.0.0";  # Force IPv4 binding
         x509pop = {
           enable = true;
           caBundlePath = "/etc/spire/x509pop-ca-bundle.pem";
         };
       };
       agent = {
-        enable = false;  # Server-only node for now
+        enable = true;
+        serverAddress = "localhost";
+        insecureBootstrap = true;  # Required for initial trust bundle fetch
+        x509pop = {
+          enable = true;
+          privateKeyPath = config.sops.secrets."spire/nodes/ripnix/key".path;
+          certificatePath = "/etc/spire/ripnix-cert.pem";
+        };
       };
     };
     sudo.enable = true;
@@ -89,6 +97,24 @@
     mode = "0644";
   };
 
+  # NixOS-level sops secrets for SPIRE agent
+  sops.defaultSopsFile = ../../../modules/home/wheat/secrets/secrets.yaml;
+  sops.age.keyFile = "/home/petee/.config/sops/age/keys.txt";
+  sops.secrets."spire/nodes/ripnix/key" = {
+    mode = "0400";
+  };
+  sops.secrets."spire/nodes/ripnix/cert" = {
+    mode = "0444";
+    path = "/etc/spire/ripnix-cert.pem";
+  };
+
+  # Ensure SPIRE agent starts after sops secrets are decrypted
+  systemd.services.spire-agent.after = [ "sops-nix.service" ];
+  systemd.services.spire-agent.wants = [ "sops-nix.service" ];
+
+  # Open SPIRE server port for remote agents
+  networking.firewall.allowedTCPPorts = [ 8081 ];
+
   networking.hostName = "ripnix";
   systemd.network.enable = true;
   systemd.network.networks."10-lan" = {
@@ -116,11 +142,15 @@
 
   time.timeZone = "America/Chicago";
 
+  # build aarch64-linux
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
   boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "nvme" "uas" "virtio_pci" "virtio_scsi" "virtio_blk" ];
   boot.initrd.kernelModules = [ "amdgpu" "virtio_balloon" "virtio_console" "virtio_rng" ];
   boot.kernelModules = [ "amdgpu" ];
   boot.extraModulePackages = [ ];
   boot.blacklistedKernelModules = [ "qxl" ];  # Prevent QXL from conflicting with GPU passthrough
+  boot.binfmt.emulatedSystems = [ "armv6l-linux" "aarch64-linux"];
 
   # Force Wayland compositors to use the AMD GPU (card0) instead of QXL (card1)
   environment.variables = {

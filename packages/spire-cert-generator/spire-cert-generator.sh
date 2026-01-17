@@ -71,6 +71,14 @@ openssl req -new \
   -out "$output_dir/$hostname.csr" \
   -subj "/C=US/O=$TRUST_DOMAIN/CN=$hostname"
 
+# Create extensions config for x509pop attestation
+ext_file=$(mktemp)
+cat > "$ext_file" <<EOF
+subjectAltName=URI:spiffe://$TRUST_DOMAIN/hosts/$hostname
+keyUsage=critical,digitalSignature
+extendedKeyUsage=clientAuth
+EOF
+
 # Sign with CA
 echo "Signing certificate..."
 openssl x509 -req \
@@ -80,8 +88,10 @@ openssl x509 -req \
   -CAcreateserial \
   -out "$output_dir/$hostname-cert.pem" \
   -days 365 \
-  -extfile <(echo "subjectAltName=URI:spiffe://$TRUST_DOMAIN/hosts/$hostname") \
+  -extfile "$ext_file" \
   2>/dev/null
+
+rm -f "$ext_file"
 
 rm -f "$output_dir/$hostname.csr"
 

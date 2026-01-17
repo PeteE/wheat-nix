@@ -55,6 +55,8 @@
     secrets.enable = true;
     wifi.enable = true;
   };
+  services.tailscale.enable = true;
+
   system.stateVersion = "25.11";
   nix.settings.trusted-users = [ "root" "petee" "pete" ];
   # nix.settings.substituters = [ "https://nix-cache-dev.corp.tooling.opaque-int.com/opaque" ];
