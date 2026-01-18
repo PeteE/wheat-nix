@@ -30,6 +30,6 @@ in {
         export AWS_ACCESS_KEY_ID=$(cat ${config.sops.secrets.aws-access-key-id.path})
         export AWS_SECRET_ACCESS_KEY=$(cat ${config.sops.secrets.aws-secret-access-key.path})
       '';
-    }
+    };
   };
 }
