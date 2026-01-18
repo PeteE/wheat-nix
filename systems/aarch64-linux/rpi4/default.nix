@@ -34,6 +34,7 @@
   boot.loader.generic-extlinux-compatible.enable = true;
 
   networking.useDHCP = lib.mkDefault true;
+  networking.nameservers = [ "127.0.0.1" ];
   networking.firewall.enable = false;
   networking.hostName = "rpi4";
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
@@ -54,8 +55,58 @@
     sudo.enable = true;
     secrets.enable = true;
     wifi.enable = true;
+
+    # SPIRE Server - primary identity provider for wheat-dn42.net
+    services.spire = {
+      enable = true;
+      trustDomain = "wheat-dn42.net";
+      server = {
+        enable = true;
+        bindAddress = "0.0.0.0";
+        x509pop = {
+          enable = true;
+          caBundlePath = "/etc/spire/x509pop-ca-bundle.pem";
+        };
+        oidcDiscovery = {
+          enable = true;
+          domain = "oidc.wheat-dn42.net";
+          bindPort = 8082;
+          healthPort = 8083;
+        };
+      };
+      agent = {
+        enable = true;
+        serverAddress = "localhost";
+        insecureBootstrap = true;
+        x509pop = {
+          enable = true;
+          privateKeyPath = config.sops.secrets."spire/nodes/rpi4/key".path;
+          certificatePath = "/etc/spire/rpi4-cert.pem";
+        };
+      };
+    };
   };
   services.tailscale.enable = true;
+
+  # SPIRE x509pop CA certificate for node attestation
+  environment.etc."spire/x509pop-ca-bundle.pem" = {
+    source = ../../x86_64-linux/x1/spire-x509pop-ca.pem;
+    mode = "0644";
+  };
+
+  # SOPS secrets for SPIRE node credentials
+  sops.defaultSopsFile = ../../../modules/home/wheat/secrets/secrets.yaml;
+  sops.secrets."spire/nodes/rpi4/key" = {
+    mode = "0400";
+  };
+  sops.secrets."spire/nodes/rpi4/cert" = {
+    mode = "0444";
+    path = "/etc/spire/rpi4-cert.pem";
+  };
+
+  # Ensure SPIRE services start after sops secrets are decrypted
+  systemd.services.spire-agent.after = [ "sops-nix.service" ];
+  systemd.services.spire-agent.wants = [ "sops-nix.service" ];
 
   # Cloudflare Dynamic DNS
   sops.age.keyFile = "/home/petee/.config/sops/age/keys.txt";
@@ -77,6 +128,7 @@
     email = "pete.perickson@gmail.com";
     virtualHosts = {
       "adguard.wheat-dn42.net" = { upstream = "localhost:3000"; };
+      "oidc.wheat-dn42.net" = { upstream = "localhost:8082"; };
     };
   };
 
@@ -89,6 +141,7 @@
     mutableSettings = true;
     dnsRewrites = [
       # App infrastructure (K8s ingress)
+      { domain = "adguard.wheat-dn42.net"; answer = "192.168.1.173"; }
       { domain = "unifi.wheat-dn42.net"; answer = "192.168.1.245"; }
       { domain = "hs.wheat-dn42.net"; answer = "192.168.1.245"; }
       { domain = "reg.wheat-dn42.net"; answer = "192.168.1.245"; }

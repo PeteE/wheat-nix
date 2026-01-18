@@ -43,20 +43,14 @@
       extraGroups = ["wheel" "NetworkManager"];
     };
 
+    # SPIRE agent connecting to rpi4 server
     services.spire = {
       enable = true;
       trustDomain = "wheat-dn42.net";
-      server = {
-        enable = true;
-        bindAddress = "0.0.0.0";  # Force IPv4 binding
-        x509pop = {
-          enable = true;
-          caBundlePath = "/etc/spire/x509pop-ca-bundle.pem";
-        };
-      };
+      server.enable = false;  # Server runs on rpi4
       agent = {
         enable = true;
-        serverAddress = "localhost";
+        serverAddress = "192.168.1.173";  # rpi4
         insecureBootstrap = true;  # Required for initial trust bundle fetch
         x509pop = {
           enable = true;
@@ -112,8 +106,6 @@
   systemd.services.spire-agent.after = [ "sops-nix.service" ];
   systemd.services.spire-agent.wants = [ "sops-nix.service" ];
 
-  # Open SPIRE server port for remote agents
-  networking.firewall.allowedTCPPorts = [ 8081 ];
 
   networking.hostName = "ripnix";
   systemd.network.enable = true;
