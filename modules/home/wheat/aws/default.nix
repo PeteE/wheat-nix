@@ -22,14 +22,10 @@ in {
       awscli
 
     ];
-    sops.secrets.aws-access-key-id = { };
-    sops.secrets.aws-secret-access-key = { };
+    sops.secrets.aws-env = { };
 
-    programs.zsh = {
-      envExtra = ''
-        export AWS_ACCESS_KEY_ID=$(cat ${config.sops.secrets.aws-access-key-id.path})
-        export AWS_SECRET_ACCESS_KEY=$(cat ${config.sops.secrets.aws-secret-access-key.path})
-      '';
-    };
+    programs.zsh.envExtra = ''
+      [[ -r "${config.sops.secrets.aws-env.path}" ]] && source ${config.sops.secrets.aws-env.path}
+    '';
   };
 }

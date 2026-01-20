@@ -51,5 +51,8 @@
     htop
     gcc
     pgcli
+    jq
+    fx
+    pwgen
   ];
 }

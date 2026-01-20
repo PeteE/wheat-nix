@@ -13,7 +13,7 @@
     ...
 }:
 {
-  imports = [ 
+  imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     (../../../modules/shared/wheat/default.nix)
   ];
@@ -53,7 +53,6 @@
       ];
     };
     sudo.enable = true;
-    secrets.enable = true;
     wifi.enable = true;
 
     # SPIRE Server - primary identity provider for wheat-dn42.net
@@ -63,6 +62,7 @@
       server = {
         enable = true;
         bindAddress = "0.0.0.0";
+        jwtIssuer = "https://oidc.wheat-dn42.net";
         x509pop = {
           enable = true;
           caBundlePath = "/etc/spire/x509pop-ca-bundle.pem";
@@ -73,6 +73,10 @@
           bindPort = 8082;
           healthPort = 8083;
         };
+        federation = {
+          enable = true;
+          bundleEndpoint.port = 8444;  # 8443 is used by Caddy
+        };
       };
       agent = {
         enable = true;
@@ -82,6 +86,31 @@
           enable = true;
           privateKeyPath = config.sops.secrets."spire/nodes/rpi4/key".path;
           certificatePath = "/etc/spire/rpi4-cert.pem";
+        };
+      };
+    };
+
+    # Kanidm - user identity provider (OIDC, LDAP)
+    services.kanidm = {
+      enable = true;
+      domain = "idp.wheat-dn42.net";
+      bindAddress = "127.0.0.1";
+      bindPort = 8445;
+      adminPasswordFile = config.sops.secrets."kanidm/admin-password".path;
+      idmAdminPasswordFile = config.sops.secrets."kanidm/idm-admin-password".path;
+
+      provision = {
+        enable = true;
+        groups = {
+          homelab-users = {};
+          homelab-admins = { members = [ "petee" ]; };
+        };
+        persons = {
+          petee = {
+            displayName = "Pete Erickson";
+            mailAddresses = [ "pete.perickson@gmail.com" ];
+            groups = [ "homelab-users" "homelab-admins" ];
+          };
         };
       };
     };
@@ -104,9 +133,23 @@
     path = "/etc/spire/rpi4-cert.pem";
   };
 
+  # Kanidm admin passwords
+  sops.secrets."kanidm/admin-password" = {
+    mode = "0400";
+    owner = "kanidm";
+  };
+  sops.secrets."kanidm/idm-admin-password" = {
+    mode = "0400";
+    owner = "kanidm";
+  };
+
   # Ensure SPIRE services start after sops secrets are decrypted
   systemd.services.spire-agent.after = [ "sops-nix.service" ];
   systemd.services.spire-agent.wants = [ "sops-nix.service" ];
+
+  # Ensure Kanidm starts after sops secrets are decrypted
+  systemd.services.kanidm.after = [ "sops-nix.service" ];
+  systemd.services.kanidm.wants = [ "sops-nix.service" ];
 
   # Cloudflare Dynamic DNS
   sops.age.keyFile = "/home/petee/.config/sops/age/keys.txt";
@@ -122,13 +165,24 @@
     proxied = false;
   };
 
-  # Caddy reverse proxy with Cloudflare DNS-01 ACME
+  # Caddy reverse proxy with TCP passthrough to K8s ingress
   wheat.services.caddy = {
     enable = true;
     email = "pete.perickson@gmail.com";
+    defaultUpstream = "192.168.1.245";
     virtualHosts = {
       "adguard.wheat-dn42.net" = { upstream = "localhost:3000"; };
       "oidc.wheat-dn42.net" = { upstream = "localhost:8082"; };
+      "spire-bundle.wheat-dn42.net" = {
+        upstream = "localhost:8444";
+        upstreamScheme = "https";
+        upstreamTlsInsecure = true;  # SPIRE uses SPIFFE certs, not web PKI
+      };
+      "idp.wheat-dn42.net" = {
+        upstream = "localhost:8445";
+        upstreamScheme = "https";
+        upstreamTlsInsecure = true;  # Kanidm uses self-signed cert internally
+      };
     };
   };
 
@@ -147,7 +201,7 @@
       { domain = "reg.wheat-dn42.net"; answer = "192.168.1.245"; }
       { domain = "authentik.wheat-dn42.net"; answer = "192.168.1.245"; }
       { domain = "s3.wheat-dn42.net"; answer = "192.168.1.245"; }
-      { domain = "idp.wheat-dn42.net"; answer = "192.168.1.245"; }
+      { domain = "idp.wheat-dn42.net"; answer = "192.168.1.173"; }  # rpi4 - Kanidm
       # Automation
       { domain = "mqtt.wheat-dn42.net"; answer = "192.168.1.245"; }
       { domain = "node-red.wheat-dn42.net"; answer = "192.168.1.245"; }
@@ -155,6 +209,9 @@
       { domain = "overseerr.wheat-dn42.net"; answer = "192.168.1.245"; }
       # Apps
       { domain = "hastebin.wheat-dn42.net"; answer = "192.168.1.245"; }
+      # SPIRE federation (k8s cluster bundle endpoint)
+      { domain = "spire-bundle-k8s.wheat-dn42.net"; answer = "192.168.1.245"; }
+      { domain = "spire-bundle.wheat-dn42.net"; answer = "192.168.1.173"; }
       # Local network
       { domain = "gw"; answer = "192.168.1.33"; }
       { domain = "freenas.wheat-dn42.net"; answer = "192.168.1.120"; }

@@ -49,6 +49,16 @@ with lib; let
         log_level = "${cfg.server.logLevel}"
         ca_ttl = "${cfg.server.caTtl}"
         default_x509_svid_ttl = "${cfg.server.defaultX509SvidTtl}"
+        ${optionalString (cfg.server.jwtIssuer != null) ''jwt_issuer = "${cfg.server.jwtIssuer}"''}
+
+        ${optionalString cfg.server.federation.enable ''
+        federation {
+            bundle_endpoint {
+                address = "${cfg.server.federation.bundleEndpoint.address}"
+                port = "${toString cfg.server.federation.bundleEndpoint.port}"
+            }
+        }
+        ''}
     }
 
     plugins {
@@ -77,6 +87,7 @@ with lib; let
         }
         ''}
     }
+
   '';
 
   # Generate the agent configuration file
@@ -168,6 +179,16 @@ in {
         description = "Default TTL for X.509 SVIDs";
       };
 
+      jwtIssuer = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          The JWT issuer URL. This is included in the 'iss' claim of JWT SVIDs.
+          Required for OIDC federation with external services like AWS IAM.
+          Should match the OIDC discovery provider URL (e.g., "https://oidc.example.com").
+        '';
+      };
+
       socketPath = mkOption {
         type = types.str;
         default = "/run/spire/server/private/api.sock";
@@ -182,6 +203,25 @@ in {
           default = "/var/lib/spire/server/x509pop-ca-bundle.pem";
           description = "Path to the CA bundle for validating node certificates";
         };
+      };
+
+      federation = {
+        enable = mkEnableOption "SPIRE Federation";
+
+        bundleEndpoint = {
+          address = mkOption {
+            type = types.str;
+            default = "0.0.0.0";
+            description = "Address for the federation bundle endpoint to listen on";
+          };
+
+          port = mkOption {
+            type = types.port;
+            default = 8443;
+            description = "Port for the federation bundle endpoint";
+          };
+        };
+
       };
 
       oidcDiscovery = {
@@ -398,8 +438,8 @@ in {
     # SPIRE OIDC Discovery Provider systemd service
     systemd.services.spire-oidc-discovery-provider = mkIf cfg.server.oidcDiscovery.enable {
       description = "SPIRE OIDC Discovery Provider";
-      after = ["network-online.target" "spire-server.service" "spire-agent.service"];
-      requires = ["spire-server.service" "spire-agent.service"];
+      after = ["network-online.target" "spire-server.service"];
+      requires = ["spire-server.service"];
       wants = ["network-online.target"];
       wantedBy = ["multi-user.target"];
 
@@ -420,8 +460,8 @@ in {
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectSystem = "strict";
-        # Needs access to server socket and agent socket
-        ReadWritePaths = ["/run/spire/server" "/run/spire/agent"];
+        # Needs access to server socket
+        ReadWritePaths = ["/run/spire/server"];
         RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK"];
         RestrictNamespaces = true;
         RestrictRealtime = true;
