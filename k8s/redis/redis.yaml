@@ -1,0 +1,61 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-data-master-nvme
+  namespace: data-store
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "truenas-iscsi-csi-nvme"
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis
+  namespace: default
+spec:
+  project: default
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: redis
+    targetRevision: 17.14.5
+    helm:
+      values: |
+        global:
+          storageClass: "truenas-iscsi-csi-nvme"
+        auth:
+          enabled: false
+
+        master:
+          persistence:
+            size: 10Gi
+            existingClaim: redis-data-master-nvme
+
+        replica:
+          replicaCount: 1
+          persistence:
+            size: 10Gi
+            storageClass: "truenas-iscsi-csi-nvme"
+
+        rbac:
+          create: true
+
+        metrics:
+          enabled: true
+
+        volumePermissions:
+          enabled: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: data-store
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

@@ -8,6 +8,37 @@
 with lib; let
   cfg = config.wheat.services.spire;
 
+  # Generate the OIDC Discovery Provider configuration file
+  oidcConfig = pkgs.writeText "oidc-discovery-provider.conf" ''
+    log_level = "${cfg.server.oidcDiscovery.logLevel}"
+
+    domains = ["${cfg.server.oidcDiscovery.domain}"]
+
+    server_api {
+        address = "unix://${cfg.server.socketPath}"
+    }
+
+    health_checks {
+        bind_address = "127.0.0.1"
+        bind_port = "${toString cfg.server.oidcDiscovery.healthPort}"
+        ready_path = "/ready"
+        live_path = "/live"
+    }
+
+    ${if cfg.server.oidcDiscovery.servingCertFile != null then ''
+    serving_cert_file {
+        cert_file_path = "${cfg.server.oidcDiscovery.servingCertFile.certPath}"
+        key_file_path = "${cfg.server.oidcDiscovery.servingCertFile.keyPath}"
+        ${optionalString (cfg.server.oidcDiscovery.servingCertFile.fileSyncInterval != null)
+          ''file_sync_interval = "${cfg.server.oidcDiscovery.servingCertFile.fileSyncInterval}"''
+        }
+        addr = ":${toString cfg.server.oidcDiscovery.bindPort}"
+    }
+    '' else ''
+    insecure_addr = ":${toString cfg.server.oidcDiscovery.bindPort}"
+    ''}
+  '';
+
   # Generate the server configuration file
   serverConfig = pkgs.writeText "spire-server.conf" ''
     server {
@@ -18,6 +49,16 @@ with lib; let
         log_level = "${cfg.server.logLevel}"
         ca_ttl = "${cfg.server.caTtl}"
         default_x509_svid_ttl = "${cfg.server.defaultX509SvidTtl}"
+        ${optionalString (cfg.server.jwtIssuer != null) ''jwt_issuer = "${cfg.server.jwtIssuer}"''}
+
+        ${optionalString cfg.server.federation.enable ''
+        federation {
+            bundle_endpoint {
+                address = "${cfg.server.federation.bundleEndpoint.address}"
+                port = "${toString cfg.server.federation.bundleEndpoint.port}"
+            }
+        }
+        ''}
     }
 
     plugins {
@@ -46,6 +87,7 @@ with lib; let
         }
         ''}
     }
+
   '';
 
   # Generate the agent configuration file
@@ -137,6 +179,16 @@ in {
         description = "Default TTL for X.509 SVIDs";
       };
 
+      jwtIssuer = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          The JWT issuer URL. This is included in the 'iss' claim of JWT SVIDs.
+          Required for OIDC federation with external services like AWS IAM.
+          Should match the OIDC discovery provider URL (e.g., "https://oidc.example.com").
+        '';
+      };
+
       socketPath = mkOption {
         type = types.str;
         default = "/run/spire/server/private/api.sock";
@@ -150,6 +202,82 @@ in {
           type = types.str;
           default = "/var/lib/spire/server/x509pop-ca-bundle.pem";
           description = "Path to the CA bundle for validating node certificates";
+        };
+      };
+
+      federation = {
+        enable = mkEnableOption "SPIRE Federation";
+
+        bundleEndpoint = {
+          address = mkOption {
+            type = types.str;
+            default = "0.0.0.0";
+            description = "Address for the federation bundle endpoint to listen on";
+          };
+
+          port = mkOption {
+            type = types.port;
+            default = 8443;
+            description = "Port for the federation bundle endpoint";
+          };
+        };
+
+      };
+
+      oidcDiscovery = {
+        enable = mkEnableOption "SPIRE OIDC Discovery Provider";
+
+        domain = mkOption {
+          type = types.str;
+          description = ''
+            The domain where the OIDC Discovery Provider will be accessible.
+            This is used in the discovery document and must match the URL
+            used to access the provider (e.g., "oidc.example.com").
+          '';
+        };
+
+        bindPort = mkOption {
+          type = types.port;
+          default = 8082;
+          description = "Port for the OIDC Discovery Provider to listen on";
+        };
+
+        healthPort = mkOption {
+          type = types.port;
+          default = 8083;
+          description = "Port for the OIDC Discovery Provider health checks";
+        };
+
+        logLevel = mkOption {
+          type = types.enum ["debug" "info" "warn" "error"];
+          default = "info";
+          description = "Log level for the OIDC Discovery Provider";
+        };
+
+        servingCertFile = mkOption {
+          type = types.nullOr (types.submodule {
+            options = {
+              certPath = mkOption {
+                type = types.str;
+                description = "Path to the TLS certificate file";
+              };
+              keyPath = mkOption {
+                type = types.str;
+                description = "Path to the TLS private key file";
+              };
+              fileSyncInterval = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                description = "Interval to check for cert/key file changes (e.g., '5m')";
+              };
+            };
+          });
+          default = null;
+          description = ''
+            TLS certificate configuration for the OIDC Discovery Provider.
+            If null, the provider will run in insecure (HTTP) mode, suitable
+            for use behind a reverse proxy like Caddy that handles TLS.
+          '';
         };
       };
     };
@@ -300,6 +428,40 @@ in {
         ProtectKernelTunables = true;
         ProtectSystem = "strict";
         ReadWritePaths = ["/var/lib/spire/agent" "/run/spire/agent"];
+        RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK"];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+      };
+    };
+
+    # SPIRE OIDC Discovery Provider systemd service
+    systemd.services.spire-oidc-discovery-provider = mkIf cfg.server.oidcDiscovery.enable {
+      description = "SPIRE OIDC Discovery Provider";
+      after = ["network-online.target" "spire-server.service"];
+      requires = ["spire-server.service"];
+      wants = ["network-online.target"];
+      wantedBy = ["multi-user.target"];
+
+      serviceConfig = {
+        ExecStart = "${pkgs.spire}/bin/oidc-discovery-provider -config ${oidcConfig}";
+        Restart = "always";
+        RestartSec = "5s";
+
+        # Security hardening
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateTmp = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        # Needs access to server socket
+        ReadWritePaths = ["/run/spire/server"];
         RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK"];
         RestrictNamespaces = true;
         RestrictRealtime = true;

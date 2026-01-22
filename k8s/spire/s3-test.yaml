@@ -1,0 +1,49 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: s3-test
+  namespace: default
+---
+
+apiVersion: spire.spiffe.io/v1alpha1
+kind: ClusterSPIFFEID
+metadata:
+  name: s3-test
+spec:
+  spiffeIDTemplate: "spiffe://k8s.wheat-dn42.net/ns/{{ .PodMeta.Namespace }}/sa/{{ .PodSpec.ServiceAccountName }}"
+  podSelector:
+    matchLabels:
+      app: s3-test
+  namespaceSelector:
+    matchExpressions:
+      - key: kubernetes.io/metadata.name
+        operator: In
+        values:
+          - default
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: s3-test
+  namespace: default
+  labels:
+    app: s3-test
+spec:
+  serviceAccountName: s3-test
+  containers:
+    - name: test
+      image: debian:bookworm-slim
+      command: ["tail", "-f", "/dev/null"]
+      env:
+        - name: AWS_ROLE_ARN
+          value: "arn:aws:iam::130132656921:role/test-s3-spiffe"
+      volumeMounts:
+        - name: spiffe-workload-api
+          mountPath: /spiffe-workload-api
+          readOnly: true
+  volumes:
+    - name: spiffe-workload-api
+      csi:
+        driver: "csi.spiffe.io"
+        readOnly: true

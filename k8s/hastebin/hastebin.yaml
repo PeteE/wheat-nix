@@ -1,0 +1,63 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hastebin
+  namespace: default
+spec:
+  project: default
+  source:
+    repoURL: https://k8s-at-home.com/charts/
+    chart: haste-server
+    targetRevision: 3.4.2
+    helm:
+      values: |
+        env:
+          STORAGE_TYPE: "redis"
+          STORAGE_HOST: "redis-master.data-store.svc.cluster.local"
+          STORAGE_PORT: 6379
+          KEY_LENGTH: 20
+          KEYGENERATOR_TYPE: random
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hastebin
+  namespace: default
+spec:
+  entryPoints:
+  - websecure
+  routes:
+  - kind: Rule
+    match: Host(`hastebin.wheat-dn42.net`)
+    services:
+    - name: hastebin-haste-server
+      port: 7777
+    middlewares:
+      - name: traefik-headers
+        namespace: wheat-system
+
+  tls:
+    secretName: wildcard-wheat-dn42-net-secret
+
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: hastebin
+  namespace: default
+spec:
+  endpoints:
+  - dnsName: hastebin.wheat-dn42.net
+    recordTTL: 60
+    recordType: CNAME
+    targets:
+    - edge-public.wheat-dn42.net

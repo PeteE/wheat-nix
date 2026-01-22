@@ -1,0 +1,82 @@
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: mosquitto-data-nvme
+#   namespace: automation
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   storageClassName: "truenas-iscsi-csi-nvme"
+#   resources:
+#     requests:
+#       storage: 1Gi
+
+# ---
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: mosquitto
+#   namespace: default
+# spec:
+#   project: default
+#   source:
+#     repoURL: https://storage.googleapis.com/t3n-helm-charts
+#     chart: mosquitto
+#     targetRevision: "2.4.1"
+#     helm:
+#       values: |
+#         service:
+#           externalTrafficPolicy: ""
+#         persistence:
+#           enabled: true
+#           accessMode: ReadWriteOnce
+#           storageClassName: "truenas-iscsi-csi-nvme"
+#           existingClaim: "mosquitto-data-nvme"
+#           mountPath: /mosquitto/data
+#           size: 1Gi
+
+#         authentication:
+#           passwordEntries: |-
+#             # TODO: move to sops
+
+#         authorization:
+#           acls: |-
+#             user admin
+#             topic read #
+#             topic write #
+
+#             # # Tasmota-compatible ACLs
+#             # pattern read cmnd/%u/#
+#             # pattern write stat/%u/#
+#             # pattern write tele/%u/#
+
+#           aclfilePath: "/etc/mosquitto/aclfile"
+
+#         # monitoring:
+#         #   podMonitor:
+#         #     enabled: false
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: automation
+#   syncPolicy:
+#     automated:
+#       prune: true
+#       selfHeal: true
+#     syncOptions:
+#       - CreateNamespace=true
+
+# ---
+# apiVersion: traefik.containo.us/v1alpha1
+# kind: IngressRouteTCP
+# metadata:
+#   name: mosquitto
+#   namespace: automation
+# spec:
+#   entryPoints:
+#     - mqtt
+#   routes:
+#   - match: HostSNI(`*`)
+#     services:
+#     - name: mosquitto
+#       port: mqtt

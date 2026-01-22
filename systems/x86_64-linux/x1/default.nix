@@ -33,14 +33,15 @@
       ];
     };
 
-    # SPIRE agent connecting to ripnix server
+    # SPIRE agent connecting to rpi4 server
     services.spire = {
       enable = true;
       trustDomain = "wheat-dn42.net";
-      server.enable = false;  # Server runs on ripnix
+      server.enable = false;  # Server runs on rpi4
       agent = {
         enable = true;
-        serverAddress = "ripnix";  # Tailscale hostname
+        serverAddress = "192.168.1.173";  # rpi4
+        insecureBootstrap = true;  # Required for initial trust bundle fetch
         x509pop = {
           enable = true;
           privateKeyPath = config.sops.secrets."spire/nodes/x1/key".path;
@@ -170,8 +171,8 @@
     networkConfig = {
       Address = ["192.168.100.1/24"];
       DNS = [
-        "192.168.1.249"
-        "1.1.1.1"
+        "192.168.1.173"  # rpi4 AdGuard Home
+        "1.1.1.1"        # fallback
       ];
       IPv6AcceptRA = false;
     };

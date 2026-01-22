@@ -27,6 +27,7 @@
     zed-editor.enable = true;
     vscode.enable = true;
     azure.enable = true;
+    aws.enable = true;
     dev-tools.enable = true;
     gcloud.enable = true;
     embedded.enable = true;

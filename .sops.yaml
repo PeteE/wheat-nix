@@ -1,3 +1,7 @@
+stores:
+  yaml:
+    indent: 2
+
 creation_rules:
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
     age: >-

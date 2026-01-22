@@ -1,0 +1,104 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: s3-python-test-script
+  namespace: default
+data:
+  test.py: |
+    #!/usr/bin/env python3
+    """
+    SPIFFE/SPIRE AWS S3 Integration Test
+
+    Uses py-spiffe to fetch a JWT SVID and assumes an AWS role
+    to write a file to S3.
+    """
+    import os
+    import boto3
+    from datetime import datetime
+    from spiffe import WorkloadApiClient
+
+    ROLE_ARN = os.environ.get('AWS_ROLE_ARN', 'arn:aws:iam::130132656921:role/test-s3-spiffe')
+    S3_BUCKET = os.environ.get('S3_BUCKET', 'petee-spiffe-test')
+    S3_KEY = os.environ.get('S3_KEY', 'python-k8s-test.txt')
+
+    def main():
+        # 1. Fetch JWT from SPIRE
+        print("Fetching JWT from SPIRE workload API...")
+        with WorkloadApiClient() as client:
+            jwt_svid = client.fetch_jwt_svid(audience={'s3'})
+            print(f"Got JWT for SPIFFE ID: {jwt_svid.spiffe_id}")
+            token = jwt_svid.token
+
+        # 2. Assume AWS role with the JWT
+        print(f"Assuming role: {ROLE_ARN}")
+        sts = boto3.client('sts')
+        response = sts.assume_role_with_web_identity(
+            RoleArn=ROLE_ARN,
+            RoleSessionName='python-spiffe-session',
+            WebIdentityToken=token
+        )
+        creds = response['Credentials']
+        print(f"Assumed role successfully!")
+
+        # 3. Create S3 client with temporary credentials
+        s3 = boto3.client(
+            's3',
+            aws_access_key_id=creds['AccessKeyId'],
+            aws_secret_access_key=creds['SecretAccessKey'],
+            aws_session_token=creds['SessionToken']
+        )
+
+        # 4. Write test file to S3
+        content = f"Hello from Python SPIFFE workload!\nTimestamp: {datetime.utcnow().isoformat()}\nSPIFFE ID: {jwt_svid.spiffe_id}\n"
+        print(f"Writing to s3://{S3_BUCKET}/{S3_KEY}")
+        s3.put_object(
+            Bucket=S3_BUCKET,
+            Key=S3_KEY,
+            Body=content.encode('utf-8')
+        )
+        print("Success!")
+
+    if __name__ == '__main__':
+        main()
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: s3-python-test
+  namespace: default
+  labels:
+    app: s3-python-test
+spec:
+  restartPolicy: Never
+  containers:
+    - name: python
+      image: python:3.12-slim
+      command:
+        - /bin/bash
+        - -c
+        - |
+          pip install spiffe boto3 && python /scripts/test.py
+      env:
+        - name: AWS_ROLE_ARN
+          value: "arn:aws:iam::130132656921:role/test-s3-spiffe"
+        - name: S3_BUCKET
+          value: "petee-spiffe-test"
+        - name: S3_KEY
+          value: "python-k8s-test.txt"
+        - name: SPIFFE_ENDPOINT_SOCKET
+          value: "unix:///spiffe-workload-api/api.sock"
+      volumeMounts:
+        - name: spiffe-workload-api
+          mountPath: /spiffe-workload-api
+          readOnly: true
+        - name: scripts
+          mountPath: /scripts
+  volumes:
+    - name: spiffe-workload-api
+      csi:
+        driver: "csi.spiffe.io"
+        readOnly: true
+    - name: scripts
+      configMap:
+        name: s3-python-test-script

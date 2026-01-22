@@ -62,5 +62,8 @@
     pgcli
     usbutils
     pavucontrol
+    jq
+    fx
+    pwgen
   ];
 }
