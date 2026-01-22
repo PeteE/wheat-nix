@@ -60,6 +60,9 @@ in {
         # UsePAM yes
       '';
     };
+    environment.systemPackages = with pkgs; [
+      tailscale
+    ];
     fonts.packages = with pkgs.nerd-fonts; [
       fira-code
       droid-sans-mono

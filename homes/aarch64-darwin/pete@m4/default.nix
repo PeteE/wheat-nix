@@ -4,7 +4,7 @@
 }:
 {
   wheat = {
-    ollama.enable = true;
+    ollama.enable = false;
     entertainment.vlc.enable = false;
     misc.enable = true;
     vscode.enable = true;
@@ -15,6 +15,7 @@
     embedded.enable = false;
     yazi.enable = true;
     attic-client.enable = true;
+    work.enable = true;
   };
   home.stateVersion = "25.11";
 }
