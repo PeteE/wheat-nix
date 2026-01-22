@@ -4,6 +4,7 @@
 }:
 {
   wheat = {
+    niri.enable = true;
     kitty.font.size = 14.0;  # For scale 1.0 on ultrawide
     ollama.enable = false;
     distrobox.enable = true;

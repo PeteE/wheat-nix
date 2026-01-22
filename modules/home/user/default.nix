@@ -30,6 +30,15 @@
 
   programs.home-manager.enable = true;
 
+  programs.ssh = {
+    enable = true;
+    matchBlocks = {
+      "m4" = {
+        user = "pete";
+      };
+    };
+  };
+
   home.packages = with pkgs; [
     mosquitto
     mqttx-cli
@@ -51,6 +60,8 @@
     htop
     gcc
     pgcli
+    usbutils
+    pavucontrol
     jq
     fx
     pwgen

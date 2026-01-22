@@ -183,6 +183,7 @@
       catppuccin.homeModules.catppuccin
       # hyprshell.homeModules.default
       noctalia.homeModules.default
+      # niri.homeModules.niri  # Already provided by niri.nixosModules.niri
     ];
 
     systems = {
