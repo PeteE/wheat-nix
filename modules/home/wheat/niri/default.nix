@@ -7,12 +7,13 @@
 }:
 with lib; let
   cfg = config.wheat.niri;
+  isDarwin = pkgs.stdenv.isDarwin;
 in {
   options.wheat.niri = {
     enable = mkEnableOption "Enable niri window manager home configuration";
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (cfg.enable && !isDarwin) {
     programs.niri.settings = {
       input = {
         keyboard = {
