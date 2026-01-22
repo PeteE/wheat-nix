@@ -38,6 +38,12 @@ in {
   config = mkIf cfg.enable {
     home-manager.backupFileExtension = ".hm-backup";
     programs.zsh.enable = true;
+
+    # Set locale for UTF-8 support (needed for starship, tmux, etc.)
+    environment.variables = {
+      LANG = "en_US.UTF-8";
+      LC_ALL = "en_US.UTF-8";
+    };
     users.groups.${cfg.user.name} = {};
     users.users.${cfg.user.name} = {
       inherit (cfg.user) name;

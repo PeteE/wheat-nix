@@ -117,6 +117,7 @@ in {
   };
 
   config = mkIf cfg.enable {
+    home-manager.backupFileExtension = "bak";
     programs.zsh.enable = true;
     users.groups.${cfg.user.name} = {};
     users.users.${cfg.user.name} = {
