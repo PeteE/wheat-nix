@@ -29,17 +29,24 @@
     devenv.enable = true;
     zed-editor.enable = true;
     vscode.enable = true;
+    aws.enable = true;
     azure.enable = true;
     dev-tools.enable = true;
     gcloud.enable = true;
     embedded.enable = true;
     attic-client.enable = true;
     signal.enable = true;
+    kanidm.enable = true;  # CLI client for idp.wheat-dn42.net
   };
 
   home.packages = with pkgs; [
       spotify
   ];
+
+  programs.zsh.initExtra = ''
+    s-wheat() { ssh rpi4 -- sudo spire-server "$@" -socketPath /run/spire/server/private/api.sock; }
+    s-wheat-k8s() { kubectl --context wheat exec -n spire -it spire-server-0 -- spire-server "$@"; }
+  '';
 
   # notificaiton system
   services.mako = {

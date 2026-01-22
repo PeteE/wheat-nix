@@ -1,0 +1,31 @@
+{
+  lib,
+  pkgs,
+  inputs,
+  namespace, # The namespace used for your flake, defaulting to "internal" if not set.
+  format, # A normalized name for the home target (eg. `home`).
+  virtual, # A boolean to determine whether this home is a virtual target using nixos-generators.
+  host, # The host name for this home.
+  system,
+  config,
+  ...
+}:
+with lib; let
+  cfg = config.wheat.aws;
+  pkgs-stable = inputs.nixpkgs-stable.legacyPackages."${system}";
+in {
+  options.wheat.aws = {
+    enable = mkEnableOption "Enable";
+  };
+  config = mkIf cfg.enable {
+    home.packages = with pkgs-stable; [
+      awscli
+
+    ];
+    sops.secrets.aws-env = { };
+
+    programs.zsh.envExtra = ''
+      [[ -r "${config.sops.secrets.aws-env.path}" ]] && source ${config.sops.secrets.aws-env.path}
+    '';
+  };
+}

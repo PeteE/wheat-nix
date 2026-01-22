@@ -33,6 +33,7 @@ in {
       uv
       python314
       python314Packages.pytest
+      slack
     ];
   };
 }

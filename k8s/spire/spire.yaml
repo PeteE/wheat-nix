@@ -1,0 +1,173 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: spire
+  namespace: default
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  project: default
+  source:
+    repoURL: https://spiffe.github.io/helm-charts-hardened/
+    chart: spire
+    targetRevision: "0.27.1"
+    helm:
+      values: |
+        global:
+          spire:
+            trustDomain: "k8s.wheat-dn42.net"
+            clusterName: "wheat"
+            namespaces:
+              create: true
+
+            tools:
+              kubectl:
+                registry: registry.k8s.io
+                repository: kubectl
+                tag: "v1.31.0"
+
+        tornjak-frontend:
+          ## @param tornjak-frontend.enabled Enables deployment of Tornjak frontend/UI (Not for production)
+          enabled: false
+
+        spire-server:
+          jwtIssuer: "https://oidc-k8s.wheat-dn42.net"
+          caKeyType: "ec-p256"
+          caSubject:
+            country: "US"
+            organization: "wheat"
+            commonName: "spire-k8s.wheat-dn42.net"
+          dataStore:
+            sql:
+              databaseType: sqlite3
+          persistence:
+            enabled: true
+            size: 1Gi
+            storageClass: "truenas-iscsi-csi-nvme"
+          federation:
+            enabled: true
+            bundleEndpoint:
+              address: "0.0.0.0"
+              port: 8443
+          controllerManager:
+            identities:
+              clusterFederatedTrustDomains:
+                homelab:
+                  bundleEndpointURL: "https://spire-bundle.wheat-dn42.net"
+                  trustDomain: "wheat-dn42.net"
+                  bundleEndpointProfile:
+                    type: https_web
+
+        spiffe-oidc-discovery-provider:
+          config:
+            additionalDomains:
+              - "oidc-k8s.wheat-dn42.net"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: spire
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-wheat-dn42-net
+  namespace: spire
+spec:
+  dnsNames:
+    - "*.wheat-dn42.net"
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod
+  secretName: wildcard-wheat-dn42-net-secret
+
+---
+# ServersTransport to skip TLS verification for SPIFFE backend
+apiVersion: traefik.containo.us/v1alpha1
+kind: ServersTransport
+metadata:
+  name: spire-bundle-transport
+  namespace: spire
+spec:
+  insecureSkipVerify: true
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: spire-bundle
+  namespace: spire
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`spire-bundle-k8s.wheat-dn42.net`)
+      services:
+        - name: spire-server
+          port: 8443
+          scheme: https
+          serversTransport: spire-bundle-transport
+  tls:
+    secretName: wildcard-wheat-dn42-net-secret
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: spire-oidc
+  namespace: spire
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`oidc-k8s.wheat-dn42.net`)
+      services:
+        - name: spire-spiffe-oidc-discovery-provider
+          port: 443
+      middlewares:
+        - name: traefik-headers
+          namespace: wheat-system
+  tls:
+    secretName: wildcard-wheat-dn42-net-secret
+
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: spire-bundle
+  namespace: spire
+spec:
+  endpoints:
+    - dnsName: spire-bundle-k8s.wheat-dn42.net
+      recordTTL: 60
+      recordType: A
+      targets:
+        - "192.168.1.245"
+    - dnsName: spire-bundle.wheat-dn42.net
+      recordTTL: 60
+      recordType: A
+      targets:
+        - "192.168.1.173"
+
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: spire-oidc
+  namespace: spire
+spec:
+  endpoints:
+    - dnsName: oidc-k8s.wheat-dn42.net
+      recordTTL: 60
+      recordType: CNAME
+      targets:
+        - edge-public.wheat-dn42.net

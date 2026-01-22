@@ -4,6 +4,7 @@
 }:
 {
   wheat = {
+    kitty.font.size = 14.0;  # For scale 1.0 on ultrawide
     ollama.enable = false;
     distrobox.enable = true;
     ai = {
@@ -13,6 +14,7 @@
       claude-sessions.enable = true;
       aichat.enable = true;
     };
+    chromium.enable = true;
     misc.enable = true;
     zoom.enable = true;
     work.enable = true;
@@ -24,6 +26,7 @@
     zed-editor.enable = true;
     vscode.enable = true;
     azure.enable = true;
+    aws.enable = true;
     dev-tools.enable = true;
     gcloud.enable = true;
     embedded.enable = true;

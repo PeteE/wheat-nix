@@ -67,6 +67,10 @@ nix flake check
 
 # Show flake outputs
 nix flake show
+
+# Deploy to another host using deploy-rs
+deploy .#rpi4 --skip-checks --auto-rollback false --magic-rollback false
+
 ```
 
 ### Active Hosts
@@ -74,7 +78,8 @@ nix flake show
 - **x1**: x86_64-linux laptop (Lenovo ThinkPad X1 6th gen)
 - **m4**: aarch64-darwin Mac
 - **m3p**: aarch64-darwin Mac
-- **pishield**: aarch64-linux Raspberry Pi 4
+- **rpi4**: aarch64-linux Raspberry Pi 4
+- **rpinix**: x86_64-linux -- my main nixos desktop (VM running on `ripper` debian host)
 
 ## Module System
 
@@ -91,12 +96,6 @@ wheat = {
 };
 ```
 
-### Common Modules
-
-- **AI Tools** (`wheat.ai.enable`): Includes claude-code, aichat with API key management
-- **Secrets** (`wheat.secrets.enable`): SOPS-based secret management with age encryption
-- **Development Tools**: Various dev tool configurations in `modules/home/wheat/`
-
 ### Secret Management
 
 Uses SOPS with age encryption:
@@ -106,7 +105,6 @@ Uses SOPS with age encryption:
 
 **SOPS Commands:**
 - Edit secrets: `sops edit modules/home/wheat/secrets/secrets.yaml`
-- Fix key mismatch errors: `sops updatekeys modules/home/wheat/secrets/secrets.yaml`
 
 ## Configuration Patterns
 
@@ -121,7 +119,6 @@ Uses SOPS with age encryption:
 3. **User Management**: Centralized user configuration in shared module with SSH key management
 
 ## Notes
-
 - Repository uses vim-style settings: `ts=2:sw=2:et` (2-space indentation)
 - All SSH keys are managed centrally in the shared wheat module
 - Secrets are encrypted and managed through SOPS/age
