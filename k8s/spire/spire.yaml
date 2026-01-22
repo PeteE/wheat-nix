@@ -34,6 +34,7 @@ spec:
         spire-server:
           jwtIssuer: "https://oidc-k8s.wheat-dn42.net"
           caKeyType: "ec-p256"
+          jwtKeyType: "rsa-2048"  # Azure AD requires RSA (doesn't support EC)
           caSubject:
             country: "US"
             organization: "wheat"
@@ -67,9 +68,6 @@ spec:
     server: https://kubernetes.default.svc
     namespace: spire
   syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
     syncOptions:
       - CreateNamespace=true
 

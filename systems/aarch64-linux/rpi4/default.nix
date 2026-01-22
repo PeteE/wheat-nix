@@ -63,6 +63,7 @@
         enable = true;
         bindAddress = "0.0.0.0";
         jwtIssuer = "https://oidc.wheat-dn42.net";
+        jwtKeyType = "rsa-2048";  # Azure AD requires RSA (doesn't support EC)
         x509pop = {
           enable = true;
           caBundlePath = "/etc/spire/x509pop-ca-bundle.pem";
