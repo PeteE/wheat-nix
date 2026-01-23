@@ -1,5 +1,6 @@
 {
     home,
+    pkgs,
     ...
 }:
 {
@@ -38,6 +39,20 @@
   # notificaiton system
   services.mako = {
     enable = true;
+  };
+
+  # GTK theming (for thunar, etc.)
+  gtk = {
+    enable = true;
+    theme = {
+      name = "catppuccin-mocha-blue-standard";
+      package = pkgs.catppuccin-gtk.override {
+        variant = "mocha";
+        accents = [ "blue" ];
+      };
+    };
+    gtk3.extraConfig.gtk-application-prefer-dark-theme = true;
+    gtk4.extraConfig.gtk-application-prefer-dark-theme = true;
   };
 
   programs.noctalia-shell = {

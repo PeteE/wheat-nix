@@ -68,6 +68,7 @@
 
     services.hyprland.enable = false;
     services.niri.enable = true;
+    services.clipcat.enable = true;
 
     virtualisation = {
       enable = true;
