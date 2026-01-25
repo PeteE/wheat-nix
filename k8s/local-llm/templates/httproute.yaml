@@ -10,6 +10,9 @@ spec:
   hostnames:
     - {{ .Values.hostname }}
   rules:
-    - backendRefs:
+    - timeouts:
+        request: {{ .Values.timeout | default "300s" }}
+        backendRequest: {{ .Values.timeout | default "300s" }}
+      backendRefs:
         - name: {{ .Release.Name }}
           port: {{ .Values.port }}
