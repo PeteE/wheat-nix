@@ -51,6 +51,11 @@
   # notificaiton system
   services.mako = {
     enable = true;
+    defaultTimeout = 5000;  # 5 seconds in milliseconds
+    extraConfig = ''
+      [app-name=Slack]
+      default-timeout=3000
+    '';
   };
 
   programs.noctalia-shell = {

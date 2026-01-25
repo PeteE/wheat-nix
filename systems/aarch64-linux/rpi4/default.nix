@@ -205,7 +205,6 @@
       { domain = "idp.wheat-dn42.net"; answer = "192.168.1.173"; }  # rpi4 - Kanidm
       # Automation
       { domain = "mqtt.wheat-dn42.net"; answer = "192.168.1.245"; }
-      { domain = "node-red.wheat-dn42.net"; answer = "192.168.1.245"; }
       # Media
       { domain = "overseerr.wheat-dn42.net"; answer = "192.168.1.245"; }
       # Apps

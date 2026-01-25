@@ -39,6 +39,7 @@
   # notificaiton system
   services.mako = {
     enable = true;
+    defaultTimeout = 5000;  # 5 seconds in milliseconds
   };
 
   # GTK theming (for thunar, etc.)

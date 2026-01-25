@@ -162,11 +162,8 @@
     # overlays
     overlays = with inputs; [
       nix-vscode-extensions.overlays.default
-      # grim-hyprland.overlays.default
-      # waybar.overlays.default
       nur.overlays.default
       claude-code.overlays.default
-      # flake.overlays.default
     ];
 
     channels-config = {
@@ -181,9 +178,8 @@
     homes.modules = with inputs; [
       sops-nix.homeManagerModules.sops
       catppuccin.homeModules.catppuccin
-      # hyprshell.homeModules.default
       noctalia.homeModules.default
-      # niri.homeModules.niri  # Already provided by niri.nixosModules.niri
+      niri.homeModules.niri
     ];
 
     systems = {
@@ -211,9 +207,6 @@
             niri.nixosModules.niri
             {
               boot.binfmt.emulatedSystems = [ "armv6l-linux" "aarch64-linux"];
-              # nixpkgs.config.allowUnsupportedSystem = true;
-              # nixpkgs.hostPlatform.system = "armv6l-linux";
-              # nixpkgs.buildPlatform.system = "x86_64-linux"; #If you build on x86 other wise changes this.
             }
           ];
         };

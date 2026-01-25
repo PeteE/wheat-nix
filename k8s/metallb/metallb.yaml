@@ -1,0 +1,48 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: metallb
+  namespace: default
+spec:
+  project: default
+  source:
+    chart: metallb
+    repoURL: https://metallb.github.io/metallb
+    targetRevision: 0.15.3
+    helm:
+      values: |
+        prometheus:
+          namespace: wheat-system
+          serviceAccount: prometheus-kube-prometheus-operator
+          podMonitor:
+            enabled: true
+            additionalLabels:
+              release: prometheus
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+
+
+
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  creationTimestamp: null
+  name: default
+  namespace: kube-system
+spec:
+  addresses:
+    - 192.168.1.244-192.168.1.253
+
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  creationTimestamp: null
+  name: l2advertisement1
+  namespace: kube-system
+spec:
+  ipAddressPools:
+    - default

@@ -91,6 +91,14 @@ in {
           open-floating = true;
         }
         {
+          matches = [{ app-id = "^thunar$"; }];
+          open-floating = true;
+        }
+        {
+          matches = [{ app-id = "^zoom$"; }];
+          open-floating = true;
+        }
+        {
           geometry-corner-radius = {
             top-left = 12.0;
             top-right = 12.0;
