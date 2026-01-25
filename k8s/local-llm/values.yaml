@@ -1,6 +1,7 @@
 # External LLM service configuration
 externalHost: "192.168.1.115"
 port: 8080
+timeout: "300s"  # 5 minutes for LLM requests
 
 # Gateway API configuration
 gateway:
