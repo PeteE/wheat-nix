@@ -179,7 +179,6 @@
       sops-nix.homeManagerModules.sops
       catppuccin.homeModules.catppuccin
       noctalia.homeModules.default
-      niri.homeModules.niri
     ];
 
     systems = {

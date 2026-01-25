@@ -1,0 +1,62 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: node-red
+  namespace: default
+spec:
+  project: default
+  source:
+    chart: node-red
+    repoURL: https://schwarzit.github.io/node-red-chart/
+    targetRevision: 0.40.0
+    helm:
+      values: |
+        persistence:
+          enabled: true
+          existingClaim: node-red-data
+        podSecurityContext:
+          runAsUser: 0
+          runAsGroup: 0
+          fsGroup: 0
+        securityContext:
+          runAsNonRoot: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: automation
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: node-red-data
+  namespace: automation
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: truenas-iscsi-csi
+
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: node-red
+  namespace: automation
+spec:
+  parentRefs:
+    - name: default-gateway-ingress
+      namespace: kgateway-system
+  hostnames:
+    - node-red.wheat-dn42.net
+  rules:
+    - backendRefs:
+        - name: node-red
+          port: 1880

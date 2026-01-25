@@ -3,17 +3,19 @@
   lib,
   pkgs,
   config,
+  options,
   ...
 }:
 with lib; let
   cfg = config.wheat.niri;
   isDarwin = pkgs.stdenv.isDarwin;
+  hasNiri = options ? programs && options.programs ? niri;
 in {
   options.wheat.niri = {
     enable = mkEnableOption "Enable niri window manager home configuration";
   };
 
-  config = mkIf (cfg.enable && !isDarwin) {
+  config = mkIf (cfg.enable && !isDarwin && hasNiri) {
     programs.niri.settings = {
       input = {
         keyboard = {
