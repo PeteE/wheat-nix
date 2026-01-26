@@ -19,7 +19,9 @@ in {
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs-stable; [
-      azure-cli
+      (azure-cli.withExtensions [
+        azure-cli-extensions.virtual-wan
+      ])
     ];
   };
 }

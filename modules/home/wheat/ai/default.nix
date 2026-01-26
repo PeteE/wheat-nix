@@ -21,7 +21,7 @@ in {
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      # claude-code
+      claude-code
       opencommit
     ];
 
@@ -29,7 +29,7 @@ in {
       text = ''
         OCO_AI_PROVIDER=openai
         OCO_MODEL=qwen2:7b
-        OCO_API_URL='https://llm.wheat-dn42.net/v1/chat'
+        OCO_API_URL='https://llm.wheat-dn42.net/'
         OCO_API_KEY=undefined
         OCO_API_CUSTOM_HEADERS=undefined
         OCO_TOKENS_MAX_INPUT=4096
