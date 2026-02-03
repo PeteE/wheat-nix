@@ -9,6 +9,10 @@
     kitty.font.size = 14.0;  # For scale 1.0 on ultrawide
     ollama.enable = false;
     distrobox.enable = true;
+    k8s = {
+      enable = true;
+      argocd.enable = true;
+    };
     ai = {
       enable = true;
       ollamaHost = "192.168.1.115"; # m4
@@ -56,6 +60,9 @@
     gtk4.extraConfig.gtk-application-prefer-dark-theme = true;
   };
 
+  home.packages = with pkgs; [
+    socat
+  ];
   programs.noctalia-shell = {
     enable = true;
   };

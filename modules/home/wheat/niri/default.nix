@@ -15,7 +15,7 @@ in {
     enable = mkEnableOption "Enable niri window manager home configuration";
   };
 
-  config = mkIf (cfg.enable && !isDarwin && hasNiri) {
+  config = mkIf (cfg.enable && !isDarwin && hasNiri) (optionalAttrs hasNiri {
     programs.niri.settings = {
       input = {
         keyboard = {
@@ -268,5 +268,5 @@ in {
         "Mod+Shift+P".action.power-off-monitors = {};
       };
     };
-  };
+  });
 }
