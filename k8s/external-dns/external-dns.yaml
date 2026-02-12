@@ -1,0 +1,45 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-dns
+  namespace: default
+spec:
+  destination:
+    namespace: external-dns
+    server: https://kubernetes.default.svc
+  project: default
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - CreateNamespace=true
+  source:
+    chart: external-dns
+    repoURL: https://kubernetes-sigs.github.io/external-dns/
+    targetRevision: 1.15.0
+    helm:
+      values: |-
+        sources:
+          - crd
+          - service
+          - gateway-httproute
+          - gateway-grpcroute
+          - gateway-tlsroute
+          - gateway-tcproute
+          - gateway-udproute
+        provider:
+          name: cloudflare
+        policy: sync
+        env:
+          - name: CF_API_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: cloudflare-api-token-secret
+                key: cloudflare_api_token
+
+        # serviceMonitor:
+        #   enabled: true
+        #   namespace: "wheat-system"
+        #   labels:
+        #     wheat-dn42.net/service: external-dns
+        #     release: prometheus

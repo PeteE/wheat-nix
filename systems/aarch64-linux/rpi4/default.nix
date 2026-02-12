@@ -116,7 +116,15 @@
       };
     };
   };
-  services.tailscale.enable = true;
+  # Tailscale subnet router and exit node for home network
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "server";  # enables IP forwarding
+    extraUpFlags = [
+      "--advertise-routes=192.168.1.0/24"
+      "--advertise-exit-node"
+    ];
+  };
 
   # SPIRE x509pop CA certificate for node attestation
   environment.etc."spire/x509pop-ca-bundle.pem" = {

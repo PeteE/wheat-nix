@@ -43,7 +43,7 @@
       spotify
   ];
 
-  programs.zsh.initExtra = ''
+  programs.zsh.initContent = ''
     s-wheat() { ssh rpi4 -- sudo spire-server "$@" -socketPath /run/spire/server/private/api.sock; }
     s-wheat-k8s() { kubectl --context wheat exec -n spire -it spire-server-0 -- spire-server "$@"; }
   '';
