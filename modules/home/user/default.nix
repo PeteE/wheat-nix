@@ -60,10 +60,9 @@
     htop
     gcc
     pgcli
-    usbutils
-    pavucontrol
     jq
     fx
     pwgen
+    python313Packages.json5
   ];
 }

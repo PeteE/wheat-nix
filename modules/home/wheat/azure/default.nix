@@ -21,6 +21,7 @@ in {
     home.packages = with pkgs-stable; [
       (azure-cli.withExtensions [
         azure-cli-extensions.virtual-wan
+        azure-cli-extensions.azure-firewall
       ])
     ];
   };

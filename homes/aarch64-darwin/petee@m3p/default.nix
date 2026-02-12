@@ -1,6 +1,8 @@
 {
   home,
   pkgs,
+  inputs,
+  system,
   ...
 }:
 {
@@ -22,6 +24,8 @@
   };
   home.packages = with pkgs; [
     vault
+    inputs.nixpkgs-stable.legacyPackages."${system}".tailscale
+    python312Packages.huggingface-hub
   ];
   home.stateVersion = "25.11";
 }
