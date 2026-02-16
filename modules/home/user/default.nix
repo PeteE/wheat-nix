@@ -4,8 +4,12 @@
     inputs,
     system,
     config,
+    lib,
     ...
 }:
+let
+  isDarwin = pkgs.stdenv.isDarwin;
+in
 {
   home = {
     username = config.snowfallorg.user.name;
@@ -60,10 +64,11 @@
     htop
     gcc
     pgcli
-    usbutils
-    pavucontrol
     jq
     fx
     pwgen
+  ] ++ lib.optionals (!isDarwin) [
+    usbutils
+    pavucontrol
   ];
 }
