@@ -12,13 +12,17 @@
 }:
 with lib; let
   cfg = config.wheat.azure;
+  pkgs-stable = inputs.nixpkgs-stable.legacyPackages."${system}";
 in {
   options.wheat.azure = {
     enable = mkEnableOption "Enable";
   };
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
-      azure-cli
+    home.packages = with pkgs-stable; [
+      (azure-cli.withExtensions [
+        azure-cli-extensions.virtual-wan
+        azure-cli-extensions.azure-firewall
+      ])
     ];
   };
 }

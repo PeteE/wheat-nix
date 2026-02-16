@@ -1,5 +1,9 @@
 # CLAUDE.md
 
+## TODO for homelab:
+- install gateway api and kgateway
+- install coco - try out cloud runtimeclass
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Overview

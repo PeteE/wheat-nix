@@ -1,0 +1,38 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: default-gateway-ingress
+  namespace: kgateway-system
+spec:
+  gatewayClassName: kgateway
+  listeners:
+    - name: http
+      port: 80
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: https
+      port: 443
+      protocol: HTTPS
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: gw-wheat-dn42-net-tls
+
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: gw-wheat-dn42-net
+  namespace: kgateway-system
+spec:
+  secretName: gw-wheat-dn42-net-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - "*.wheat-dn42.net"

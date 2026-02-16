@@ -3,6 +3,14 @@ stores:
     indent: 2
 
 creation_rules:
+  # Kubernetes secrets - encrypted for K8s operator + your machines
+  # Only encrypts values under 'data' or 'stringData' keys
+  - path_regex: k8s/.*secret.*\.yaml$
+    encrypted_regex: ^(data|stringData)$
+    age: >-
+      age17p9fjp7yvq3yqzjhjpf3zetv68878tguj5d6r3x3mdp7hv2sqevqgyg4au,
+      age1u8dqa38qkztrzcuppkezy7mt7500aa0yex65e7h7qxyze59sdgpssksa62
+  # NixOS/Home-manager secrets
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
     age: >-
       age1u8dqa38qkztrzcuppkezy7mt7500aa0yex65e7h7qxyze59sdgpssksa62,

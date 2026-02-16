@@ -63,6 +63,7 @@
         enable = true;
         bindAddress = "0.0.0.0";
         jwtIssuer = "https://oidc.wheat-dn42.net";
+        jwtKeyType = "rsa-2048";  # Azure AD requires RSA (doesn't support EC)
         x509pop = {
           enable = true;
           caBundlePath = "/etc/spire/x509pop-ca-bundle.pem";
@@ -115,7 +116,15 @@
       };
     };
   };
-  services.tailscale.enable = true;
+  # Tailscale subnet router and exit node for home network
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "server";  # enables IP forwarding
+    extraUpFlags = [
+      "--advertise-routes=192.168.1.0/24"
+      "--advertise-exit-node"
+    ];
+  };
 
   # SPIRE x509pop CA certificate for node attestation
   environment.etc."spire/x509pop-ca-bundle.pem" = {
@@ -204,7 +213,6 @@
       { domain = "idp.wheat-dn42.net"; answer = "192.168.1.173"; }  # rpi4 - Kanidm
       # Automation
       { domain = "mqtt.wheat-dn42.net"; answer = "192.168.1.245"; }
-      { domain = "node-red.wheat-dn42.net"; answer = "192.168.1.245"; }
       # Media
       { domain = "overseerr.wheat-dn42.net"; answer = "192.168.1.245"; }
       # Apps

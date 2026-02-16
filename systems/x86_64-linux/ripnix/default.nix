@@ -61,6 +61,7 @@
     };
     sudo.enable = true;
     xserver.enable = true;
+    coco.enable = true;
     secrets.enable = true;
     fonts.subpixelRgba = "bgr";  # Samsung curved monitor
     services.podman.enable = true;
@@ -68,6 +69,7 @@
 
     services.hyprland.enable = false;
     services.niri.enable = true;
+    services.clipcat.enable = true;
 
     virtualisation = {
       enable = true;

@@ -3,20 +3,20 @@
   lib,
   pkgs,
   config,
+  options,
   ...
 }:
 with lib; let
   cfg = config.wheat.niri;
   isDarwin = pkgs.stdenv.isDarwin;
+  hasNiri = options ? programs && options.programs ? niri;
 in {
   options.wheat.niri = {
     enable = mkEnableOption "Enable niri window manager home configuration";
   };
 
-  config = mkIf (cfg.enable && !isDarwin) (lib.optionalAttrs (!isDarwin) {
-    programs.niri = {
-      enable = true;
-      settings = {
+  config = mkIf (cfg.enable && !isDarwin && hasNiri) (optionalAttrs hasNiri {
+    programs.niri.settings = {
       input = {
         keyboard = {
           xkb = {};
@@ -90,6 +90,14 @@ in {
         }
         {
           matches = [{ app-id = "firefox$"; title = "^Picture-in-Picture$"; }];
+          open-floating = true;
+        }
+        {
+          matches = [{ app-id = "^thunar$"; }];
+          open-floating = true;
+        }
+        {
+          matches = [{ app-id = "^zoom$"; }];
           open-floating = true;
         }
         {
@@ -259,7 +267,6 @@ in {
         "Ctrl+Alt+Delete".action.quit = {};
         "Mod+Shift+P".action.power-off-monitors = {};
       };
-    };
     };
   });
 }

@@ -36,7 +36,6 @@
         "kubectl"
         "helm"
         "aliases"
-        "common-aliases"
         "direnv"
         "encode64"
         "extract"

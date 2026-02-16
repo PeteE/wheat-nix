@@ -49,6 +49,7 @@ with lib; let
         log_level = "${cfg.server.logLevel}"
         ca_ttl = "${cfg.server.caTtl}"
         default_x509_svid_ttl = "${cfg.server.defaultX509SvidTtl}"
+        jwt_key_type = "${cfg.server.jwtKeyType}"
         ${optionalString (cfg.server.jwtIssuer != null) ''jwt_issuer = "${cfg.server.jwtIssuer}"''}
 
         ${optionalString cfg.server.federation.enable ''
@@ -186,6 +187,16 @@ in {
           The JWT issuer URL. This is included in the 'iss' claim of JWT SVIDs.
           Required for OIDC federation with external services like AWS IAM.
           Should match the OIDC discovery provider URL (e.g., "https://oidc.example.com").
+        '';
+      };
+
+      jwtKeyType = mkOption {
+        type = types.enum ["ec-p256" "ec-p384" "rsa-2048" "rsa-4096"];
+        default = "ec-p256";
+        description = ''
+          The key type used for signing JWT SVIDs.
+          Use "rsa-2048" or "rsa-4096" for compatibility with Azure AD (which doesn't support EC).
+          AWS supports both EC and RSA algorithms.
         '';
       };
 

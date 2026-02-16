@@ -1,5 +1,6 @@
 {
     home,
+    pkgs,
     ...
 }:
 {
@@ -8,6 +9,10 @@
     kitty.font.size = 14.0;  # For scale 1.0 on ultrawide
     ollama.enable = false;
     distrobox.enable = true;
+    k8s = {
+      enable = true;
+      argocd.enable = true;
+    };
     ai = {
       enable = true;
       ollamaHost = "192.168.1.115"; # m4
@@ -38,8 +43,26 @@
   # notificaiton system
   services.mako = {
     enable = true;
+    defaultTimeout = 5000;  # 5 seconds in milliseconds
   };
 
+  # GTK theming (for thunar, etc.)
+  gtk = {
+    enable = true;
+    theme = {
+      name = "catppuccin-mocha-blue-standard";
+      package = pkgs.catppuccin-gtk.override {
+        variant = "mocha";
+        accents = [ "blue" ];
+      };
+    };
+    gtk3.extraConfig.gtk-application-prefer-dark-theme = true;
+    gtk4.extraConfig.gtk-application-prefer-dark-theme = true;
+  };
+
+  home.packages = with pkgs; [
+    socat
+  ];
   programs.noctalia-shell = {
     enable = true;
   };

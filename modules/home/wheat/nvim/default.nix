@@ -281,12 +281,12 @@ in {
         cmp-git
         vim-python-pep8-indent
         nvim-treesitter.withAllGrammars
-        nvim-treesitter-parsers.just
-        nvim-treesitter-parsers.rust
-        nvim-treesitter-parsers.yaml
-        nvim-treesitter-parsers.starlark
-        nvim-treesitter-textobjects
-        nvim-treesitter-refactor
+        # nvim-treesitter-parsers.just
+        # nvim-treesitter-parsers.rust
+        # nvim-treesitter-parsers.yaml
+        # nvim-treesitter-parsers.starlark
+        # nvim-treesitter-textobjects
+        # nvim-treesitter-refactor
         # rustaceanvim
         nvim-dap
         diffview-nvim
