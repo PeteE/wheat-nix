@@ -164,6 +164,7 @@
       nix-vscode-extensions.overlays.default
       nur.overlays.default
       claude-code.overlays.default
+      niri.overlays.niri
     ];
 
     channels-config = {

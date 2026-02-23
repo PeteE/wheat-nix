@@ -104,6 +104,7 @@
     };
   };
   environment.systemPackages = with pkgs; [
+    android-tools
     wheat.spire-cert-generator
     wireshark
     rpi-imager
@@ -251,7 +252,6 @@
     };
   };
 
-  programs.adb.enable = true;
   programs.uwsm.enable = true;
   system.stateVersion = "25.11";
 }

@@ -61,11 +61,7 @@ in {
           urgent.color = "#9b0000";
         };
         shadow = {
-          enable = true;
-          softness = 30;
-          spread = 5;
-          offset = { x = 0; y = 5; };
-          color = "#0007";
+          enable = false;
         };
       };
 
@@ -81,7 +77,7 @@ in {
 
       screenshot-path = "~/scrot/screen-%Y%m%dT%H%M%SZ.png";
 
-      animations = {};
+      animations.enable = false;
 
       window-rules = [
         {

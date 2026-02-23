@@ -11,12 +11,11 @@
     distrobox.enable = true;
     ai = {
       enable = true;
+
       ollamaHost = "192.168.1.115"; # m4
       mcp.enable = true;
-      claude-sessions.enable = true;
       aichat.enable = true;
-      opencommit.enable = false;
-      ccr.enable = false;
+      opencommit.enable = true;
     };
 
     misc.enable = true;
@@ -28,7 +27,7 @@
     hyprland.enable = false;
     devenv.enable = true;
     zed-editor.enable = true;
-    vscode.enable = true;
+    # vscode.enable = true;
     aws.enable = true;
     azure.enable = true;
     dev-tools.enable = true;
@@ -40,7 +39,10 @@
   };
 
   home.packages = with pkgs; [
-      spotify
+    miro
+    spotify
+    pandoc
+    tectonic
   ];
 
   programs.zsh.initContent = ''
