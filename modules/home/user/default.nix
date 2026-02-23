@@ -64,5 +64,6 @@
     fx
     pwgen
     python313Packages.json5
+    gum
   ];
 }
