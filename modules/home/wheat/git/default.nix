@@ -24,9 +24,9 @@ in {
       source = ./catppuccin.gitconfig;
     };
 
-    home.packages = mkIf cfg.openCommit [
-      pkgs.opencommit
-    ];
+    # home.packages = mkIf cfg.openCommit [
+    #   pkgs.opencommit
+    # ];
     home.sessionVariables = {
       GIT_EDITOR = "${pkgs.neovim}/bin/nvim";
     };

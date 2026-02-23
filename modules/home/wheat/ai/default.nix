@@ -22,27 +22,8 @@ in {
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       claude-code
-      opencommit
     ];
-
-    home.file.".opencommit" = {
-      text = ''
-        OCO_AI_PROVIDER=openai
-        OCO_MODEL=qwen2:7b
-        OCO_API_URL='https://llm.wheat-dn42.net/'
-        OCO_API_KEY=undefined
-        OCO_API_CUSTOM_HEADERS=undefined
-        OCO_TOKENS_MAX_INPUT=4096
-        OCO_TOKENS_MAX_OUTPUT=500
-        OCO_EMOJI=false
-        OCO_LANGUAGE=en
-        OCO_MESSAGE_TEMPLATE_PLACEHOLDER=$msg
-        OCO_PROMPT_MODULE=conventional-commit
-        OCO_ONE_LINE_COMMIT=false
-        OCO_TEST_MOCK_TYPE=commit-message
-        OCO_GITPUSH=true
-      '';
-    };
+    
     # sops.secrets."aichat" = {
     #   path = "${config.home.homeDirectory}/.config/aichat/config.yaml";
     # };
@@ -54,6 +35,7 @@ in {
     #   OLLAMA_HOST = "192.168.1.115";
     # };
 
+    sops.secrets.openrouerApiKey = { };
     sops.secrets.openaiApiKey = { };
     # sops.secrets.anthropicApiKey = { };
     sops.secrets.assemblyAiApiKey = { };
@@ -62,6 +44,7 @@ in {
       envExtra = ''
         export OLLAMA_HOST=${cfg.ollamaHost}
         export OPENAI_API_KEY=$(cat ${config.sops.secrets.openaiApiKey.path})
+        export OPENROUTER_API_KEY=$(cat ${config.sops.secrets.openrouerApiKey.path})
         # export ANTHROPIC_API_KEY=""
         export ASSEMBLYAI_API_KEY=$(cat ${config.sops.secrets.assemblyAiApiKey.path})
         export OPAQUE_GITHUB_TOKEN=$(cat ${config.sops.secrets.opaqueGithubToken.path})

@@ -17,6 +17,7 @@
     aws.enable = true;
     dev-tools.enable = true;
     ai.enable = true;
+    ai.mcp.enable = true;
     gcloud.enable = true;
     embedded.enable = false;
     yazi.enable = true;

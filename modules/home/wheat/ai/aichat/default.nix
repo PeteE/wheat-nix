@@ -10,6 +10,26 @@ with lib; let
 in {
   options.wheat.ai.aichat = {
     enable = mkEnableOption "Enable";
+    settings = mkOption {
+      type = types.attrs;
+      default = {
+        clients = [
+          {
+            type = "openai-compatible";
+            name = "m4";
+            api_base = "http://m4:8080/v1";
+            models = [
+              {
+                name = "mistral:7b";
+                max_input_tokens = 8192;
+                supports_function_calling = true;
+              }
+            ];
+          }
+        ];
+      };
+      description = "Settings written to ~/.config/aichat/config.yaml";
+    };
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
@@ -17,6 +37,7 @@ in {
     ];
     programs.aichat = {
       enable = true;
+      settings = cfg.settings;
     };
     programs.zsh = {
       completionInit = ''

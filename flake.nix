@@ -168,6 +168,8 @@
       nix-vscode-extensions.overlays.default
       nur.overlays.default
       llama-cpp.overlays.default
+      claude-code.overlays.default
+      niri.overlays.niri
     ];
 
     channels-config = {

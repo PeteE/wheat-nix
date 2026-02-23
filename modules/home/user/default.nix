@@ -68,8 +68,6 @@ in
     fx
     pwgen
     python313Packages.json5
-  ] ++ lib.optionals (!isDarwin) [
-    usbutils
-    pavucontrol
+    gum
   ];
 }

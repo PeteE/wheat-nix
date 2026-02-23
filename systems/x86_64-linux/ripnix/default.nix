@@ -108,6 +108,19 @@
   systemd.services.spire-agent.after = [ "sops-nix.service" ];
   systemd.services.spire-agent.wants = [ "sops-nix.service" ];
 
+  # k3s Kubernetes cluster
+  services.k3s = {
+    enable = true;
+    role = "server";
+    extraFlags = toString [
+      "--disable=traefik"  # We'll use kgateway/Gateway API
+      "--write-kubeconfig-mode=644"
+      "--flannel-backend=host-gw"
+    ];
+  };
+
+  # Open firewall for k3s
+  networking.firewall.allowedTCPPorts = [ 6443 ];  # k3s API server
 
   networking.hostName = "ripnix";
   systemd.network.enable = true;
@@ -186,6 +199,7 @@
 
   networking.useDHCP = lib.mkDefault false;
 
+  environment.systemPackages = with pkgs; [ ];
 
   # Micro VMs
   microvm.vms = {
@@ -193,6 +207,7 @@
     #   flake = inputs.self;
     # };
   };
+
 
   nix.settings.trusted-users = [ "root" "petee" "pete" ];
   nix.settings.substituters = [ "https://nix-cache-dev.corp.tooling.opaque-int.com/opaque" ];
