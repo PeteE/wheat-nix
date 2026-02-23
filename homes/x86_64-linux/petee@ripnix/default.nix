@@ -29,8 +29,8 @@
     firefox.enable = true;
     hyprland.enable = false;
     devenv.enable = true;
-    zed-editor.enable = true;
-    vscode.enable = true;
+    # zed-editor.enable = true;
+    # vscode.enable = true;
     azure.enable = true;
     aws.enable = true;
     dev-tools.enable = true;
@@ -46,7 +46,6 @@
     defaultTimeout = 5000;  # 5 seconds in milliseconds
   };
 
-  # GTK theming (for thunar, etc.)
   gtk = {
     enable = true;
     theme = {

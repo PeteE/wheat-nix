@@ -41,7 +41,7 @@ in
       # fuzzel  # app launcher
       kitty
       xwayland-satellite
-      xfce.thunar
+      thunar
     ];
 
     environment.variables = {

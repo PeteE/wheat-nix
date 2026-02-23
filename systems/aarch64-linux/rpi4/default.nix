@@ -180,8 +180,12 @@
     email = "pete.perickson@gmail.com";
     defaultUpstream = "192.168.1.245";
     virtualHosts = {
-      "adguard.wheat-dn42.net" = { upstream = "localhost:3000"; };
-      "oidc.wheat-dn42.net" = { upstream = "localhost:8082"; };
+      "adguard.wheat-dn42.net" = {
+        upstream = "localhost:3000";
+      };
+      "oidc.wheat-dn42.net" = {
+        upstream = "localhost:8082";
+      };
       "spire-bundle.wheat-dn42.net" = {
         upstream = "localhost:8444";
         upstreamScheme = "https";
@@ -230,6 +234,12 @@
     ];
   };
 
+  environment.systemPackages = with pkgs; [
+    nodejs_22
+    gnumake
+    glibc
+    cmake
+  ];
   system.stateVersion = "25.11";
   nix.settings.trusted-users = [ "root" "petee" "pete" ];
   # nix.settings.substituters = [ "https://nix-cache-dev.corp.tooling.opaque-int.com/opaque" ];

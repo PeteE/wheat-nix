@@ -146,7 +146,7 @@
     xdg-utils # Collection of XDG desktop integration tools
     desktop-file-utils # for updating desktop database
     hicolor-icon-theme # Base fallback icon theme
-    xfce.thunar
+    thunar
   ];
   networking.useDHCP = true;
   networking.useNetworkd = true;

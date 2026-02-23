@@ -48,6 +48,18 @@ with lib; let
       };
     };
   };
+  # Build headers handler for a virtual host (if headers are configured)
+  hasHeaders = vhost: vhost.headers != {} || vhost.removeHeaders != [];
+  mkHeadersHandler = vhost: {
+    handler = "headers";
+    response = {
+      deferred = true;
+    } // optionalAttrs (vhost.headers != {}) {
+      set = mapAttrs (_: value: [ value ]) vhost.headers;
+    } // optionalAttrs (vhost.removeHeaders != []) {
+      delete = vhost.removeHeaders;
+    };
+  };
 
   # HTTP routes for virtual hosts
   virtualHostRoutes = mapAttrsToList (host: vhost: {
@@ -55,7 +67,9 @@ with lib; let
     handle = [{
       handler = "subroute";
       routes = [{
-        handle = [ (mkReverseProxyHandler vhost) ];
+        handle =
+          (optional (hasHeaders vhost) (mkHeadersHandler vhost))
+          ++ [ (mkReverseProxyHandler vhost) ];
       }];
     }];
     terminal = true;
@@ -163,6 +177,20 @@ in {
             type = types.bool;
             default = false;
             description = "Skip TLS verification for HTTPS upstreams (useful for SPIFFE endpoints)";
+          };
+          headers = mkOption {
+            type = types.attrsOf types.str;
+            default = {};
+            description = "Response headers to set (header name -> value)";
+            example = {
+              "Strict-Transport-Security" = "max-age=63072000; includeSubDomains; preload";
+            };
+          };
+          removeHeaders = mkOption {
+            type = types.listOf types.str;
+            default = [];
+            description = "Response header names to remove";
+            example = [ "Server" ];
           };
         };
       });
