@@ -66,6 +66,7 @@ in {
         # UsePAM yes
       '';
     };
+    services.tailscale.enable = true;
     environment.systemPackages = with pkgs; [
       tailscale
     ];

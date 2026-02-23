@@ -31,7 +31,8 @@
     # services.podman.enable = true;
   };
   environment.systemPackages = with pkgs; [
-    llama-cpp
+    inputs.nixpkgs-stable.legacyPackages."${system}".llama-cpp
+    python313Packages.huggingface-hub
   ];
   nix.settings.trusted-users = [
     "pete"

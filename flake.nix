@@ -76,6 +76,10 @@
       url = "github:sadjow/claude-code-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    llama-cpp = {
+      url = "github:ggml-org/llama.cpp";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = { self, ... }@inputs: inputs.snowfall-lib.mkFlake {
     inherit inputs;
@@ -163,7 +167,7 @@
     overlays = with inputs; [
       nix-vscode-extensions.overlays.default
       nur.overlays.default
-      claude-code.overlays.default
+      llama-cpp.overlays.default
     ];
 
     channels-config = {
