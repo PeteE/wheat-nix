@@ -16,36 +16,6 @@
       mcp.enable = true;
       aichat.enable = true;
       opencommit.enable = true;
-      # ccr = {
-      #   enable = true;
-      #   providers = [
-      #     {
-      #       name = "openai";
-      #       api_base_url = "https://api.openai.com/v1/chat/completions";
-      #       api_key = "$OPENAI_API_KEY";
-      #       models = ["gpt-5-nano" "gpt-5"];
-      #     }
-      #     {
-      #       name = "openrouter";
-      #       api_base_url = "https://openrouter.ai/api/v1/chat/completions";
-      #       api_key = "$OPENROUTER_API_KEY";
-      #       models = ["openrouter/free"];
-      #     }
-      #     {
-      #       name = "m4";
-      #       api_base_url = "http://m4:8080/v1/chat/completions";
-      #       api_key = "dummy";
-      #       models = ["mistral"];
-      #     }
-      #   ];
-      #   router = {
-      #     # default = "openai,gpt-5";
-      #     default = "openrouter,openrouter/free";
-      #     background = "m4,mistral";
-      #     longContextThreshold = 60000;
-      #     webSearch = "openai,gpt-5";
-      #   };
-      # };
     };
 
     misc.enable = true;
