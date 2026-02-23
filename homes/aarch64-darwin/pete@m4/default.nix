@@ -7,7 +7,7 @@
     ollama.enable = false;
     entertainment.vlc.enable = false;
     misc.enable = true;
-    vscode.enable = true;
+    # vscode.enable = true;
     azure.enable = true;
     aws.enable = true;
     dev-tools.enable = true;
