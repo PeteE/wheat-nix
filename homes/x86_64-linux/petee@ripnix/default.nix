@@ -17,7 +17,6 @@
       enable = true;
       ollamaHost = "192.168.1.115"; # m4
       mcp.enable = true;
-      claude-sessions.enable = true;
       aichat.enable = true;
     };
     chromium.enable = true;
