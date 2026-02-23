@@ -182,6 +182,11 @@
     virtualHosts = {
       "adguard.wheat-dn42.net" = { upstream = "localhost:3000"; };
       "oidc.wheat-dn42.net" = { upstream = "localhost:8082"; };
+      "oidc-discovery.op3.wheat-dn42.net" = {
+        upstream = "192.168.1.40:443";
+        upstreamScheme = "https";
+        upstreamTlsInsecure = true;  # SPIRE uses SPIFFE certs, not web PKI
+      };
       "spire-bundle.wheat-dn42.net" = {
         upstream = "localhost:8444";
         upstreamScheme = "https";
@@ -211,6 +216,7 @@
       { domain = "authentik.wheat-dn42.net"; answer = "192.168.1.245"; }
       { domain = "s3.wheat-dn42.net"; answer = "192.168.1.245"; }
       { domain = "idp.wheat-dn42.net"; answer = "192.168.1.173"; }  # rpi4 - Kanidm
+      { domain = "oidc-discovery.op3.wheat-dn42.net"; answer = "192.168.1.40"; }  # Gateway on wheat-k3s cluster
       # Automation
       { domain = "mqtt.wheat-dn42.net"; answer = "192.168.1.245"; }
       # Media

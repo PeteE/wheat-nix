@@ -16,15 +16,11 @@ in
   config = mkIf cfg.enable {
     programs.niri = {
       enable = true;
+      package = pkgs.niri-unstable;
     };
     programs.xwayland = {
       enable = true;
     };
-    # programs.niri.settings = {
-    #   spawn-at-startup = [
-    #     { command = ["xwayland-satellite"]; }  # or handled automatically
-    #   ];
-    # };
     services.displayManager.sddm = {
       enable = true;
       wayland.enable = true;
@@ -38,11 +34,17 @@ in
       swaylock
       catppuccin-cursors
       wheat.rofi-scripts
-      # fuzzel  # app launcher
       kitty
       xwayland-satellite
-      xfce.thunar
+      thunar
+      gpu-screen-recorder # screen recording backend for noctalia-shell
+      quickshell # provides `qs` CLI for noctalia-shell IPC
     ];
+
+    xdg.portal = {
+      enable = true;
+      extraPortals = [ pkgs.xdg-desktop-portal-gnome ];
+    };
 
     environment.variables = {
       NIXOS_OZONE_WL = "1";

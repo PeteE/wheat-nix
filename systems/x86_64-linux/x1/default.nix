@@ -104,6 +104,7 @@
     };
   };
   environment.systemPackages = with pkgs; [
+    android-tools
     wheat.spire-cert-generator
     wireshark
     rpi-imager
@@ -146,7 +147,7 @@
     xdg-utils # Collection of XDG desktop integration tools
     desktop-file-utils # for updating desktop database
     hicolor-icon-theme # Base fallback icon theme
-    xfce.thunar
+    thunar
   ];
   networking.useDHCP = true;
   networking.useNetworkd = true;
@@ -251,7 +252,6 @@
     };
   };
 
-  programs.adb.enable = true;
   programs.uwsm.enable = true;
   system.stateVersion = "25.11";
 }
