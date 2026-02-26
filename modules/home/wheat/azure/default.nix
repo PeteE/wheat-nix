@@ -23,7 +23,7 @@ in {
       (azure-cli.withExtensions [
         azure-cli-extensions.virtual-wan
         azure-cli-extensions.azure-firewall
-        azure-cli-extensions.serial-console
+        # azure-cli-extensions.serial-console
       ])
     ];
   };

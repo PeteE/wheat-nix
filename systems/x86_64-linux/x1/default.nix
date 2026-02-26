@@ -122,7 +122,14 @@
     exfat
     libinput
     libnotify
+
+    # screenshot stuff
     slurp
+    grim
+    grimblast
+    satty
+    # swappy
+
     bluez
     bluez-tools
     blueman
