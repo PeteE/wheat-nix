@@ -68,7 +68,6 @@
     remote-builder-client = {
       enable = true;
     };
-    services.hyprland.enable = false;
     services.niri.enable = true;
   };
 

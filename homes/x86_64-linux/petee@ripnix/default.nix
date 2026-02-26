@@ -26,7 +26,6 @@
     rofi.enable = true;
     clipcat.enable = true;
     firefox.enable = true;
-    hyprland.enable = false;
     devenv.enable = true;
     # zed-editor.enable = true;
     # vscode.enable = true;

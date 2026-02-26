@@ -67,7 +67,6 @@
     services.podman.enable = true;
     remote-builder.enable = true;
 
-    services.hyprland.enable = false;
     services.niri.enable = true;
     services.clipcat.enable = true;
 
