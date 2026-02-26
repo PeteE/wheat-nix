@@ -68,7 +68,7 @@
     remote-builder-client = {
       enable = true;
     };
-    services.hyprland.enable = true;
+    services.hyprland.enable = false;
     services.niri.enable = true;
   };
 
@@ -122,13 +122,7 @@
     exfat
     libinput
     libnotify
-
-    # screenshot stuff
-    slurp
-    grim
-    grimblast
-    satty
-    # swappy
+    alacritty
 
     bluez
     bluez-tools

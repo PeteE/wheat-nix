@@ -24,6 +24,7 @@ in {
         };
         touchpad = {
           tap = true;
+          natural-scroll = false;
         };
         mouse = {};
         trackball = {
@@ -38,7 +39,9 @@ in {
       outputs."DP-1" = {
         scale = 1.0;
       };
-
+      outputs."eDP-1" = {
+        scale = 1.2;
+      };
       layout = {
         gaps = 16;
         center-focused-column = "never";
@@ -94,6 +97,10 @@ in {
         }
         {
           matches = [{ app-id = "^zoom$"; }];
+          open-floating = true;
+        }
+        {
+          matches = [{ app-id = "com\\.gabm\\.satty$"; }];
           open-floating = true;
         }
         {
@@ -253,6 +260,7 @@ in {
         "Mod+W".action.toggle-column-tabbed-display = {};
 
         # Screenshots
+        "Mod+Shift+S".action.spawn = ["sh" "-c" ''grim -g "$(slurp -b '#00000080' -c '#17929980' -s '#ffffff10' -B '#ffffffff' -w 3 -d)" - | satty -f -''];
         "Print".action.screenshot = {};
         "Ctrl+Print".action.screenshot-screen = {};
         "Alt+Print".action.screenshot-window = {};

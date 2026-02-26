@@ -37,6 +37,7 @@
     embedded.enable = true;
     attic-client.enable = true;
     signal.enable = true;
+    screenshot.enable = true;
   };
 
   # notificaiton system

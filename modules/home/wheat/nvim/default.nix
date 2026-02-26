@@ -592,7 +592,7 @@ in {
       ];
       withPython3 = true;
       withNodeJs = true;
-      extraLuaConfig = ''
+      initLua = ''
         vim.o.clipboard = "unnamedplus"
         -- vim.o.diffopt:append("iwhiteall")
         vim.g.mapleader = ","

@@ -82,6 +82,14 @@
       # Disable pager for systemd tools (journalctl, systemctl, etc.)
       export SYSTEMD_PAGER=""
 
+      # fzf-tab configuration (must be set before sourcing)
+      # disable standard completion menu so fzf-tab can capture completions
+      zstyle ':completion:*' menu no
+      # use common prefix of completions as query, not the user input
+      zstyle ':fzf-tab:*' query-string prefix
+      # enable filename colorizing
+      zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"
+
       # enable fzf-tab
       source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
 

@@ -36,7 +36,13 @@ in
 
   programs.ssh = {
     enable = true;
+    enableDefaultConfig = false;
     matchBlocks = {
+      "*" = {
+        extraOptions = {
+          "AddKeysToAgent" = "yes";
+        };
+      };
       "m4" = {
         user = "pete";
       };
