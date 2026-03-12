@@ -32,6 +32,9 @@
         "disk"
       ];
     };
+    services.n8n = {
+      enable = true;
+    };
 
     # SPIRE agent connecting to rpi4 server
     services.spire = {
@@ -103,6 +106,7 @@
     };
   };
   environment.systemPackages = with pkgs; [
+    usbutils
     android-tools
     wheat.spire-cert-generator
     wireshark

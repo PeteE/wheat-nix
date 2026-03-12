@@ -44,6 +44,9 @@
     spotify
     pandoc
     tectonic
+
+    # neato tui for network
+    inputs.matthart1983-netwatch.packages."${pkgs.system}".netwatch
   ];
 
   programs.zsh.initContent = ''
