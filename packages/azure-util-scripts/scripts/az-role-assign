@@ -94,9 +94,27 @@ case "$ASSIGNEE_TYPE" in
     ASSIGNEE_LABEL=$(az ad signed-in-user show --query userPrincipalName -o tsv 2>/dev/null)
     ;;
   "Another user (by email/UPN)")
-    UPN=$(gum input --placeholder="user@example.com" --header="Enter user email or UPN")
-    ASSIGNEE=$(az ad user show --id "$UPN" --query id -o tsv 2>/dev/null) || die "User not found: $UPN"
-    ASSIGNEE_LABEL="$UPN"
+    SEARCH=$(gum input --placeholder="adam or user@example.com" --header="Search by name or enter exact email/UPN")
+    if [[ "$SEARCH" == *@* ]]; then
+      # Exact email/UPN lookup
+      info "Looking up '$SEARCH'..."
+      ASSIGNEE=$(az ad user show --id "$SEARCH" --query id -o tsv 2>/dev/null) || die "User not found: $SEARCH"
+      ASSIGNEE_LABEL=$(az ad user show --id "$SEARCH" --query displayName -o tsv 2>/dev/null)
+    else
+      # Name prefix search
+      info "Searching users matching '$SEARCH'..."
+      USERS_JSON=$(az ad user list --display-name "$SEARCH" \
+        --query "[].{name:displayName, upn:userPrincipalName, id:id}" -o json 2>/dev/null)
+      USER_COUNT=$(echo "$USERS_JSON" | jq length)
+      if [[ "$USER_COUNT" -eq 0 ]]; then
+        die "No users found matching: $SEARCH"
+      fi
+      USER_LINE=$(echo "$USERS_JSON" \
+        | jq -r '.[] | "\(.name) <\(.upn)>\t\(.id)"' \
+        | fzf --prompt="User > " --header="Select user" --delimiter='\t' --with-nth=1)
+      ASSIGNEE=$(echo "$USER_LINE" | cut -f2)
+      ASSIGNEE_LABEL=$(echo "$USER_LINE" | cut -f1)
+    fi
     ;;
   "Service principal (by display name)")
     info "Fetching service principals..."
@@ -191,19 +209,31 @@ gum style --border rounded --padding "1 2" --border-foreground 3 \
   "Scope:    $SCOPE_LABEL"
 echo ""
 
-gum confirm "Create this role assignment?" || { info "Cancelled."; exit 0; }
+PRINCIPAL_TYPE="$(
+  case "$ASSIGNEE_TYPE" in
+    "Me (current signed-in user)"|"Another user (by email/UPN)") echo "User" ;;
+    "Service principal (by display name)") echo "ServicePrincipal" ;;
+    "Managed identity (by name)") echo "ServicePrincipal" ;;
+  esac
+)"
 
-info "Creating role assignment..."
+AZ_CMD="az role assignment create \\
+  --role \"$SELECTED_ROLE\" \\
+  --assignee-object-id \"$ASSIGNEE\" \\
+  --assignee-principal-type \"$PRINCIPAL_TYPE\" \\
+  --scope \"$SCOPE\" \\
+  -o table"
+
+echo ""
+gum style --foreground 245 "$AZ_CMD"
+echo ""
+
+gum confirm "Run this command?" || { info "Cancelled."; exit 0; }
+
 az role assignment create \
   --role "$SELECTED_ROLE" \
   --assignee-object-id "$ASSIGNEE" \
-  --assignee-principal-type "$(
-    case "$ASSIGNEE_TYPE" in
-      "Me (current signed-in user)"|"Another user (by email/UPN)") echo "User" ;;
-      "Service principal (by display name)") echo "ServicePrincipal" ;;
-      "Managed identity (by name)") echo "ServicePrincipal" ;;
-    esac
-  )" \
+  --assignee-principal-type "$PRINCIPAL_TYPE" \
   --scope "$SCOPE" \
   -o table
 
