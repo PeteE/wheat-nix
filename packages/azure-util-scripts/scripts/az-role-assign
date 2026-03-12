@@ -94,20 +94,18 @@ case "$ASSIGNEE_TYPE" in
     ASSIGNEE_LABEL=$(az ad signed-in-user show --query userPrincipalName -o tsv 2>/dev/null)
     ;;
   "Another user (by email/UPN)")
-    SEARCH=$(gum input --placeholder="adam or user@example.com" --header="Search by name or enter exact email/UPN")
+    SEARCH=$(gum input --placeholder="adam or user@opaque.co" --header="Search by name or enter exact email/UPN")
     if [[ "$SEARCH" == *@* ]]; then
-      # Exact email/UPN lookup
       info "Looking up '$SEARCH'..."
       ASSIGNEE=$(az ad user show --id "$SEARCH" --query id -o tsv 2>/dev/null) || die "User not found: $SEARCH"
       ASSIGNEE_LABEL=$(az ad user show --id "$SEARCH" --query displayName -o tsv 2>/dev/null)
     else
-      # Name prefix search
       info "Searching users matching '$SEARCH'..."
       USERS_JSON=$(az ad user list --display-name "$SEARCH" \
         --query "[].{name:displayName, upn:userPrincipalName, id:id}" -o json 2>/dev/null)
       USER_COUNT=$(echo "$USERS_JSON" | jq length)
       if [[ "$USER_COUNT" -eq 0 ]]; then
-        die "No users found matching: $SEARCH"
+        die "No users found matching: $SEARCH (you may lack Azure AD read permissions in this tenant)"
       fi
       USER_LINE=$(echo "$USERS_JSON" \
         | jq -r '.[] | "\(.name) <\(.upn)>\t\(.id)"' \
