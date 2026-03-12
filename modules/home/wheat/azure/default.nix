@@ -25,6 +25,7 @@ in {
         azure-cli-extensions.azure-firewall
         # azure-cli-extensions.serial-console
       ])
+      wheat.azure-util-scripts
     ];
   };
 }

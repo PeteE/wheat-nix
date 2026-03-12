@@ -28,6 +28,7 @@ in {
       nodejs_22
       postgresql_18
       vim
+      lego
       jq
     ];
   };

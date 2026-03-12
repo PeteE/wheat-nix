@@ -1,0 +1,211 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# az-role-assign: Interactively assign common Azure RBAC roles using gum + fzf
+
+# ── Helpers ──────────────────────────────────────────────────────────────────
+
+die() { gum style --foreground 1 "ERROR: $*"; exit 1; }
+info() { gum style --foreground 4 "$*"; }
+success() { gum style --foreground 2 "$*"; }
+
+require_cmd() {
+  for cmd in "$@"; do
+    command -v "$cmd" &>/dev/null || die "Missing required command: $cmd"
+  done
+}
+
+require_cmd az gum fzf jq
+
+# ── Role definitions ─────────────────────────────────────────────────────────
+
+declare -A ROLE_DESCRIPTIONS=(
+  ["Storage Blob Data Reader"]="Read-only access to blob data"
+  ["Storage Blob Data Contributor"]="Read/write/delete blob data"
+  ["Key Vault Administrator"]="Full access to Key Vault secrets, keys, and certificates"
+  ["Key Vault Secrets User"]="Read secret contents (not metadata)"
+  ["Azure Kubernetes Service Cluster User Role"]="List AKS cluster credentials"
+  ["Azure Kubernetes Service RBAC Reader"]="Read-only access to AKS resources"
+)
+
+# Ordered list for display
+ROLES=(
+  "Storage Blob Data Reader"
+  "Storage Blob Data Contributor"
+  "Key Vault Administrator"
+  "Key Vault Secrets User"
+  "Azure Kubernetes Service Cluster User Role"
+  "Azure Kubernetes Service RBAC Reader"
+)
+
+# Resource types to query per role category
+declare -A ROLE_RESOURCE_TYPE=(
+  ["Storage Blob Data Reader"]="Microsoft.Storage/storageAccounts"
+  ["Storage Blob Data Contributor"]="Microsoft.Storage/storageAccounts"
+  ["Key Vault Administrator"]="Microsoft.KeyVault/vaults"
+  ["Key Vault Secrets User"]="Microsoft.KeyVault/vaults"
+  ["Azure Kubernetes Service Cluster User Role"]="Microsoft.ContainerService/managedClusters"
+  ["Azure Kubernetes Service RBAC Reader"]="Microsoft.ContainerService/managedClusters"
+)
+
+# ── Step 1: Pick subscription ────────────────────────────────────────────────
+
+info "Fetching subscriptions..."
+SUBS_JSON=$(az account list --query "[].{name:name, id:id}" -o json 2>/dev/null)
+SUB_COUNT=$(echo "$SUBS_JSON" | jq length)
+
+if [[ "$SUB_COUNT" -eq 0 ]]; then
+  die "No subscriptions found. Run 'az login' first."
+fi
+
+SUBSCRIPTION=$(echo "$SUBS_JSON" \
+  | jq -r '.[] | "\(.name)\t\(.id)"' \
+  | fzf --prompt="Subscription > " --header="Select Azure subscription" --delimiter='\t' --with-nth=1 \
+  | cut -f2)
+
+[[ -z "$SUBSCRIPTION" ]] && die "No subscription selected"
+info "Using subscription: $SUBSCRIPTION"
+
+# ── Step 2: Pick role ────────────────────────────────────────────────────────
+
+ROLE_DISPLAY=()
+for role in "${ROLES[@]}"; do
+  ROLE_DISPLAY+=("$role  --  ${ROLE_DESCRIPTIONS[$role]}")
+done
+
+SELECTED_ROLE_LINE=$(printf '%s\n' "${ROLE_DISPLAY[@]}" \
+  | fzf --prompt="Role > " --header="Select RBAC role to assign")
+
+[[ -z "$SELECTED_ROLE_LINE" ]] && die "No role selected"
+SELECTED_ROLE="${SELECTED_ROLE_LINE%%  --  *}"
+info "Selected role: $SELECTED_ROLE"
+
+# ── Step 3: Pick assignee ───────────────────────────────────────────────────
+
+ASSIGNEE_TYPE=$(gum choose --header="Who should receive this role?" \
+  "Me (current signed-in user)" \
+  "Another user (by email/UPN)" \
+  "Service principal (by display name)" \
+  "Managed identity (by name)")
+
+case "$ASSIGNEE_TYPE" in
+  "Me (current signed-in user)")
+    ASSIGNEE=$(az ad signed-in-user show --query id -o tsv 2>/dev/null)
+    ASSIGNEE_LABEL=$(az ad signed-in-user show --query userPrincipalName -o tsv 2>/dev/null)
+    ;;
+  "Another user (by email/UPN)")
+    UPN=$(gum input --placeholder="user@example.com" --header="Enter user email or UPN")
+    ASSIGNEE=$(az ad user show --id "$UPN" --query id -o tsv 2>/dev/null) || die "User not found: $UPN"
+    ASSIGNEE_LABEL="$UPN"
+    ;;
+  "Service principal (by display name)")
+    info "Fetching service principals..."
+    SP_NAME=$(gum input --placeholder="my-service-principal" --header="Enter SP display name (or partial match)")
+    SP_JSON=$(az ad sp list --display-name "$SP_NAME" --query "[].{name:displayName, id:id}" -o json 2>/dev/null)
+    SP_COUNT=$(echo "$SP_JSON" | jq length)
+    if [[ "$SP_COUNT" -eq 0 ]]; then
+      die "No service principals found matching: $SP_NAME"
+    fi
+    SP_LINE=$(echo "$SP_JSON" \
+      | jq -r '.[] | "\(.name)\t\(.id)"' \
+      | fzf --prompt="SP > " --header="Select service principal" --delimiter='\t' --with-nth=1)
+    ASSIGNEE=$(echo "$SP_LINE" | cut -f2)
+    ASSIGNEE_LABEL=$(echo "$SP_LINE" | cut -f1)
+    ;;
+  "Managed identity (by name)")
+    info "Fetching managed identities in subscription..."
+    MI_JSON=$(az identity list --subscription "$SUBSCRIPTION" \
+      --query "[].{name:name, id:principalId, rg:resourceGroup}" -o json 2>/dev/null)
+    MI_COUNT=$(echo "$MI_JSON" | jq length)
+    if [[ "$MI_COUNT" -eq 0 ]]; then
+      die "No managed identities found in subscription"
+    fi
+    MI_LINE=$(echo "$MI_JSON" \
+      | jq -r '.[] | "\(.name) (\(.rg))\t\(.id)"' \
+      | fzf --prompt="Identity > " --header="Select managed identity" --delimiter='\t' --with-nth=1)
+    ASSIGNEE=$(echo "$MI_LINE" | cut -f2)
+    ASSIGNEE_LABEL=$(echo "$MI_LINE" | cut -f1)
+    ;;
+esac
+
+[[ -z "$ASSIGNEE" ]] && die "No assignee selected"
+info "Assignee: $ASSIGNEE_LABEL ($ASSIGNEE)"
+
+# ── Step 4: Pick scope (resource) ───────────────────────────────────────────
+
+RESOURCE_TYPE="${ROLE_RESOURCE_TYPE[$SELECTED_ROLE]}"
+
+SCOPE_CHOICE=$(gum choose --header="Select scope" \
+  "Pick a specific resource" \
+  "Entire resource group" \
+  "Enter scope manually")
+
+case "$SCOPE_CHOICE" in
+  "Pick a specific resource")
+    info "Fetching ${RESOURCE_TYPE} resources..."
+    RESOURCES_JSON=$(az resource list \
+      --subscription "$SUBSCRIPTION" \
+      --resource-type "$RESOURCE_TYPE" \
+      --query "[].{name:name, id:id, rg:resourceGroup}" \
+      -o json 2>/dev/null)
+
+    RES_COUNT=$(echo "$RESOURCES_JSON" | jq length)
+    if [[ "$RES_COUNT" -eq 0 ]]; then
+      die "No ${RESOURCE_TYPE} resources found in subscription"
+    fi
+
+    RES_LINE=$(echo "$RESOURCES_JSON" \
+      | jq -r '.[] | "\(.name) (\(.rg))\t\(.id)"' \
+      | fzf --prompt="Resource > " --header="Select resource" --delimiter='\t' --with-nth=1)
+
+    SCOPE=$(echo "$RES_LINE" | cut -f2)
+    SCOPE_LABEL=$(echo "$RES_LINE" | cut -f1)
+    ;;
+  "Entire resource group")
+    info "Fetching resource groups..."
+    RG_JSON=$(az group list --subscription "$SUBSCRIPTION" \
+      --query "[].{name:name, id:id}" -o json 2>/dev/null)
+
+    RG_LINE=$(echo "$RG_JSON" \
+      | jq -r '.[] | "\(.name)\t\(.id)"' \
+      | fzf --prompt="RG > " --header="Select resource group" --delimiter='\t' --with-nth=1)
+
+    SCOPE=$(echo "$RG_LINE" | cut -f2)
+    SCOPE_LABEL=$(echo "$RG_LINE" | cut -f1)
+    ;;
+  "Enter scope manually")
+    SCOPE=$(gum input --placeholder="/subscriptions/.../resourceGroups/..." --header="Enter full Azure resource ID")
+    SCOPE_LABEL="$SCOPE"
+    ;;
+esac
+
+[[ -z "$SCOPE" ]] && die "No scope selected"
+info "Scope: $SCOPE_LABEL"
+
+# ── Step 5: Confirm and assign ───────────────────────────────────────────────
+
+echo ""
+gum style --border rounded --padding "1 2" --border-foreground 3 \
+  "Role:     $SELECTED_ROLE" \
+  "Assignee: $ASSIGNEE_LABEL" \
+  "Scope:    $SCOPE_LABEL"
+echo ""
+
+gum confirm "Create this role assignment?" || { info "Cancelled."; exit 0; }
+
+info "Creating role assignment..."
+az role assignment create \
+  --role "$SELECTED_ROLE" \
+  --assignee-object-id "$ASSIGNEE" \
+  --assignee-principal-type "$(
+    case "$ASSIGNEE_TYPE" in
+      "Me (current signed-in user)"|"Another user (by email/UPN)") echo "User" ;;
+      "Service principal (by display name)") echo "ServicePrincipal" ;;
+      "Managed identity (by name)") echo "ServicePrincipal" ;;
+    esac
+  )" \
+  --scope "$SCOPE" \
+  -o table
+
+echo ""
+success "Role assignment created successfully!"

@@ -25,8 +25,12 @@
   };
   home.packages = with pkgs; [
     vault
+    azure-storage-azcopy
     inputs.nixpkgs-stable.legacyPackages."${system}".tailscale
     python312Packages.huggingface-hub
   ];
+  home.sessionVariables = {
+    AZCOPY_AUTO_LOGIN_TYPE = "AZCLI";
+  };
   home.stateVersion = "25.11";
 }
