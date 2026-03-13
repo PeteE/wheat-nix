@@ -24,11 +24,6 @@ in {
                 max_input_tokens = 8192;
                 supports_function_calling = true;
               }
-              # {
-              #   name = "mlx-community/GLM-4-9B-0414-4bit";
-              #   max_input_tokens = 8192;
-              #   supports_function_calling = true;
-              # }
             ];
           }
         ];

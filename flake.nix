@@ -127,7 +127,7 @@
         };
       };
       nodes.m4 = {
-        hostname = "192.168.1.115";
+        hostname = "192.168.1.149";
         fastConnection = true;
         interactiveSudo = false;
         remoteBuild = true;

@@ -15,7 +15,7 @@
     };
     ai = {
       enable = true;
-      ollamaHost = "192.168.1.115"; # m4
+      ollamaHost = "192.168.1.149"; # m4
       mcp.enable = true;
       aichat.enable = true;
     };

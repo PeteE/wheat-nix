@@ -17,5 +17,6 @@
   environment.systemPackages = with pkgs; [
     bridge-utils
     binwalk
+    sysstat
   ];
 }
