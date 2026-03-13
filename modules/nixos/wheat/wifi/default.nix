@@ -19,7 +19,7 @@ in {
     ];
     networking.wireless = {
       enable = true;
-      userControlled.enable = true;
+      userControlled = true;
       networks = {
         soma20_5g = {
           pskRaw = "121e447798031c71665a2728c57099b937b3a66b84b0ce21acb6ed7983a823ae";
