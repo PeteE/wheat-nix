@@ -33,6 +33,7 @@
   environment.systemPackages = with pkgs; [
     inputs.nixpkgs-stable.legacyPackages."${system}".llama-cpp
     python313Packages.huggingface-hub
+    macpm
   ];
   nix.settings.trusted-users = [
     "pete"
