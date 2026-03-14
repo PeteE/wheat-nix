@@ -40,7 +40,7 @@ in {
       settings = cfg.settings;
     };
     programs.zsh = {
-      completionInit = ''
+      initExtra = ''
         _aichat_zsh() {
           if [[ -n "$BUFFER" ]]; then
               local _old=$BUFFER
@@ -51,7 +51,6 @@ in {
           fi
         }
         zle -N _aichat_zsh
-        ${pkgs.wl-clipboard}/bin/wl-copy
         bindkey '\ee' _aichat_zsh
       '';
     };
