@@ -40,7 +40,7 @@
     user = {
       name = "petee";
       hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
-      extraGroups = ["wheel" "NetworkManager"];
+      extraGroups = ["wheel" "NetworkManager" "docker"];
     };
 
     # SPIRE agent connecting to rpi4 server
@@ -64,7 +64,7 @@
     coco.enable = true;
     secrets.enable = true;
     fonts.subpixelRgba = "bgr";  # Samsung curved monitor
-    services.podman.enable = true;
+    services.docker.enable = true;
     remote-builder.enable = true;
 
     services.niri.enable = true;

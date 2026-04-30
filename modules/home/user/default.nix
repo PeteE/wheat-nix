@@ -53,6 +53,7 @@ in
     mosquitto
     mqttx-cli
     zip
+    gnumake
     unzip
     dig
     bat
