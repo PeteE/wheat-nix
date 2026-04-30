@@ -20,6 +20,8 @@ require_cmd az gum fzf jq
 # ── Role definitions ─────────────────────────────────────────────────────────
 
 declare -A ROLE_DESCRIPTIONS=(
+  ["User Access Administrator"]="Manage Users and Roles"
+  ["Network Contributor"]="Manage vNets"
   ["Storage Blob Data Reader"]="Read-only access to blob data"
   ["Storage Blob Data Contributor"]="Read/write/delete blob data"
   ["Key Vault Administrator"]="Full access to Key Vault secrets, keys, and certificates"
@@ -30,6 +32,8 @@ declare -A ROLE_DESCRIPTIONS=(
 
 # Ordered list for display
 ROLES=(
+  "User Access Administrator"
+  "Network Contributor"
   "Storage Blob Data Reader"
   "Storage Blob Data Contributor"
   "Key Vault Administrator"
@@ -40,6 +44,8 @@ ROLES=(
 
 # Resource types to query per role category
 declare -A ROLE_RESOURCE_TYPE=(
+  ["User Access Administrator"]=""
+  ["Network Contributor"]="Microsoft.Network/virtualNetworks"
   ["Storage Blob Data Reader"]="Microsoft.Storage/storageAccounts"
   ["Storage Blob Data Contributor"]="Microsoft.Storage/storageAccounts"
   ["Key Vault Administrator"]="Microsoft.KeyVault/vaults"
@@ -86,7 +92,8 @@ ASSIGNEE_TYPE=$(gum choose --header="Who should receive this role?" \
   "Me (current signed-in user)" \
   "Another user (by email/UPN)" \
   "Service principal (by display name)" \
-  "Managed identity (by name)")
+  "Managed identity (by name)" \
+  "Enter object ID directly (skip Graph lookup)")
 
 case "$ASSIGNEE_TYPE" in
   "Me (current signed-in user)")
@@ -97,8 +104,27 @@ case "$ASSIGNEE_TYPE" in
     SEARCH=$(gum input --placeholder="adam or user@opaque.co" --header="Search by name or enter exact email/UPN")
     if [[ "$SEARCH" == *@* ]]; then
       info "Looking up '$SEARCH'..."
-      ASSIGNEE=$(az ad user show --id "$SEARCH" --query id -o tsv 2>/dev/null) || die "User not found: $SEARCH"
-      ASSIGNEE_LABEL=$(az ad user show --id "$SEARCH" --query displayName -o tsv 2>/dev/null)
+      if ASSIGNEE=$(az ad user show --id "$SEARCH" --query id -o tsv 2>/dev/null); then
+        ASSIGNEE_LABEL=$(az ad user show --id "$SEARCH" --query displayName -o tsv 2>/dev/null)
+      else
+        # UPN may differ from email; fall back to mail/otherMails search
+        info "Direct lookup failed, searching by email..."
+        USERS_JSON=$(az ad user list --filter "mail eq '$SEARCH' or otherMails/any(m:m eq '$SEARCH')" \
+          --query "[].{name:displayName, upn:userPrincipalName, id:id}" -o json 2>/dev/null)
+        USER_COUNT=$(echo "$USERS_JSON" | jq length)
+        if [[ "$USER_COUNT" -eq 0 ]]; then
+          die "User not found: $SEARCH"
+        elif [[ "$USER_COUNT" -eq 1 ]]; then
+          ASSIGNEE=$(echo "$USERS_JSON" | jq -r '.[0].id')
+          ASSIGNEE_LABEL=$(echo "$USERS_JSON" | jq -r '.[0].name')
+        else
+          USER_LINE=$(echo "$USERS_JSON" \
+            | jq -r '.[] | "\(.name) <\(.upn)>\t\(.id)"' \
+            | fzf --prompt="User > " --header="Multiple matches — select user" --delimiter='\t' --with-nth=1)
+          ASSIGNEE=$(echo "$USER_LINE" | cut -f2)
+          ASSIGNEE_LABEL=$(echo "$USER_LINE" | cut -f1)
+        fi
+      fi
     else
       info "Searching users matching '$SEARCH'..."
       USERS_JSON=$(az ad user list --display-name "$SEARCH" \
@@ -142,6 +168,15 @@ case "$ASSIGNEE_TYPE" in
     ASSIGNEE=$(echo "$MI_LINE" | cut -f2)
     ASSIGNEE_LABEL=$(echo "$MI_LINE" | cut -f1)
     ;;
+  "Enter object ID directly (skip Graph lookup)")
+    ASSIGNEE=$(gum input --placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" --header="Enter the principal's object ID (GUID)")
+    [[ -z "$ASSIGNEE" ]] && die "No object ID entered"
+    PRINCIPAL_TYPE_OVERRIDE=$(gum choose --header="What type of principal is this?" \
+      "User" \
+      "ServicePrincipal" \
+      "Group")
+    ASSIGNEE_LABEL="$ASSIGNEE (manual)"
+    ;;
 esac
 
 [[ -z "$ASSIGNEE" ]] && die "No assignee selected"
@@ -151,10 +186,16 @@ info "Assignee: $ASSIGNEE_LABEL ($ASSIGNEE)"
 
 RESOURCE_TYPE="${ROLE_RESOURCE_TYPE[$SELECTED_ROLE]}"
 
-SCOPE_CHOICE=$(gum choose --header="Select scope" \
-  "Pick a specific resource" \
-  "Entire resource group" \
-  "Enter scope manually")
+if [[ -n "$RESOURCE_TYPE" ]]; then
+  SCOPE_CHOICE=$(gum choose --header="Select scope" \
+    "Pick a specific resource" \
+    "Entire resource group" \
+    "Enter scope manually")
+else
+  SCOPE_CHOICE=$(gum choose --header="Select scope (no specific resource type for this role)" \
+    "Entire resource group" \
+    "Enter scope manually")
+fi
 
 case "$SCOPE_CHOICE" in
   "Pick a specific resource")
@@ -207,13 +248,13 @@ gum style --border rounded --padding "1 2" --border-foreground 3 \
   "Scope:    $SCOPE_LABEL"
 echo ""
 
-PRINCIPAL_TYPE="$(
+PRINCIPAL_TYPE="${PRINCIPAL_TYPE_OVERRIDE:-$(
   case "$ASSIGNEE_TYPE" in
     "Me (current signed-in user)"|"Another user (by email/UPN)") echo "User" ;;
     "Service principal (by display name)") echo "ServicePrincipal" ;;
     "Managed identity (by name)") echo "ServicePrincipal" ;;
   esac
-)"
+)}"
 
 AZ_CMD="az role assignment create \\
   --role \"$SELECTED_ROLE\" \\
