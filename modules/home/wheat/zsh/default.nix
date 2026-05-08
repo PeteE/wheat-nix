@@ -61,6 +61,7 @@
       nd = "nix develop -c zsh";
       vi = "nvim";
       vim = "nvim";
+      pb = "pbcopy";
       j = "just";
       netshoot = "kubectl run netshoot --rm -it --image=nicolaka/netshoot --restart=Never -- bash";
     };
