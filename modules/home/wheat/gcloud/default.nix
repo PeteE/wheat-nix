@@ -18,6 +18,7 @@ in {
           gke-gcloud-auth-plugin
         ]
       ))
+      uplosi
     ];
   };
 }

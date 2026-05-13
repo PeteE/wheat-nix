@@ -30,6 +30,7 @@ in {
       vim
       lego
       jq
+      pkg-config
     ];
   };
 }
