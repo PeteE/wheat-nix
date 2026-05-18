@@ -1,0 +1,23 @@
+---
+# Pre-commit hooks for wheat-nix.
+# Install once: `nix develop` (auto-runs `lefthook install`) or `lefthook install`.
+# Tools come from the flake devShell — run hooks from inside `nix develop`,
+# or rely on direnv to keep them in PATH.
+
+pre-commit:
+  parallel: true
+  jobs:
+    - name: nixfmt
+      glob: "*.nix"
+      stage_fixed: true
+      run: nixfmt {staged_files}
+
+    - name: statix
+      glob: "*.nix"
+      # statix check only accepts a single TARGET, so loop per file.
+      run: echo {staged_files} | xargs -n1 statix check
+
+    - name: deadnix
+      glob: "*.nix"
+      # -L: skip lambda attrset pattern names (snowfall module signatures)
+      run: deadnix -L --fail {staged_files}

@@ -4,9 +4,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.sudo;
-in {
+in
+{
   options.wheat.sudo = with types; {
     enable = mkOption {
       type = bool;

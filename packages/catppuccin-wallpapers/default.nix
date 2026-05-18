@@ -3,7 +3,7 @@
   inputs,
   namespace,
   pkgs,
-  stdenvNoCC
+  stdenvNoCC,
 }:
 stdenvNoCC.mkDerivation {
   name = "catppuccin-wallpapers";

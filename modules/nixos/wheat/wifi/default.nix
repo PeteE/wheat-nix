@@ -5,10 +5,12 @@
   inputs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.wifi;
   inherit (lib) mkEnableOption mkIf;
-in {
+in
+{
   options.wheat.wifi = {
     enable = mkEnableOption "Enable wifi";
   };

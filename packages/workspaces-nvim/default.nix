@@ -3,7 +3,7 @@
   inputs,
   namespace,
   pkgs,
-  stdenv
+  stdenv,
 }:
 pkgs.vimUtils.buildVimPlugin {
   pname = "workspaces-nvim";

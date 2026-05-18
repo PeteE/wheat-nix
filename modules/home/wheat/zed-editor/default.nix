@@ -4,16 +4,18 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.zed-editor;
-in {
+in
+{
   options.wheat.zed-editor = {
     enable = mkEnableOption "Enable";
   };
   config = mkIf cfg.enable {
     programs.zed-editor = {
       enable = true;
-      extensions = [ 
+      extensions = [
         "nix"
         "toml"
         "rust"
@@ -58,7 +60,12 @@ in {
           dock = "bottom";
           detect_venv = {
             on = {
-              directories = [ ".env" "env" ".venv" "venv" ];
+              directories = [
+                ".env"
+                "env"
+                ".venv"
+                "venv"
+              ];
               activate_script = "default";
             };
           };

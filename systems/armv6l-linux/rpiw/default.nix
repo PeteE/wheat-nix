@@ -1,19 +1,19 @@
 {
-    lib,
-    pkgs,
-    inputs,
-    namespace,
-    system,
-    target,
-    format,
-    virtual,
-    systems,
-    config,
-    modulesPath,
-    ...
+  lib,
+  pkgs,
+  inputs,
+  namespace,
+  system,
+  target,
+  format,
+  virtual,
+  systems,
+  config,
+  modulesPath,
+  ...
 }:
 {
-  imports = [ 
+  imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     (../../../modules/shared/wheat/default.nix)
     <nixpks/modules/installer/cd-dvd/sd-image-raspberrypi.nix>
@@ -27,7 +27,7 @@
     platform = lib.systems.platforms.raspberrypi;
   };
 
-  fileSystems = { 
+  fileSystems = {
     "/" = {
       device = "/dev/disk/by-label/NIXOS_SD";
       fsType = "ext4";
@@ -63,6 +63,10 @@
     wifi.enable = true;
   };
   system.stateVersion = "25.11";
-  nix.settings.trusted-users = [ "root" "petee" "pete" ];
+  nix.settings.trusted-users = [
+    "root"
+    "petee"
+    "pete"
+  ];
   # nix.settings.substituters = [ "https://nix-cache-dev.corp.tooling.opaque-int.com/opaque" ];
 }

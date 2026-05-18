@@ -1,20 +1,22 @@
 {
-    lib,
-    pkgs,
-    inputs,
-    namespace,
-    system,
-    target,
-    format,
-    virtual,
-    systems,
-    config,
-    ...
+  lib,
+  pkgs,
+  inputs,
+  namespace,
+  system,
+  target,
+  format,
+  virtual,
+  systems,
+  config,
+  ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.git;
   theme = "git/theme.gitconfig";
-in {
+in
+{
   options.wheat.git = with types; {
     enable = mkEnableOption "Enable";
     openCommit = mkEnableOption "Enable";
@@ -117,28 +119,28 @@ in {
       ];
 
       home.activation.seedGitConfig = config.lib.dag.entryAfter [ "writeBoundary" ] ''
-        gitconfig="${config.xdg.configHome}/git/config"
-        if [ ! -f "$gitconfig" ] || [ -L "$gitconfig" ]; then
-          # Remove stale symlink from previous managed mode
-          rm -f "$gitconfig"
-          mkdir -p "$(dirname "$gitconfig")"
-          cat > "$gitconfig" << 'GITCFG'
-[user]
-	email = pete.perickson@gmail.com
-	name = PeteE
-[core]
-	editor = ${pkgs.neovim}/bin/nvim
-[credential "https://github.com"]
-	helper = !f() { echo username=petee; echo password=$(${pkgs.gh}/bin/gh auth token); }; f
-[pull]
-	rebase = false
-[push]
-	default = current
-[include]
-	path = ~/.config/git/config.local
-GITCFG
-          run echo "Seeded mutable git config at $gitconfig"
-        fi
+                gitconfig="${config.xdg.configHome}/git/config"
+                if [ ! -f "$gitconfig" ] || [ -L "$gitconfig" ]; then
+                  # Remove stale symlink from previous managed mode
+                  rm -f "$gitconfig"
+                  mkdir -p "$(dirname "$gitconfig")"
+                  cat > "$gitconfig" << 'GITCFG'
+        [user]
+        	email = pete.perickson@gmail.com
+        	name = PeteE
+        [core]
+        	editor = ${pkgs.neovim}/bin/nvim
+        [credential "https://github.com"]
+        	helper = !f() { echo username=petee; echo password=$(${pkgs.gh}/bin/gh auth token); }; f
+        [pull]
+        	rebase = false
+        [push]
+        	default = current
+        [include]
+        	path = ~/.config/git/config.local
+        GITCFG
+                  run echo "Seeded mutable git config at $gitconfig"
+                fi
       '';
     })
   ]);

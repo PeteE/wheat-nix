@@ -5,9 +5,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.services.kanidm;
-in {
+in
+{
   options.wheat.services.kanidm = {
     enable = mkEnableOption "Kanidm identity management server";
 
@@ -30,7 +32,13 @@ in {
     };
 
     logLevel = mkOption {
-      type = types.enum [ "trace" "debug" "info" "warn" "error" ];
+      type = types.enum [
+        "trace"
+        "debug"
+        "info"
+        "warn"
+        "error"
+      ];
       default = "info";
       description = "Log level for Kanidm";
     };
@@ -57,75 +65,91 @@ in {
       enable = mkEnableOption "declarative provisioning of Kanidm";
 
       groups = mkOption {
-        type = types.attrsOf (types.submodule {
-          options = {
-            members = mkOption {
-              type = types.listOf types.str;
-              default = [];
-              description = "List of members (persons, groups) in this group";
+        type = types.attrsOf (
+          types.submodule {
+            options = {
+              members = mkOption {
+                type = types.listOf types.str;
+                default = [ ];
+                description = "List of members (persons, groups) in this group";
+              };
             };
-          };
-        });
-        default = {};
+          }
+        );
+        default = { };
         description = "Groups to provision in Kanidm";
         example = {
-          homelab-users = { members = [ "pete" ]; };
-          homelab-admins = { members = [ "pete" ]; };
+          homelab-users = {
+            members = [ "pete" ];
+          };
+          homelab-admins = {
+            members = [ "pete" ];
+          };
         };
       };
 
       persons = mkOption {
-        type = types.attrsOf (types.submodule {
-          options = {
-            displayName = mkOption {
-              type = types.str;
-              description = "Display name for the person";
+        type = types.attrsOf (
+          types.submodule {
+            options = {
+              displayName = mkOption {
+                type = types.str;
+                description = "Display name for the person";
+              };
+              mailAddresses = mkOption {
+                type = types.listOf types.str;
+                default = [ ];
+                description = "Email addresses for the person";
+              };
+              groups = mkOption {
+                type = types.listOf types.str;
+                default = [ ];
+                description = "Groups this person belongs to";
+              };
             };
-            mailAddresses = mkOption {
-              type = types.listOf types.str;
-              default = [];
-              description = "Email addresses for the person";
-            };
-            groups = mkOption {
-              type = types.listOf types.str;
-              default = [];
-              description = "Groups this person belongs to";
-            };
-          };
-        });
-        default = {};
+          }
+        );
+        default = { };
         description = "Persons to provision in Kanidm";
       };
 
       oauth2 = mkOption {
-        type = types.attrsOf (types.submodule {
-          options = {
-            displayName = mkOption {
-              type = types.str;
-              description = "Display name for the OAuth2 client";
+        type = types.attrsOf (
+          types.submodule {
+            options = {
+              displayName = mkOption {
+                type = types.str;
+                description = "Display name for the OAuth2 client";
+              };
+              originUrl = mkOption {
+                type = types.str;
+                description = "Origin URL for the OAuth2 client";
+              };
+              originLanding = mkOption {
+                type = types.str;
+                description = "Landing page URL after authentication";
+              };
+              allowInsecureClientDisablePkce = mkOption {
+                type = types.bool;
+                default = false;
+                description = "Allow clients that don't support PKCE (legacy apps)";
+              };
+              scopeMaps = mkOption {
+                type = types.attrsOf (types.listOf types.str);
+                default = { };
+                description = "Map Kanidm groups to OAuth2 scopes";
+                example = {
+                  "homelab-users" = [
+                    "openid"
+                    "profile"
+                    "email"
+                  ];
+                };
+              };
             };
-            originUrl = mkOption {
-              type = types.str;
-              description = "Origin URL for the OAuth2 client";
-            };
-            originLanding = mkOption {
-              type = types.str;
-              description = "Landing page URL after authentication";
-            };
-            allowInsecureClientDisablePkce = mkOption {
-              type = types.bool;
-              default = false;
-              description = "Allow clients that don't support PKCE (legacy apps)";
-            };
-            scopeMaps = mkOption {
-              type = types.attrsOf (types.listOf types.str);
-              default = {};
-              description = "Map Kanidm groups to OAuth2 scopes";
-              example = { "homelab-users" = [ "openid" "profile" "email" ]; };
-            };
-          };
-        });
-        default = {};
+          }
+        );
+        default = { };
         description = "OAuth2 clients to provision";
       };
     };
@@ -138,15 +162,15 @@ in {
     services.kanidm = {
       enableServer = true;
       enableClient = true;
-      package = pkgs.kanidm_1_8.withSecretProvisioning;  # Latest stable with secret provisioning
+      package = pkgs.kanidm_1_8.withSecretProvisioning; # Latest stable with secret provisioning
 
       clientSettings = {
         uri = "https://localhost:${toString cfg.bindPort}";
-        verify_ca = false;  # Using self-signed cert internally
+        verify_ca = false; # Using self-signed cert internally
       };
 
       serverSettings = {
-        domain = cfg.domain;
+        inherit (cfg) domain;
         origin = "https://${cfg.domain}";
         bindaddress = "${cfg.bindAddress}:${toString cfg.bindPort}";
         tls_chain = "/var/lib/kanidm/tls/chain.pem";
@@ -156,18 +180,18 @@ in {
 
       provision = mkIf cfg.provision.enable {
         enable = true;
-        adminPasswordFile = cfg.adminPasswordFile;
-        idmAdminPasswordFile = cfg.idmAdminPasswordFile;
+        inherit (cfg) adminPasswordFile;
+        inherit (cfg) idmAdminPasswordFile;
 
-        groups = mapAttrs (name: group: {
+        groups = mapAttrs (_name: group: {
           inherit (group) members;
         }) cfg.provision.groups;
 
-        persons = mapAttrs (name: person: {
+        persons = mapAttrs (_name: person: {
           inherit (person) displayName mailAddresses groups;
         }) cfg.provision.persons;
 
-        systems.oauth2 = mapAttrs (name: client: {
+        systems.oauth2 = mapAttrs (_name: client: {
           inherit (client) displayName originUrl originLanding;
           inherit (client) allowInsecureClientDisablePkce scopeMaps;
         }) cfg.provision.oauth2;

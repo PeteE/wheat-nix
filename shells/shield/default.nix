@@ -1,9 +1,9 @@
 {
-    lib,
-    inputs,
-    namespace,
-    pkgs,
-    ...
+  lib,
+  inputs,
+  namespace,
+  pkgs,
+  ...
 }:
 pkgs.mkShell {
   # Create your shell

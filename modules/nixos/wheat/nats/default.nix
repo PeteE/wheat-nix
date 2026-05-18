@@ -5,9 +5,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.services.nats;
-in {
+in
+{
   options.wheat.services.nats = {
     enable = mkEnableOption "nats";
   };

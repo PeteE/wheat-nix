@@ -1,32 +1,29 @@
 # vim: ts=2:sw=2:et
 {
-    lib,
-    pkgs,
-    inputs,
-    namespace,
-    system,
-    target,
-    format,
-    virtual,
-    systems,
-    config,
-    modulesPath,
-    ...
-  }: 
-  let 
-    foo = "bar";
-  in 
-  {
-    imports = [ 
-      (modulesPath + "/installer/scan/not-detected.nix")
-    ];
+  lib,
+  pkgs,
+  inputs,
+  namespace,
+  system,
+  target,
+  format,
+  virtual,
+  systems,
+  config,
+  modulesPath,
+  ...
+}:
+{
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
 
   wheat = {
     enable = true;
     user = {
       name = "azureuser";
       hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
-      extraGroups = ["wheel"];
+      extraGroups = [ "wheel" ];
     };
     sudo.enable = true;
     secrets.enable = true;
@@ -54,5 +51,8 @@
     htop
     sshguard
   ];
-  nix.settings.trusted-users = [ "root" "azureuser" ];
+  nix.settings.trusted-users = [
+    "root"
+    "azureuser"
+  ];
 }

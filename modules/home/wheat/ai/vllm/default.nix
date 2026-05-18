@@ -5,9 +5,11 @@
   inputs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.ai.vllm;
-in {
+in
+{
   options.wheat.ai.vllm = {
     enable = mkEnableOption "Enable";
   };

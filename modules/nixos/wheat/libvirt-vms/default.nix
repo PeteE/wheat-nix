@@ -5,10 +5,12 @@
   inputs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.libvirt-vms;
-  inherit (lib) mkEnableOption mkOption mkIf;
-in {
+  inherit (lib) mkEnableOption mkIf;
+in
+{
   options.wheat.libvirt-vms = {
     enable = mkEnableOption "Enable";
   };

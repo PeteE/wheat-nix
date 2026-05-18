@@ -1,13 +1,14 @@
-
 {
   lib,
   pkgs,
   config,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.minikube;
-in {
+in
+{
   options.wheat.minikube = {
     enable = mkEnableOption "Enable";
   };

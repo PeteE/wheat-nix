@@ -1,19 +1,20 @@
 # vim: ts=2:sw=2:et
 {
-    lib,
-    pkgs,
-    inputs,
-    namespace,
-    system,
-    target,
-    format,
-    virtual,
-    systems,
-    config,
-    modulesPath,
-    ...
+  lib,
+  pkgs,
+  inputs,
+  namespace,
+  system,
+  target,
+  format,
+  virtual,
+  systems,
+  config,
+  modulesPath,
+  ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.tmux;
   tmux-35 = pkgs.tmux.overrideAttrs (oldAttrs: rec {
     inherit (oldAttrs) pname;
@@ -25,7 +26,8 @@ with lib; let
       sha256 = "sha256-8CRZj7UyBhuB5QO27Y+tHG62S/eGxPOHWrwvh1aBqq0=";
     };
   });
-in {
+in
+{
   options.wheat.tmux = {
     enable = mkEnableOption "Enable";
     terminal = mkOption {
@@ -46,14 +48,14 @@ in {
       package = tmux-35;
       enable = true;
       shell = "${pkgs.zsh}/bin/zsh";
-      terminal = cfg.terminal;
+      inherit (cfg) terminal;
       secureSocket = true;
-      historyLimit = cfg.historyLimit;
-      keyMode = cfg.keyMode;
+      inherit (cfg) historyLimit;
+      inherit (cfg) keyMode;
       tmuxp.enable = true;
       plugins = with pkgs; [
         tmuxPlugins.sensible
-        { 
+        {
           plugin = tmuxPlugins.tmux-fzf;
           extraConfig = ''
             #TMUX_FZF_ORDER="session|window|pane|command|keybinding|clipboard|process"
@@ -102,7 +104,7 @@ in {
         # tmuxPlugins.session-wizard
         # tmuxPlugins.prefix-highlight
       ];
-      shortcut = "a";  # Ctrl-a
+      shortcut = "a"; # Ctrl-a
       mouse = true;
       sensibleOnTop = true;
       extraConfig = ''
@@ -160,19 +162,18 @@ in {
       '';
     };
     xdg.configFile."tmuxp/wheat-nix.yaml" = {
-       source = ./tmuxp/wheat-nix.yaml;
+      source = ./tmuxp/wheat-nix.yaml;
     };
     xdg.configFile."tmuxp/opaque-systems.yaml" = {
-       source = ./tmuxp/opaque-systems.yaml;
+      source = ./tmuxp/opaque-systems.yaml;
     };
     programs.zsh.envExtra = ''
       export DISABLE_AUTO_TITLE=true
     '';
     home.packages = with pkgs; [
-      lsof  # TODO(pete): probably not neccessary, can't remember
-      file  # TODO(pete): probably not neccessary, can't remember
+      lsof # TODO(pete): probably not neccessary, can't remember
+      file # TODO(pete): probably not neccessary, can't remember
       fzf
     ];
   };
 }
-

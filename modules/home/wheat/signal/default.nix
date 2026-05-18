@@ -1,13 +1,15 @@
 # vim: ts=2:sw=2:et
 {
-    lib,
-    pkgs,
-    config,
-    ...
+  lib,
+  pkgs,
+  config,
+  ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.signal;
-in {
+in
+{
   options.wheat.signal = {
     enable = mkEnableOption "Enable";
   };
@@ -17,4 +19,3 @@ in {
     ];
   };
 }
-

@@ -5,15 +5,17 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.services.cloudflare-dyndns;
-in {
+in
+{
   options.wheat.services.cloudflare-dyndns = {
     enable = mkEnableOption "Cloudflare Dynamic DNS";
 
     domains = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = "List of domain names to update";
       example = [ "home.example.com" ];
     };
@@ -22,7 +24,7 @@ in {
       type = types.str;
       default = "*:0/5";
       description = "How often to check/update DNS (systemd timer format)";
-      example = "*:0/15";  # every 15 minutes
+      example = "*:0/15"; # every 15 minutes
     };
 
     ipv4 = mkOption {
@@ -53,12 +55,12 @@ in {
 
     services.cloudflare-dyndns = {
       enable = true;
-      domains = cfg.domains;
+      inherit (cfg) domains;
       apiTokenFile = config.sops.secrets.cloudflare-token.path;
-      frequency = cfg.frequency;
-      ipv4 = cfg.ipv4;
-      ipv6 = cfg.ipv6;
-      proxied = cfg.proxied;
+      inherit (cfg) frequency;
+      inherit (cfg) ipv4;
+      inherit (cfg) ipv6;
+      inherit (cfg) proxied;
     };
 
     # Ensure secrets are decrypted before service runs

@@ -2,7 +2,7 @@
 
 pkgs.writeShellScriptBin "sclient" ''
   ADDRESS=$1
-  
+
   if [ -z "$ADDRESS" ]; then
     echo "Usage: sclient <hostname:port>"
     echo ""
@@ -14,7 +14,7 @@ pkgs.writeShellScriptBin "sclient" ''
     echo "  sclient google.com:443    # explicit port"
     exit 1
   fi
-  
+
   # Parse hostname and port from ADDRESS
   if [[ "$ADDRESS" == *":"* ]]; then
     HOST=$(echo "$ADDRESS" | cut -d: -f1)
@@ -25,7 +25,7 @@ pkgs.writeShellScriptBin "sclient" ''
     PORT=443
     FULL_ADDRESS="$ADDRESS:443"
   fi
-  
+
   ${pkgs.openssl}/bin/openssl s_client -connect "$FULL_ADDRESS" -servername "$HOST" </dev/null 2>/dev/null \
     | ${pkgs.openssl}/bin/openssl x509 -noout -dates -subject -issuer -ext subjectAltName
 ''

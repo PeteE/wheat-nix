@@ -9,9 +9,11 @@
   config,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.carapace;
-in {
+in
+{
   options.wheat.carapace = {
     enable = mkEnableOption "Enable";
   };

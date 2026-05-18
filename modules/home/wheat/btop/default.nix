@@ -9,9 +9,11 @@
   config,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.btop;
-in {
+in
+{
   options.wheat.btop = {
     enable = mkEnableOption "Enable";
   };
@@ -189,7 +191,7 @@ in {
         net_sync = true;
 
         #* Starts with the Network Interface specified here.
-        net_iface = "";  # TOOD(pete): host specific
+        net_iface = ""; # TOOD(pete): host specific
 
         #* "true" shows bitrates in base 10 (Kbps, Mbps). "false" shows bitrates in binary sizes (Kibps, Mibps, etc.). "Auto" uses base_10_sizes.
         base_10_bitrate = "Auto";
@@ -219,8 +221,8 @@ in {
     };
 
     xdg.configFile."btop/themes/" = {
-       source = "${pkgs.wheat.btop-catppuccin-theme}/themes/catppuccin_mocha.theme";
-       target = "btop/themes/catppuccin_mocha.theme";
+      source = "${pkgs.wheat.btop-catppuccin-theme}/themes/catppuccin_mocha.theme";
+      target = "btop/themes/catppuccin_mocha.theme";
     };
   };
 }

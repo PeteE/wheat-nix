@@ -4,9 +4,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.virtualisation;
-in {
+in
+{
   options.wheat.virtualisation = with types; {
     enable = mkEnableOption "Enable";
     libvirtd.enable = mkEnableOption "Enable";
@@ -32,10 +34,12 @@ in {
           swtpm.enable = true;
           ovmf = {
             enable = true;
-            packages = [(pkgs.OVMF.override {
-              secureBoot = true;
-              tpmSupport = true;
-            }).fd];
+            packages = [
+              (pkgs.OVMF.override {
+                secureBoot = true;
+                tpmSupport = true;
+              }).fd
+            ];
           };
         };
       };

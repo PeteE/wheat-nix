@@ -10,10 +10,12 @@
   config,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.azure;
   # pkgs-stable = inputs.nixpkgs-stable.legacyPackages."${system}";
-in {
+in
+{
   options.wheat.azure = {
     enable = mkEnableOption "Enable";
   };
@@ -29,4 +31,3 @@ in {
     ];
   };
 }
-

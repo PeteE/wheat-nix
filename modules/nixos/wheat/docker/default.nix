@@ -5,9 +5,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.services.docker;
-in {
+in
+{
   options.wheat.services.docker = {
     enable = mkEnableOption "Enable docker";
   };

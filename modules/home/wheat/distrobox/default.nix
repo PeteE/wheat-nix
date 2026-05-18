@@ -1,4 +1,3 @@
-
 {
   lib,
   pkgs,
@@ -10,9 +9,11 @@
   config,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.distrobox;
-in {
+in
+{
   options.wheat.distrobox = {
     enable = mkEnableOption "Enable";
   };

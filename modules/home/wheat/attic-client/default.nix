@@ -9,9 +9,11 @@
   config,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.attic-client;
-in {
+in
+{
   options.wheat.attic-client = with types; {
     enable = mkEnableOption "Enable";
   };

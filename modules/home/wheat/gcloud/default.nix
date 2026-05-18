@@ -4,9 +4,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.gcloud;
-in {
+in
+{
   options.wheat.gcloud = {
     enable = mkEnableOption "Enable";
   };

@@ -19,7 +19,15 @@ pkgs.stdenv.mkDerivation {
     chmod +x $out/bin/spire-cert-generator
 
     wrapProgram $out/bin/spire-cert-generator \
-      --prefix PATH : ${lib.makeBinPath [ pkgs.openssl pkgs.gnused pkgs.coreutils pkgs.sops pkgs.git ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          pkgs.openssl
+          pkgs.gnused
+          pkgs.coreutils
+          pkgs.sops
+          pkgs.git
+        ]
+      }
   '';
 
   meta = with lib; {

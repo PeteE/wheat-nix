@@ -4,9 +4,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.ai.opencommit;
-in {
+in
+{
   options.wheat.ai.opencommit = {
     enable = mkEnableOption "Enable";
   };

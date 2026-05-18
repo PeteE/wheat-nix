@@ -46,7 +46,7 @@
     };
     shellAliases = {
       c = "claude";
-      arduino ="_JAVA_AWT_WM_NONREPARENTING=1 arduino";
+      arduino = "_JAVA_AWT_WM_NONREPARENTING=1 arduino";
       icat = "kitty +kitten icat";
       g = "git";
       tg = "terragrunt";
