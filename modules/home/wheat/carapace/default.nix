@@ -20,7 +20,7 @@ in
   config = mkIf cfg.enable {
     programs.carapace = {
       enable = true;
-      enableNushellIntegration = if config.wheat.nushell.enable then true else false;
+      enableNushellIntegration = false;
       enableZshIntegration = true;
     };
   };
