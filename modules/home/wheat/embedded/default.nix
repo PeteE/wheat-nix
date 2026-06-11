@@ -9,9 +9,11 @@
   config,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.embedded;
-in {
+in
+{
   options.wheat.embedded = {
     enable = mkEnableOption "Enable";
   };
@@ -24,4 +26,3 @@ in {
     ];
   };
 }
-

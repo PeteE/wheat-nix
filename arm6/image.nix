@@ -1,5 +1,10 @@
 # Heavily based on https://gist.github.com/sorki/548de08f621b066c94f0c36a7a78cc41#file-configuration-nix-L9
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   imports = [

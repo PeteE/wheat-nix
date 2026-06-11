@@ -7,6 +7,7 @@
 }:
 {
   wheat = {
+    git.managedConfig = false;
     work.enable = true;
     minikube.enable = true;
     secrets = {
@@ -25,6 +26,7 @@
   };
   home.packages = with pkgs; [
     vault
+    codex
     azure-storage-azcopy
     inputs.nixpkgs-stable.legacyPackages."${system}".tailscale
     python312Packages.huggingface-hub

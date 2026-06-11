@@ -4,10 +4,12 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.ai;
-in {
-  imports  = [
+in
+{
+  imports = [
     ./mcp/mcp.nix
   ];
 
@@ -23,7 +25,7 @@ in {
     home.packages = with pkgs; [
       claude-code
     ];
-    
+
     # sops.secrets."aichat" = {
     #   path = "${config.home.homeDirectory}/.config/aichat/config.yaml";
     # };

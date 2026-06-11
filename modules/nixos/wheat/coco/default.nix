@@ -5,10 +5,12 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.coco;
-in {
-  options.wheat.coco  = with types; {
+in
+{
+  options.wheat.coco = with types; {
     enable = mkEnableOption "Enable";
   };
 
@@ -17,7 +19,7 @@ in {
       containerd = {
         enable = true;
       };
-      podman.enable = true; 
+      podman.enable = true;
     };
     environment.systemPackages = with pkgs; [
       minikube

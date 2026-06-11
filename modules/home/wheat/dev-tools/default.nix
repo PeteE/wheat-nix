@@ -4,9 +4,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.dev-tools;
-in {
+in
+{
   options.wheat.dev-tools = {
     enable = mkEnableOption "Enable";
   };
@@ -30,6 +32,7 @@ in {
       vim
       lego
       jq
+      pkg-config
     ];
   };
 }

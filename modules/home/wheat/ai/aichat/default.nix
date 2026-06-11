@@ -5,9 +5,11 @@
   inputs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.ai.aichat;
-in {
+in
+{
   options.wheat.ai.aichat = {
     enable = mkEnableOption "Enable";
     settings = mkOption {
@@ -37,7 +39,7 @@ in {
     ];
     programs.aichat = {
       enable = true;
-      settings = cfg.settings;
+      inherit (cfg) settings;
     };
     programs.zsh = {
       initExtra = ''

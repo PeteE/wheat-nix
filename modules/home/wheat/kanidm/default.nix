@@ -5,9 +5,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.kanidm;
-in {
+in
+{
   options.wheat.kanidm = {
     enable = mkEnableOption "Kanidm CLI client";
 

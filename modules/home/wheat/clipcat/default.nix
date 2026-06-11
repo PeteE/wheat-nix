@@ -5,9 +5,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.clipcat;
-in {
+in
+{
   options.wheat.clipcat = {
     enable = mkEnableOption "enable";
   };

@@ -11,9 +11,10 @@
   config,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.thermald;
-in 
+in
 {
   options.wheat.thermald = {
     enable = mkEnableOption "Enable";

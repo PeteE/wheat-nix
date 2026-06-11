@@ -5,9 +5,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.services.otel;
-in {
+in
+{
   options.wheat.services.otel = {
     enable = mkEnableOption "otel";
   };

@@ -46,7 +46,7 @@
     };
     shellAliases = {
       c = "claude";
-      arduino ="_JAVA_AWT_WM_NONREPARENTING=1 arduino";
+      arduino = "_JAVA_AWT_WM_NONREPARENTING=1 arduino";
       icat = "kitty +kitten icat";
       g = "git";
       tg = "terragrunt";
@@ -61,6 +61,7 @@
       nd = "nix develop -c zsh";
       vi = "nvim";
       vim = "nvim";
+      pb = "pbcopy";
       j = "just";
       netshoot = "kubectl run netshoot --rm -it --image=nicolaka/netshoot --restart=Never -- bash";
     };

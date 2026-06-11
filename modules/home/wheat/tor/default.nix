@@ -10,10 +10,12 @@
   config,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.tor;
   pkgs-stable = inputs.nixpkgs-stable.legacyPackages."${system}";
-in {
+in
+{
   options.wheat.tor = {
     enable = mkEnableOption "Enable";
   };

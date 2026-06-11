@@ -1,23 +1,23 @@
 {
-    lib,
-    pkgs,
-    inputs,
-    namespace,
-    system,
-    target,
-    format,
-    virtual,
-    systems,
-    config,
-    modulesPath,
-    ...
+  lib,
+  pkgs,
+  inputs,
+  namespace,
+  system,
+  target,
+  format,
+  virtual,
+  systems,
+  config,
+  modulesPath,
+  ...
 }:
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     (../../../modules/shared/wheat/default.nix)
   ];
-  fileSystems = { 
+  fileSystems = {
     "/" = {
       device = "/dev/disk/by-label/NIXOS_SD";
       fsType = "ext4";
@@ -27,7 +27,10 @@
 
   boot.kernelPackages = pkgs.linuxPackages_rpi4;
   boot.initrd.allowMissingModules = true;
-  boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" ];
+  boot.initrd.availableKernelModules = [
+    "xhci_pci"
+    "usbhid"
+  ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
   boot.loader.grub.enable = false;
@@ -63,7 +66,7 @@
         enable = true;
         bindAddress = "0.0.0.0";
         jwtIssuer = "https://oidc.wheat-dn42.net";
-        jwtKeyType = "rsa-2048";  # Azure AD requires RSA (doesn't support EC)
+        jwtKeyType = "rsa-2048"; # Azure AD requires RSA (doesn't support EC)
         x509pop = {
           enable = true;
           caBundlePath = "/etc/spire/x509pop-ca-bundle.pem";
@@ -76,7 +79,7 @@
         };
         federation = {
           enable = true;
-          bundleEndpoint.port = 8444;  # 8443 is used by Caddy
+          bundleEndpoint.port = 8444; # 8443 is used by Caddy
         };
       };
       agent = {
@@ -103,14 +106,19 @@
       provision = {
         enable = true;
         groups = {
-          homelab-users = {};
-          homelab-admins = { members = [ "petee" ]; };
+          homelab-users = { };
+          homelab-admins = {
+            members = [ "petee" ];
+          };
         };
         persons = {
           petee = {
             displayName = "Pete Erickson";
             mailAddresses = [ "pete.perickson@gmail.com" ];
-            groups = [ "homelab-users" "homelab-admins" ];
+            groups = [
+              "homelab-users"
+              "homelab-admins"
+            ];
           };
         };
       };
@@ -119,7 +127,7 @@
   # Tailscale subnet router and exit node for home network
   services.tailscale = {
     enable = true;
-    useRoutingFeatures = "server";  # enables IP forwarding
+    useRoutingFeatures = "server"; # enables IP forwarding
     extraUpFlags = [
       "--advertise-routes=192.168.1.0/24"
       "--advertise-exit-node"
@@ -168,7 +176,7 @@
       "wheat-dn42.net"
       "edge-public.wheat-dn42.net"
     ];
-    frequency = "*:0/5";  # every 5 minutes
+    frequency = "*:0/5"; # every 5 minutes
     ipv4 = true;
     ipv6 = false;
     proxied = false;
@@ -189,17 +197,17 @@
       "oidc-discovery.op3.wheat-dn42.net" = {
         upstream = "192.168.1.40:443";
         upstreamScheme = "https";
-        upstreamTlsInsecure = true;  # SPIRE uses SPIFFE certs, not web PKI
+        upstreamTlsInsecure = true; # SPIRE uses SPIFFE certs, not web PKI
       };
       "spire-bundle.wheat-dn42.net" = {
         upstream = "localhost:8444";
         upstreamScheme = "https";
-        upstreamTlsInsecure = true;  # SPIRE uses SPIFFE certs, not web PKI
+        upstreamTlsInsecure = true; # SPIRE uses SPIFFE certs, not web PKI
       };
       "idp.wheat-dn42.net" = {
         upstream = "localhost:8445";
         upstreamScheme = "https";
-        upstreamTlsInsecure = true;  # Kanidm uses self-signed cert internally
+        upstreamTlsInsecure = true; # Kanidm uses self-signed cert internally
       };
     };
   };
@@ -207,36 +215,93 @@
   # AdGuard Home DNS ad blocker
   wheat.services.adguardhome = {
     enable = true;
-    port = 3000;  # web UI
+    port = 3000; # web UI
     dnsPort = 53;
     openFirewall = true;
     mutableSettings = true;
     dnsRewrites = [
       # App infrastructure (K8s ingress)
-      { domain = "adguard.wheat-dn42.net"; answer = "192.168.1.173"; }
-      { domain = "unifi.wheat-dn42.net"; answer = "192.168.1.245"; }
-      { domain = "hs.wheat-dn42.net"; answer = "192.168.1.245"; }
-      { domain = "reg.wheat-dn42.net"; answer = "192.168.1.245"; }
-      { domain = "authentik.wheat-dn42.net"; answer = "192.168.1.245"; }
-      { domain = "s3.wheat-dn42.net"; answer = "192.168.1.245"; }
-      { domain = "idp.wheat-dn42.net"; answer = "192.168.1.173"; }  # rpi4 - Kanidm
-      { domain = "oidc-discovery.op3.wheat-dn42.net"; answer = "192.168.1.40"; }  # Gateway on wheat-k3s cluster
+      {
+        domain = "adguard.wheat-dn42.net";
+        answer = "192.168.1.173";
+      }
+      {
+        domain = "unifi.wheat-dn42.net";
+        answer = "192.168.1.245";
+      }
+      {
+        domain = "hs.wheat-dn42.net";
+        answer = "192.168.1.245";
+      }
+      {
+        domain = "reg.wheat-dn42.net";
+        answer = "192.168.1.245";
+      }
+      {
+        domain = "authentik.wheat-dn42.net";
+        answer = "192.168.1.245";
+      }
+      {
+        domain = "s3.wheat-dn42.net";
+        answer = "192.168.1.245";
+      }
+      {
+        domain = "idp.wheat-dn42.net";
+        answer = "192.168.1.173";
+      } # rpi4 - Kanidm
+      {
+        domain = "oidc-discovery.op3.wheat-dn42.net";
+        answer = "192.168.1.40";
+      } # Gateway on wheat-k3s cluster
       # Automation
-      { domain = "mqtt.wheat-dn42.net"; answer = "192.168.1.245"; }
+      {
+        domain = "mqtt.wheat-dn42.net";
+        answer = "192.168.1.245";
+      }
       # Media
-      { domain = "overseerr.wheat-dn42.net"; answer = "192.168.1.245"; }
+      {
+        domain = "overseerr.wheat-dn42.net";
+        answer = "192.168.1.245";
+      }
       # Apps
-      { domain = "hastebin.wheat-dn42.net"; answer = "192.168.1.245"; }
+      {
+        domain = "hastebin.wheat-dn42.net";
+        answer = "192.168.1.245";
+      }
       # SPIRE federation (k8s cluster bundle endpoint)
-      { domain = "spire-bundle-k8s.wheat-dn42.net"; answer = "192.168.1.245"; }
-      { domain = "spire-bundle.wheat-dn42.net"; answer = "192.168.1.173"; }
+      {
+        domain = "spire-bundle-k8s.wheat-dn42.net";
+        answer = "192.168.1.245";
+      }
+      {
+        domain = "spire-bundle.wheat-dn42.net";
+        answer = "192.168.1.173";
+      }
       # Local network
-      { domain = "gw"; answer = "192.168.1.33"; }
-      { domain = "freenas.wheat-dn42.net"; answer = "192.168.1.120"; }
-      { domain = "nas.wheat-dn42.net"; answer = "192.168.1.120"; }
-      { domain = "nas"; answer = "192.168.1.120"; }
-      { domain = "hv"; answer = "192.168.1.50"; }
-      { domain = "ripper"; answer = "192.168.1.51"; }
+      {
+        domain = "gw";
+        answer = "192.168.1.33";
+      }
+      {
+        domain = "freenas.wheat-dn42.net";
+        answer = "192.168.1.120";
+      }
+      {
+        domain = "nas.wheat-dn42.net";
+        answer = "192.168.1.120";
+      }
+      {
+        domain = "nas";
+        answer = "192.168.1.120";
+      }
+      {
+        domain = "hv";
+        answer = "192.168.1.50";
+      }
+      {
+        domain = "ripper";
+        answer = "192.168.1.51";
+      }
     ];
   };
 
@@ -247,6 +312,10 @@
     cmake
   ];
   system.stateVersion = "25.11";
-  nix.settings.trusted-users = [ "root" "petee" "pete" ];
+  nix.settings.trusted-users = [
+    "root"
+    "petee"
+    "pete"
+  ];
   # nix.settings.substituters = [ "https://nix-cache-dev.corp.tooling.opaque-int.com/opaque" ];
 }

@@ -1,11 +1,11 @@
-{ 
+{
   inputs,
   pkgs,
   system,
-  ... 
+  ...
 }:
 {
-  
+
   wheat = {
     ollama.enable = false;
     distrobox.enable = true;
@@ -34,7 +34,7 @@
     embedded.enable = true;
     attic-client.enable = true;
     signal.enable = true;
-    kanidm.enable = true;  # CLI client for idp.wheat-dn42.net
+    kanidm.enable = true; # CLI client for idp.wheat-dn42.net
     screenshot.enable = true;
     niri.enable = true;
   };
@@ -57,7 +57,7 @@
   # notificaiton system
   services.mako = {
     enable = true;
-    settings.default-timeout = 5000;  # 5 seconds in milliseconds
+    settings.default-timeout = 5000; # 5 seconds in milliseconds
     extraConfig = ''
       [app-name=Slack]
       default-timeout=3000

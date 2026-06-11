@@ -3,12 +3,15 @@
   pkgs,
   lib,
   ...
-}: let
-  slack-mcp-server = pkgs.callPackage ./slack-mcp-server/package.nix {};
+}:
+let
+  slack-mcp-server = pkgs.callPackage ./slack-mcp-server/package.nix { };
 in
-with lib; let
+with lib;
+let
   cfg = config.wheat.ai.mcp;
-in {
+in
+{
   options.wheat.ai.mcp = {
     enable = mkEnableOption "Enable";
   };
