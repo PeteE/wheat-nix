@@ -5,7 +5,8 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.services.spire;
 
   # Generate the OIDC Discovery Provider configuration file
@@ -25,18 +26,23 @@ with lib; let
         live_path = "/live"
     }
 
-    ${if cfg.server.oidcDiscovery.servingCertFile != null then ''
-    serving_cert_file {
-        cert_file_path = "${cfg.server.oidcDiscovery.servingCertFile.certPath}"
-        key_file_path = "${cfg.server.oidcDiscovery.servingCertFile.keyPath}"
-        ${optionalString (cfg.server.oidcDiscovery.servingCertFile.fileSyncInterval != null)
-          ''file_sync_interval = "${cfg.server.oidcDiscovery.servingCertFile.fileSyncInterval}"''
-        }
-        addr = ":${toString cfg.server.oidcDiscovery.bindPort}"
+    ${
+      if cfg.server.oidcDiscovery.servingCertFile != null then
+        ''
+          serving_cert_file {
+              cert_file_path = "${cfg.server.oidcDiscovery.servingCertFile.certPath}"
+              key_file_path = "${cfg.server.oidcDiscovery.servingCertFile.keyPath}"
+              ${optionalString (
+                cfg.server.oidcDiscovery.servingCertFile.fileSyncInterval != null
+              ) ''file_sync_interval = "${cfg.server.oidcDiscovery.servingCertFile.fileSyncInterval}"''}
+              addr = ":${toString cfg.server.oidcDiscovery.bindPort}"
+          }
+        ''
+      else
+        ''
+          insecure_addr = ":${toString cfg.server.oidcDiscovery.bindPort}"
+        ''
     }
-    '' else ''
-    insecure_addr = ":${toString cfg.server.oidcDiscovery.bindPort}"
-    ''}
   '';
 
   # Generate the server configuration file
@@ -53,12 +59,12 @@ with lib; let
         ${optionalString (cfg.server.jwtIssuer != null) ''jwt_issuer = "${cfg.server.jwtIssuer}"''}
 
         ${optionalString cfg.server.federation.enable ''
-        federation {
-            bundle_endpoint {
-                address = "${cfg.server.federation.bundleEndpoint.address}"
-                port = "${toString cfg.server.federation.bundleEndpoint.port}"
-            }
-        }
+          federation {
+              bundle_endpoint {
+                  address = "${cfg.server.federation.bundleEndpoint.address}"
+                  port = "${toString cfg.server.federation.bundleEndpoint.port}"
+              }
+          }
         ''}
     }
 
@@ -81,11 +87,11 @@ with lib; let
         }
 
         ${optionalString cfg.server.x509pop.enable ''
-        NodeAttestor "x509pop" {
-            plugin_data {
-                ca_bundle_path = "${cfg.server.x509pop.caBundlePath}"
-            }
-        }
+          NodeAttestor "x509pop" {
+              plugin_data {
+                  ca_bundle_path = "${cfg.server.x509pop.caBundlePath}"
+              }
+          }
         ''}
     }
 
@@ -103,12 +109,12 @@ with lib; let
         admin_socket_path = "${cfg.agent.adminSocketPath}"
 
         ${optionalString cfg.agent.insecureBootstrap ''
-        # Insecure bootstrap is NOT appropriate for production use but is ok for
-        # simple testing/evaluation purposes.
-        insecure_bootstrap = true
+          # Insecure bootstrap is NOT appropriate for production use but is ok for
+          # simple testing/evaluation purposes.
+          insecure_bootstrap = true
         ''}
         ${optionalString (cfg.agent.joinToken != null) ''
-        join_token = "${cfg.agent.joinToken}"
+          join_token = "${cfg.agent.joinToken}"
         ''}
     }
 
@@ -119,25 +125,31 @@ with lib; let
             }
         }
 
-        ${if cfg.agent.x509pop.enable then ''
-        NodeAttestor "x509pop" {
-            plugin_data {
-                private_key_path = "${cfg.agent.x509pop.privateKeyPath}"
-                certificate_path = "${cfg.agent.x509pop.certificatePath}"
-            }
+        ${
+          if cfg.agent.x509pop.enable then
+            ''
+              NodeAttestor "x509pop" {
+                  plugin_data {
+                      private_key_path = "${cfg.agent.x509pop.privateKeyPath}"
+                      certificate_path = "${cfg.agent.x509pop.certificatePath}"
+                  }
+              }
+            ''
+          else
+            ''
+              NodeAttestor "join_token" {
+                  plugin_data {}
+              }
+            ''
         }
-        '' else ''
-        NodeAttestor "join_token" {
-            plugin_data {}
-        }
-        ''}
 
         WorkloadAttestor "unix" {
             plugin_data {}
         }
     }
   '';
-in {
+in
+{
   options.wheat.services.spire = {
     enable = mkEnableOption "SPIRE (SPIFFE Runtime Environment)";
 
@@ -163,7 +175,12 @@ in {
       };
 
       logLevel = mkOption {
-        type = types.enum ["DEBUG" "INFO" "WARN" "ERROR"];
+        type = types.enum [
+          "DEBUG"
+          "INFO"
+          "WARN"
+          "ERROR"
+        ];
         default = "INFO";
         description = "Log level for the SPIRE server";
       };
@@ -191,7 +208,12 @@ in {
       };
 
       jwtKeyType = mkOption {
-        type = types.enum ["ec-p256" "ec-p384" "rsa-2048" "rsa-4096"];
+        type = types.enum [
+          "ec-p256"
+          "ec-p384"
+          "rsa-2048"
+          "rsa-4096"
+        ];
         default = "ec-p256";
         description = ''
           The key type used for signing JWT SVIDs.
@@ -260,29 +282,36 @@ in {
         };
 
         logLevel = mkOption {
-          type = types.enum ["debug" "info" "warn" "error"];
+          type = types.enum [
+            "debug"
+            "info"
+            "warn"
+            "error"
+          ];
           default = "info";
           description = "Log level for the OIDC Discovery Provider";
         };
 
         servingCertFile = mkOption {
-          type = types.nullOr (types.submodule {
-            options = {
-              certPath = mkOption {
-                type = types.str;
-                description = "Path to the TLS certificate file";
+          type = types.nullOr (
+            types.submodule {
+              options = {
+                certPath = mkOption {
+                  type = types.str;
+                  description = "Path to the TLS certificate file";
+                };
+                keyPath = mkOption {
+                  type = types.str;
+                  description = "Path to the TLS private key file";
+                };
+                fileSyncInterval = mkOption {
+                  type = types.nullOr types.str;
+                  default = null;
+                  description = "Interval to check for cert/key file changes (e.g., '5m')";
+                };
               };
-              keyPath = mkOption {
-                type = types.str;
-                description = "Path to the TLS private key file";
-              };
-              fileSyncInterval = mkOption {
-                type = types.nullOr types.str;
-                default = null;
-                description = "Interval to check for cert/key file changes (e.g., '5m')";
-              };
-            };
-          });
+            }
+          );
           default = null;
           description = ''
             TLS certificate configuration for the OIDC Discovery Provider.
@@ -309,7 +338,12 @@ in {
       };
 
       logLevel = mkOption {
-        type = types.enum ["DEBUG" "INFO" "WARN" "ERROR"];
+        type = types.enum [
+          "DEBUG"
+          "INFO"
+          "WARN"
+          "ERROR"
+        ];
         default = "INFO";
         description = "Log level for the SPIRE agent";
       };
@@ -384,9 +418,12 @@ in {
     # SPIRE Server systemd service
     systemd.services.spire-server = mkIf cfg.server.enable {
       description = "SPIRE Server";
-      after = ["network-online.target" "local-fs.target"];
-      wants = ["network-online.target"];
-      wantedBy = ["multi-user.target"];
+      after = [
+        "network-online.target"
+        "local-fs.target"
+      ];
+      wants = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
         ExecStart = "${pkgs.spire}/bin/spire-server run -config ${serverConfig} -socketPath ${cfg.server.socketPath}";
@@ -405,8 +442,16 @@ in {
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectSystem = "strict";
-        ReadWritePaths = ["/var/lib/spire/server" "/run/spire/server"];
-        RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK"];
+        ReadWritePaths = [
+          "/var/lib/spire/server"
+          "/run/spire/server"
+        ];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -416,10 +461,13 @@ in {
     # SPIRE Agent systemd service
     systemd.services.spire-agent = mkIf cfg.agent.enable {
       description = "SPIRE Agent";
-      after = ["network-online.target" "local-fs.target"]
-        ++ optional cfg.server.enable "spire-server.service";
-      wants = ["network-online.target"];
-      wantedBy = ["multi-user.target"];
+      after = [
+        "network-online.target"
+        "local-fs.target"
+      ]
+      ++ optional cfg.server.enable "spire-server.service";
+      wants = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
         ExecStart = "${pkgs.spire}/bin/spire-agent run -config ${agentConfig}";
@@ -438,8 +486,16 @@ in {
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectSystem = "strict";
-        ReadWritePaths = ["/var/lib/spire/agent" "/run/spire/agent"];
-        RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK"];
+        ReadWritePaths = [
+          "/var/lib/spire/agent"
+          "/run/spire/agent"
+        ];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -449,10 +505,13 @@ in {
     # SPIRE OIDC Discovery Provider systemd service
     systemd.services.spire-oidc-discovery-provider = mkIf cfg.server.oidcDiscovery.enable {
       description = "SPIRE OIDC Discovery Provider";
-      after = ["network-online.target" "spire-server.service"];
-      requires = ["spire-server.service"];
-      wants = ["network-online.target"];
-      wantedBy = ["multi-user.target"];
+      after = [
+        "network-online.target"
+        "spire-server.service"
+      ];
+      requires = [ "spire-server.service" ];
+      wants = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
         ExecStart = "${pkgs.spire}/bin/oidc-discovery-provider -config ${oidcConfig}";
@@ -472,8 +531,13 @@ in {
         ProtectKernelTunables = true;
         ProtectSystem = "strict";
         # Needs access to server socket
-        ReadWritePaths = ["/run/spire/server"];
-        RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK"];
+        ReadWritePaths = [ "/run/spire/server" ];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -481,4 +545,3 @@ in {
     };
   };
 }
-

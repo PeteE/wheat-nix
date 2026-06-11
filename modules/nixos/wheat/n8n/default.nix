@@ -5,10 +5,12 @@
   inputs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.services.n8n;
-  inherit (lib) mkEnableOption mkOption mkIf;
-in {
+  inherit (lib) mkEnableOption mkIf;
+in
+{
   options.wheat.services.n8n = {
     enable = mkEnableOption "Enable";
   };
@@ -22,4 +24,3 @@ in {
     ];
   };
 }
-

@@ -1,19 +1,21 @@
 {
-    lib,
-    pkgs,
-    inputs,
-    namespace,
-    system,
-    target,
-    format,
-    virtual,
-    systems,
-    config,
-    ...
+  lib,
+  pkgs,
+  inputs,
+  namespace,
+  system,
+  target,
+  format,
+  virtual,
+  systems,
+  config,
+  ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.k9s;
-in {
+in
+{
   # This module will contain any work-related stuff
   options.wheat.k9s = with types; {
     enable = mkEnableOption "Enable";
@@ -45,7 +47,7 @@ in {
         # Specifies if modification commands like delete/kill/edit are disabled. Default is false
         readOnly = false;
         # This setting allows users to specify the default view, but it is not set by default.
-        defaultView =  "";
+        defaultView = "";
         # Toggles whether k9s should exit when CTRL-C is pressed. When set to true, you will need to exist k9s via the :quit command. Default is false.
         noExitOnCtrlC = false;
         # Default port forward host

@@ -26,12 +26,14 @@ stdenv.mkDerivation {
       install -Dm755 "$script" "$out/bin/$script_name"
 
       wrapProgram "$out/bin/$script_name" \
-        --prefix PATH : ${lib.makeBinPath [
-          pkgs.azure-cli
-          pkgs.gum
-          pkgs.fzf
-          pkgs.jq
-        ]}
+        --prefix PATH : ${
+          lib.makeBinPath [
+            pkgs.azure-cli
+            pkgs.gum
+            pkgs.fzf
+            pkgs.jq
+          ]
+        }
     done
 
     runHook postInstall

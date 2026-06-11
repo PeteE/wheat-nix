@@ -1,19 +1,21 @@
 {
-    lib,
-    pkgs,
-    inputs,
-    namespace,
-    system,
-    target,
-    format,
-    virtual,
-    systems,
-    config,
-    ...
+  lib,
+  pkgs,
+  inputs,
+  namespace,
+  system,
+  target,
+  format,
+  virtual,
+  systems,
+  config,
+  ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.entertainment;
-in {
+in
+{
   options.wheat.entertainment = {
     vlc = {
       enable = mkEnableOption "Enable VLC media player";

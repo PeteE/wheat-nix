@@ -1,21 +1,24 @@
 # vim: ts=2:sw=2:et
 {
-    lib,
-    pkgs,
-    inputs,
-    namespace,
-    system,
-    target,
-    format,
-    virtual,
-    systems,
-    config,
-    modulesPath,
-    ...
+  lib,
+  pkgs,
+  inputs,
+  namespace,
+  system,
+  target,
+  format,
+  virtual,
+  systems,
+  config,
+  modulesPath,
+  ...
 }:
-with lib; with types; let
+with lib;
+with types;
+let
   cfg = config.wheat.ollama;
-in {
+in
+{
   options.wheat.ollama = {
     enable = mkEnableOption "Enable";
     port = mkOption {
@@ -40,7 +43,7 @@ in {
     services.ollama = {
       enable = true;
       host = cfg.listen;
-      port = cfg.port;
+      inherit (cfg) port;
       # acceleration = "cuda";
     };
     home.packages = with pkgs; [

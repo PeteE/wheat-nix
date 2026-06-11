@@ -5,9 +5,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.services.clickhouse;
-in {
+in
+{
   options.wheat.services.clickhouse = {
     enable = mkEnableOption "enable";
   };

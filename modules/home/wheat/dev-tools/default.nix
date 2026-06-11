@@ -4,9 +4,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.dev-tools;
-in {
+in
+{
   options.wheat.dev-tools = {
     enable = mkEnableOption "Enable";
   };
@@ -25,11 +27,12 @@ in {
       tcpdump
       oras
       uv
-      nodejs_22
+      nodejs_24
       postgresql_18
       vim
       lego
       jq
+      pkg-config
     ];
   };
 }

@@ -226,7 +226,6 @@
         rpi4.modules = with inputs; [
           nixos-hardware.nixosModules.raspberry-pi-4
         ];
-        rpiw.modules = with inputs; [ ];
         m4.modules = with inputs; [ ];
         m3p.modules = with inputs; [ ];
         microvm-poc.modules = with inputs; [

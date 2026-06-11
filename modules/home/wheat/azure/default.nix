@@ -10,10 +10,12 @@
   config,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.azure;
   # pkgs-stable = inputs.nixpkgs-stable.legacyPackages."${system}";
-in {
+in
+{
   options.wheat.azure = {
     enable = mkEnableOption "Enable";
   };
@@ -23,10 +25,9 @@ in {
       (azure-cli.withExtensions [
         azure-cli-extensions.virtual-wan
         azure-cli-extensions.azure-firewall
-        # azure-cli-extensions.serial-console
+        azure-cli-extensions.virtual-network-manager
       ])
       wheat.azure-util-scripts
     ];
   };
 }
-

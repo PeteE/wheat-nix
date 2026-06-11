@@ -5,9 +5,11 @@
   inputs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.ai.aichat;
-in {
+in
+{
   options.wheat.ai.aichat = {
     enable = mkEnableOption "Enable";
     settings = mkOption {
@@ -37,10 +39,10 @@ in {
     ];
     programs.aichat = {
       enable = true;
-      settings = cfg.settings;
+      inherit (cfg) settings;
     };
     programs.zsh = {
-      completionInit = ''
+      initExtra = ''
         _aichat_zsh() {
           if [[ -n "$BUFFER" ]]; then
               local _old=$BUFFER
@@ -51,7 +53,6 @@ in {
           fi
         }
         zle -N _aichat_zsh
-        ${pkgs.wl-clipboard}/bin/wl-copy
         bindkey '\ee' _aichat_zsh
       '';
     };

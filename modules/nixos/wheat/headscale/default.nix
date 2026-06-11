@@ -5,10 +5,12 @@
   inputs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat;
   inherit (lib) mkEnableOption mkIf;
-in {
+in
+{
   options.wheat = {
     headscale = {
       enable = mkEnableOption "Enable";

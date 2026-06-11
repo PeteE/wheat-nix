@@ -5,9 +5,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.services.adguardhome;
-in {
+in
+{
   options.wheat.services.adguardhome = {
     enable = mkEnableOption "AdGuard Home DNS ad blocker";
 
@@ -43,16 +45,21 @@ in {
 
     # Custom DNS rewrites for local services
     dnsRewrites = mkOption {
-      type = types.listOf (types.submodule {
-        options = {
-          domain = mkOption { type = types.str; };
-          answer = mkOption { type = types.str; };
-        };
-      });
-      default = [];
+      type = types.listOf (
+        types.submodule {
+          options = {
+            domain = mkOption { type = types.str; };
+            answer = mkOption { type = types.str; };
+          };
+        }
+      );
+      default = [ ];
       description = "Custom DNS rewrites for local services";
       example = [
-        { domain = "nas.local"; answer = "192.168.1.100"; }
+        {
+          domain = "nas.local";
+          answer = "192.168.1.100";
+        }
       ];
       # Transform to add enabled = true to each entry
       apply = map (r: r // { enabled = true; });
@@ -62,10 +69,10 @@ in {
   config = mkIf cfg.enable {
     services.adguardhome = {
       enable = true;
-      host = cfg.host;
-      port = cfg.port;
-      openFirewall = cfg.openFirewall;
-      mutableSettings = cfg.mutableSettings;
+      inherit (cfg) host;
+      inherit (cfg) port;
+      inherit (cfg) openFirewall;
+      inherit (cfg) mutableSettings;
 
       settings = {
         dns = {
@@ -129,7 +136,10 @@ in {
 
     # Open DNS port in firewall (AdGuard Home only opens web UI port)
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.dnsPort cfg.port ];
+      allowedTCPPorts = [
+        cfg.dnsPort
+        cfg.port
+      ];
       allowedUDPPorts = [ cfg.dnsPort ];
     };
   };

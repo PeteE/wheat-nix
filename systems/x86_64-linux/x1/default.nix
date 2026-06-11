@@ -1,17 +1,17 @@
 # vim: ts=2:sw=2:et
 {
-    lib,
-    pkgs,
-    inputs,
-    namespace,
-    system,
-    target,
-    format,
-    virtual,
-    systems,
-    config,
-    modulesPath,
-    ...
+  lib,
+  pkgs,
+  inputs,
+  namespace,
+  system,
+  target,
+  format,
+  virtual,
+  systems,
+  config,
+  modulesPath,
+  ...
 }:
 {
   imports = [
@@ -40,11 +40,11 @@
     services.spire = {
       enable = true;
       trustDomain = "wheat-dn42.net";
-      server.enable = false;  # Server runs on rpi4
+      server.enable = false; # Server runs on rpi4
       agent = {
         enable = true;
-        serverAddress = "192.168.1.173";  # rpi4
-        insecureBootstrap = true;  # Required for initial trust bundle fetch
+        serverAddress = "192.168.1.173"; # rpi4
+        insecureBootstrap = true; # Required for initial trust bundle fetch
         x509pop = {
           enable = true;
           privateKeyPath = config.sops.secrets."spire/nodes/x1/key".path;
@@ -84,11 +84,11 @@
   sops.defaultSopsFile = ../../../modules/home/wheat/secrets/secrets.yaml;
   sops.age.keyFile = "/home/petee/.config/sops/age/keys.txt";
   sops.secrets."spire/nodes/x1/key" = {
-    mode = "0400";  # Only root can read
+    mode = "0400"; # Only root can read
   };
   sops.secrets."spire/nodes/x1/cert" = {
     mode = "0444";
-    path = "/etc/spire/x1-cert.pem";  # Deploy cert to expected location
+    path = "/etc/spire/x1-cert.pem"; # Deploy cert to expected location
   };
 
   # Ensure SPIRE agent starts after sops secrets are decrypted
@@ -158,7 +158,10 @@
   networking.hostName = "x1";
   systemd.network.enable = true;
   systemd.network.networks."10-lan" = {
-    matchConfig.Name = ["enp0s31f6" "vm-*"];
+    matchConfig.Name = [
+      "enp0s31f6"
+      "vm-*"
+    ];
     networkConfig = {
       Bridge = "br0";
     };
@@ -174,10 +177,10 @@
   systemd.network.networks."10-lan-bridge" = {
     matchConfig.Name = "br0";
     networkConfig = {
-      Address = ["192.168.100.1/24"];
+      Address = [ "192.168.100.1/24" ];
       DNS = [
-        "192.168.1.173"  # rpi4 AdGuard Home
-        "1.1.1.1"        # fallback
+        "192.168.1.173" # rpi4 AdGuard Home
+        "1.1.1.1" # fallback
       ];
       IPv6AcceptRA = false;
     };
@@ -202,7 +205,13 @@
   };
   boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "uas" "usb_storage" "sd_mod" ];
+  boot.initrd.availableKernelModules = [
+    "xhci_pci"
+    "nvme"
+    "uas"
+    "usb_storage"
+    "sd_mod"
+  ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
@@ -210,11 +219,14 @@
     device = "/dev/disk/by-uuid/0c0f9ee0-40ed-4fdd-adab-844ca3e9b712";
     fsType = "ext4";
   };
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/914C-75B5";
-      fsType = "vfat";
-      options = [ "fmask=0077" "dmask=0077" ];
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/914C-75B5";
+    fsType = "vfat";
+    options = [
+      "fmask=0077"
+      "dmask=0077"
+    ];
+  };
   swapDevices = [
     {
       device = "/dev/disk/by-uuid/6bacfc99-1805-42fb-9797-3593255c1dff";

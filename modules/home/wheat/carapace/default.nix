@@ -9,16 +9,18 @@
   config,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.carapace;
-in {
+in
+{
   options.wheat.carapace = {
     enable = mkEnableOption "Enable";
   };
   config = mkIf cfg.enable {
     programs.carapace = {
       enable = true;
-      enableNushellIntegration = if config.wheat.nushell.enable then true else false;
+      enableNushellIntegration = false;
       enableZshIntegration = true;
     };
   };

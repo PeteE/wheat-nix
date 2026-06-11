@@ -1,15 +1,12 @@
 # vim: ts=2:sw=2:et
 {
-    pkgs,
-    inputs,
-    system,
-    config,
-    lib,
-    ...
+  pkgs,
+  inputs,
+  system,
+  config,
+  lib,
+  ...
 }:
-let
-  isDarwin = pkgs.stdenv.isDarwin;
-in
 {
   home = {
     username = config.snowfallorg.user.name;
@@ -53,6 +50,7 @@ in
     mosquitto
     mqttx-cli
     zip
+    gnumake
     unzip
     dig
     bat

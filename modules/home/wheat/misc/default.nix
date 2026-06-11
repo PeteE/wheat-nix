@@ -5,16 +5,11 @@
   inputs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.misc;
-  deployPkgs = import nixpkgs {
-    inherit system;
-    overlays = [
-      deploy-rs.overlay # or deploy-rs.overlays.default
-      (self: super: { deploy-rs = { inherit (pkgs) deploy-rs; lib = super.deploy-rs.lib; }; })
-    ];
-  };
-in {
+in
+{
   options.wheat.misc = {
     enable = mkEnableOption "Enable";
   };
@@ -25,7 +20,7 @@ in {
       ollama
       bat
       openbao
-      go_1_24
+      go_1_26
       attic-client
       glow
       delve

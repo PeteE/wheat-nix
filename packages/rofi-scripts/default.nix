@@ -17,9 +17,9 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    
+
     mkdir -p $out/bin
-    
+
     # Install all shell scripts
     for script in $(find $src -name "*.sh" -type f); do
       script_name=$(basename "$script" .sh)
@@ -27,12 +27,14 @@ stdenv.mkDerivation {
       
       # Wrap scripts to ensure dependencies are in PATH
       wrapProgram "$out/bin/$script_name" \
-        --prefix PATH : ${lib.makeBinPath [ 
-          pkgs.rofi
-          pkgs.clipcat
-        ]}
+        --prefix PATH : ${
+          lib.makeBinPath [
+            pkgs.rofi
+            pkgs.clipcat
+          ]
+        }
     done
-    
+
     runHook postInstall
   '';
 
