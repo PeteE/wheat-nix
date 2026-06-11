@@ -25,7 +25,7 @@ in {
       tcpdump
       oras
       uv
-      nodejs_22
+      nodejs_24
       postgresql_18
       vim
       lego

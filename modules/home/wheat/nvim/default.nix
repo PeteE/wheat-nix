@@ -16,7 +16,7 @@ in {
       terraform-ls
       nixpkgs-fmt
       lazygit
-      nodePackages.eslint
+      eslint
       lua-language-server
       # rust-analyzer
       helm-ls

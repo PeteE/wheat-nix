@@ -61,7 +61,7 @@
   home.packages = with pkgs; [
     socat
   ];
-  programs.noctalia-shell = {
+  programs.noctalia = {
     enable = true;
   };
  

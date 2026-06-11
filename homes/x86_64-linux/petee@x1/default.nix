@@ -64,7 +64,7 @@
     '';
   };
 
-  programs.noctalia-shell = {
+  programs.noctalia = {
     enable = true;
     # settings = {
     #   # configure noctalia here

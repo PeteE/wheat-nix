@@ -33,6 +33,9 @@ in {
         "IHGWiFi.com" = {
           psk = null;
         };
+        # "SpectrumSetup-8F" = {
+        #   psk = "";
+        # };
       };
     };
   };
