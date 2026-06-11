@@ -137,21 +137,27 @@ in {
 
     services.kanidm = {
       enableServer = true;
-      enableClient = true;
       package = pkgs.kanidm_1_8.withSecretProvisioning;  # Latest stable with secret provisioning
 
-      clientSettings = {
-        uri = "https://localhost:${toString cfg.bindPort}";
-        verify_ca = false;  # Using self-signed cert internally
+      client = {
+        enable = true;
+        settings = {
+          uri = "https://localhost:${toString cfg.bindPort}";
+          verify_ca = false;  # Using self-signed cert internally
+        };
       };
 
-      serverSettings = {
-        domain = cfg.domain;
-        origin = "https://${cfg.domain}";
-        bindaddress = "${cfg.bindAddress}:${toString cfg.bindPort}";
-        tls_chain = "/var/lib/kanidm/tls/chain.pem";
-        tls_key = "/var/lib/kanidm/tls/key.pem";
-        log_level = cfg.logLevel;
+      server = {
+        enable = true;
+
+        settings = {
+          domain = cfg.domain;
+          origin = "https://${cfg.domain}";
+          bindaddress = "${cfg.bindAddress}:${toString cfg.bindPort}";
+          tls_chain = "/var/lib/kanidm/tls/chain.pem";
+          tls_key = "/var/lib/kanidm/tls/key.pem";
+          log_level = cfg.logLevel;
+        };
       };
 
       provision = mkIf cfg.provision.enable {

@@ -126,6 +126,12 @@
     ];
   };
 
+  services.open-webui = {
+    enable = true;
+    port = 8888;
+    openFirewall = true;
+  };
+
   # SPIRE x509pop CA certificate for node attestation
   environment.etc."spire/x509pop-ca-bundle.pem" = {
     source = ../../x86_64-linux/x1/spire-x509pop-ca.pem;
@@ -182,6 +188,9 @@
     virtualHosts = {
       "adguard.wheat-dn42.net" = {
         upstream = "localhost:3000";
+      };
+      "llm.wheat-dn42.net" = {
+        upstream = "localhost:8888";
       };
       "oidc.wheat-dn42.net" = {
         upstream = "localhost:8082";
