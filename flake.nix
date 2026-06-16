@@ -85,198 +85,153 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs =
-    { self, ... }@inputs:
-    inputs.snowfall-lib.mkFlake {
-      inherit inputs;
-      src = ./.;
+  outputs = { self, ... }@inputs: inputs.snowfall-lib.mkFlake {
+    inherit inputs;
+    src = ./.;
 
-      # snowfall metadata
-      snowfall = {
-        namespace = "wheat";
-        meta = {
+    # snowfall metadata
+    snowfall = {
+      namespace = "wheat";
+      meta = {
           name = "wheat";
           title = "PeteE's Flake";
-        };
       };
+    };
 
-      # Per-system outputs: formatter, lint checks, and pre-commit devShell
-      outputs-builder =
-        channels:
-        let
-          pkgs = channels.nixpkgs;
-        in
-        {
-          formatter = pkgs.nixfmt-rfc-style;
-          checks = {
-            fmt = pkgs.runCommand "check-nixfmt" { nativeBuildInputs = [ pkgs.nixfmt-rfc-style ]; } ''
-              cd ${self}
-              find . -name '*.nix' -not -path './.git/*' -print0 \
-                | xargs -0 nixfmt --check
-              touch $out
-            '';
-            statix = pkgs.runCommand "check-statix" { nativeBuildInputs = [ pkgs.statix ]; } ''
-              statix check ${self}
-              touch $out
-            '';
-            deadnix = pkgs.runCommand "check-deadnix" { nativeBuildInputs = [ pkgs.deadnix ]; } ''
-              deadnix -L --fail ${self}
-              touch $out
-            '';
-          };
-          devShells.default = pkgs.mkShellNoCC {
-            packages = with pkgs; [
-              lefthook
-              nixfmt-rfc-style
-              statix
-              deadnix
-            ];
-            shellHook = ''
-              if [ -d .git ] && [ ! -f .git/hooks/pre-commit ]; then
-                lefthook install >/dev/null
-              fi
-            '';
-          };
-        };
-
-      # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
-      deploy = {
-        nodes.x1 = {
-          hostname = "192.168.1.7";
-          fastConnection = true;
-          interactiveSudo = false;
-          remoteBuild = false;
-          profiles = {
-            system = {
-              sshUser = "petee";
-              path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.x1;
-              user = "root";
-            };
-          };
-        };
-        nodes.ripnix = {
-          hostname = "192.168.1.143";
-          fastConnection = true;
-          interactiveSudo = false;
-          remoteBuild = true;
-          profiles = {
-            system = {
-              sshUser = "petee";
-              path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.ripnix;
-              user = "root";
-            };
-          };
-        };
-        nodes.m4 = {
-          hostname = "192.168.1.149";
-          fastConnection = true;
-          interactiveSudo = false;
-          remoteBuild = true;
-          profiles = {
-            system = {
-              path = inputs.deploy-rs.lib.aarch64-darwin.activate.darwin self.darwinConfigurations.m4;
-              user = "root";
-              sshUser = "pete";
-            };
-          };
-        };
-        nodes.m3p = {
-          hostname = "192.168.1.209";
-          fastConnection = true;
-          interactiveSudo = false;
-          remoteBuild = true;
-          profiles = {
-            system = {
-              path = inputs.deploy-rs.lib.aarch64-darwin.activate.darwin self.darwinConfigurations.m3p;
-              user = "root";
-              sshUser = "petee";
-            };
-          };
-        };
-        nodes.rpi4 = {
-          hostname = "192.168.1.173";
-          fastConnection = true;
-          interactiveSudo = false;
-          remoteBuild = true;
-          profiles = {
-            system = {
-              path = inputs.deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.rpi4;
-              user = "root";
-              sshUser = "petee";
-            };
+    # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
+    deploy = {
+      nodes.x1 = {
+        hostname = "192.168.1.7";
+        fastConnection = true;
+        interactiveSudo = false;
+        remoteBuild = false;
+        profiles = {
+          system = {
+            sshUser = "petee";
+            path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.x1;
+            user = "root";
           };
         };
       };
-
-      # overlays
-      overlays = with inputs; [
-        nix-vscode-extensions.overlays.default
-        nur.overlays.default
-        llama-cpp.overlays.default
-        claude-code.overlays.default
-        niri.overlays.niri
-      ];
-
-      channels-config = {
-        allowUnfree = true;
-        android_sdk.accept_license = true;
-        permittedInsecurePackages = [
-          # "electron-25.9.0"
-        ];
-
-      };
-
-      homes.modules = with inputs; [
-        sops-nix.homeManagerModules.sops
-        catppuccin.homeModules.catppuccin
-        noctalia.homeModules.default
-      ];
-
-      systems = {
-        overlays = with inputs; [ ];
-        modules = {
-          darwin = with inputs; [
-            sops-nix.darwinModules.sops
-            home-manager.darwinModules.home-manager
-            virby.darwinModules.default
-          ];
-          nixos = with inputs; [
-            sops-nix.nixosModules.sops
-            home-manager.nixosModules.home-manager
-            # nixos-generators.nixosModules.all-formats
-            nixvirt.nixosModules.default
-            microvm.nixosModules.host
-            vscode-server.nixosModules.default
-          ];
-        };
-
-        hosts = {
-          x1 = {
-            modules = with inputs; [
-              nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
-              niri.nixosModules.niri
-              {
-                boot.binfmt.emulatedSystems = [
-                  "armv6l-linux"
-                  "aarch64-linux"
-                ];
-              }
-            ];
+      nodes.ripnix = {
+        hostname = "192.168.1.143";
+        fastConnection = true;
+        interactiveSudo = false;
+        remoteBuild = true;
+        profiles = {
+          system = {
+            sshUser = "petee";
+            path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.ripnix;
+            user = "root";
           };
-
-          ripnix.modules = with inputs; [
-            niri.nixosModules.niri
-          ];
-          rpi4.modules = with inputs; [
-            nixos-hardware.nixosModules.raspberry-pi-4
-          ];
-          rpiw.modules = with inputs; [ ];
-          m4.modules = with inputs; [ ];
-          m3p.modules = with inputs; [ ];
-          microvm-poc.modules = with inputs; [
-            microvm.nixosModules.microvm
-          ];
+        };
+      };
+      nodes.m4 = {
+        hostname = "192.168.1.149";
+        fastConnection = true;
+        interactiveSudo = false;
+        remoteBuild = true;
+        profiles = {
+          system = {
+            path = inputs.deploy-rs.lib.aarch64-darwin.activate.darwin self.darwinConfigurations.m4;
+            user = "root";
+            sshUser = "pete";
+          };
+        };
+      };
+      nodes.m3p = {
+        hostname = "192.168.1.209";
+        fastConnection = true;
+        interactiveSudo = false;
+        remoteBuild = true;
+        profiles = {
+          system = {
+            path = inputs.deploy-rs.lib.aarch64-darwin.activate.darwin self.darwinConfigurations.m3p;
+            user = "root";
+            sshUser = "petee";
+          };
+        };
+      };
+      nodes.rpi4 = {
+        hostname = "192.168.1.173";
+        fastConnection = true;
+        interactiveSudo = false;
+        remoteBuild = true;
+        profiles = {
+          system = {
+            path = inputs.deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.rpi4;
+            user = "root";
+            sshUser = "petee";
+          };
         };
       };
     };
+
+    # overlays
+    overlays = with inputs; [
+      nix-vscode-extensions.overlays.default
+      nur.overlays.default
+      llama-cpp.overlays.default
+      claude-code.overlays.default
+      niri.overlays.niri
+    ];
+
+    channels-config = {
+      allowUnfree = true;
+      android_sdk.accept_license = true;
+      permittedInsecurePackages = [
+        # "electron-25.9.0"
+      ];
+
+    };
+
+    homes.modules = with inputs; [
+      sops-nix.homeManagerModules.sops
+      catppuccin.homeModules.catppuccin
+      noctalia.homeModules.default
+    ];
+
+    systems = {
+      overlays = with inputs; [ ];
+      modules = {
+        darwin = with inputs; [
+          sops-nix.darwinModules.sops
+          home-manager.darwinModules.home-manager
+          virby.darwinModules.default
+        ];
+        nixos = with inputs; [
+          sops-nix.nixosModules.sops
+          home-manager.nixosModules.home-manager
+          # nixos-generators.nixosModules.all-formats
+          nixvirt.nixosModules.default
+          microvm.nixosModules.host
+          vscode-server.nixosModules.default
+        ];
+      };
+
+      hosts = {
+        x1 = {
+          modules = with inputs; [
+            nixos-hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
+            niri.nixosModules.niri
+            {
+              boot.binfmt.emulatedSystems = [ "armv6l-linux" "aarch64-linux"];
+            }
+          ];
+        };
+
+        ripnix.modules = with inputs; [
+          niri.nixosModules.niri
+        ];
+        rpi4.modules = with inputs; [
+          nixos-hardware.nixosModules.raspberry-pi-4
+        ];
+        m4.modules = with inputs; [ ];
+        m3p.modules = with inputs; [ ];
+        microvm-poc.modules = with inputs; [
+          microvm.nixosModules.microvm
+        ];
+      };
+    };
+  };
 }

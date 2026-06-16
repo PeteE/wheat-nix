@@ -32,6 +32,7 @@ in
   services.vscode-server = {
     enable = true;
     enableFHS = true;
+    nodejsPackage = pkgs.nodejs_24;
   };
   services.tailscale.enable = true;
   wheat = {
@@ -235,6 +236,7 @@ in
     "petee"
     "pete"
   ];
+  nix.settings.require-sigs = false;
   nix.settings.substituters = [ "https://nix-cache-dev.corp.tooling.opaque-int.com/opaque" ];
   nix.settings.trusted-public-keys = [ "opaque:od+Hipzy1dL0ZZBg24QiYP2QgEXVPVSQfDVSBxDBNWU=" ];
 

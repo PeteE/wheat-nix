@@ -20,7 +20,7 @@ in
       ollama
       bat
       openbao
-      go_1_24
+      go_1_26
       attic-client
       glow
       delve

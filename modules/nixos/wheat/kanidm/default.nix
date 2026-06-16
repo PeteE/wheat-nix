@@ -157,12 +157,12 @@ in
 
   config = mkIf cfg.enable {
     # Add kanidm CLI tools to system path
-    environment.systemPackages = [ pkgs.kanidm_1_8 ];
+    environment.systemPackages = [ pkgs.kanidm_1_10 ];
 
     services.kanidm = {
       enableServer = true;
       enableClient = true;
-      package = pkgs.kanidm_1_8.withSecretProvisioning; # Latest stable with secret provisioning
+      package = pkgs.kanidm_1_10.withSecretProvisioning;
 
       clientSettings = {
         uri = "https://localhost:${toString cfg.bindPort}";

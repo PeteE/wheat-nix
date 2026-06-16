@@ -49,7 +49,7 @@ in
         };
 
         node = {
-          path = lib.getExe pkgs.nodejs;
+          path = lib.getExe pkgs.nodejs_24;
           npm_path = lib.getExe' pkgs.nodejs "npm";
         };
 
