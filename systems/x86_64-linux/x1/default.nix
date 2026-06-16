@@ -30,6 +30,8 @@
         "kvm"
         "dialout"
         "disk"
+        "input"
+        "uinput"
       ];
     };
     services.n8n = {
@@ -72,6 +74,11 @@
       enable = true;
     };
     services.niri.enable = true;
+    remote-desktop = {
+      enable = true;
+      backend = "sunshine";
+      openFirewall = true; # LAN access; tighten if you only want Tailscale
+    };
   };
 
   # SPIRE x509pop certificates for node attestation

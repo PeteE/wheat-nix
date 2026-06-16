@@ -7,6 +7,7 @@
 }:
 {
   wheat = {
+    ollama.enable = false;
     git.managedConfig = false;
     work.enable = true;
     minikube.enable = true;
@@ -30,9 +31,10 @@
     azure-storage-azcopy
     inputs.nixpkgs-stable.legacyPackages."${system}".tailscale
     python312Packages.huggingface-hub
+    moonlight-qt
   ];
   home.sessionVariables = {
     AZCOPY_AUTO_LOGIN_TYPE = "AZCLI";
   };
-  home.stateVersion = "25.11";
+  home.stateVersion = "26.05";
 }

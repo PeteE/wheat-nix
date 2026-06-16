@@ -17,7 +17,7 @@ in
     home.packages = with pkgs; [
       meld
       inputs.deploy-rs.packages."${system}".deploy-rs # https://github.com/serokell/deploy-rs
-      ollama
+      # ollama  # disabled: aarch64-darwin build requires Xcode + Metal toolchain
       bat
       openbao
       go_1_26

@@ -104,7 +104,7 @@
         hostname = "192.168.1.7";
         fastConnection = true;
         interactiveSudo = false;
-        remoteBuild = false;
+        remoteBuild = true;
         profiles = {
           system = {
             sshUser = "petee";
