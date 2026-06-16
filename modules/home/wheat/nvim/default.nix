@@ -348,8 +348,9 @@ in
         }
         {
           plugin = catppuccin-nvim;
+          type = "lua";
           config = ''
-            colorscheme catppuccin-mocha
+            vim.cmd.colorscheme("catppuccin-mocha")
           '';
         }
         {
@@ -560,13 +561,16 @@ in
         vim-nix
         {
           plugin = vim-gitgutter;
+          type = "lua";
           config = ''
-            let g:gitgutter_enabled=1
-            let g:gitgutter_terminal_reports_focus=0
-            let g:gitgutter_map_keys = 1
-            highlight GitGutterAdd    guifg=#a6e3a1 ctermfg=2
-            highlight GitGutterChange guifg=#fab387 ctermfg=3
-            highlight GitGutterDelete guifg=#f38ba8 ctermfg=1
+            vim.g.gitgutter_enabled = 1
+            vim.g.gitgutter_terminal_reports_focus = 0
+            vim.g.gitgutter_map_keys = 1
+            vim.cmd [[
+              highlight GitGutterAdd    guifg=#a6e3a1 ctermfg=2
+              highlight GitGutterChange guifg=#fab387 ctermfg=3
+              highlight GitGutterDelete guifg=#f38ba8 ctermfg=1
+            ]]
           '';
         }
         {
