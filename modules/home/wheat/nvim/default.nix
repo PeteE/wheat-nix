@@ -56,7 +56,7 @@ in
           plugin = trouble-nvim;
           type = "lua";
           config = ''
-            -- require('trouble').setup({})
+            require('trouble').setup({})
           '';
         }
         {
@@ -168,7 +168,7 @@ in
 
              -- LSP
              vim.keymap.set('n', '<leader>gd',   function() Snacks.picker.lsp_definitions() end, { desc = 'Go to definitions' })
-             vim.keymap.set('n', '<leader>gD',   function() Snacks.picker.lsp_declaration() end, { desc = 'Go to definitions' })
+             vim.keymap.set('n', '<leader>gD',   function() Snacks.picker.lsp_declaration() end, { desc = 'Go to declarations' })
              vim.keymap.set('n', '<leader>gr',   function() Snacks.picker.lsp_references() end, { desc = 'Go to references' })
              vim.keymap.set('n', '<leader>gI',   function() Snacks.picker.lsp_implementations() end, { desc = 'Go to implementations' })
              vim.keymap.set('n', '<leader>gy',   function() Snacks.picker.lsp_type_definitions() end, { desc = 'Go to type definitions' })

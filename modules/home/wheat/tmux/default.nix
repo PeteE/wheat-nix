@@ -87,6 +87,10 @@ in
             set -g @catppuccin_flavor 'mocha'
             set -g @catppuccin_window_status_style "rounded"
 
+            # Show the tmux window name (#W) rather than the running command
+            set -g @catppuccin_window_default_text "#W"
+            set -g @catppuccin_window_current_text "#W"
+
             set -g status-right-length 100
             set -g status-left-length 100
             set -g status-left ""
