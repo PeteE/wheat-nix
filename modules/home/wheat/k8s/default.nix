@@ -27,6 +27,7 @@ in
         kubectx
         kubernetes-helm
         kubectl
+        kubectl-gadget # inspektor gadget plugin
         krew
       ]
       ++ optionals cfg.argocd.enable [

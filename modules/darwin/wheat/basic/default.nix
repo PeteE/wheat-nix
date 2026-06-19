@@ -41,6 +41,13 @@ in
     home-manager.backupFileExtension = ".hm-backup";
     programs.zsh.enable = true;
 
+    # Skip building the nix-darwin options manual. The options.json/manual
+    # derivations force-evaluate every module (emitting unrelated deprecation
+    # warnings) and embed the nixpkgs source path without proper context. We
+    # don't use the on-disk darwin manual, so disable it. Mirrors the NixOS
+    # `documentation.enable = false` in arm6/image.nix.
+    documentation.enable = false;
+
     # Set locale for UTF-8 support (needed for starship, tmux, etc.)
     environment.variables = {
       LANG = "en_US.UTF-8";

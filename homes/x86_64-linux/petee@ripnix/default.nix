@@ -43,7 +43,7 @@
   # notificaiton system
   services.mako = {
     enable = true;
-    defaultTimeout = 5000; # 5 seconds in milliseconds
+    settings.default-timeout = 5000; # 5 seconds in milliseconds
   };
 
   gtk = {
@@ -66,5 +66,5 @@
     enable = true;
   };
 
-  home.stateVersion = "25.11";
+  home.stateVersion = "26.05";
 }
