@@ -35,9 +35,6 @@
     python313Packages.huggingface-hub
     nmap
   ];
-  nix.settings.trusted-users = [
-    "pete"
-  ];
   # hack to workaround nix group id changes
   ids.gids.nixbld = 350;
 
