@@ -74,7 +74,7 @@ in
         };
 
         spawn-at-startup = [
-          { command = [ "noctalia-shell" ]; }
+          { command = [ "noctalia" ]; }
           { command = [ "xwayland-satellite" ]; }
           { command = [ "kitty" ]; }
         ];
