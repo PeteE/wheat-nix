@@ -186,7 +186,7 @@
     networkConfig = {
       Address = [ "192.168.100.1/24" ];
       DNS = [
-        "192.168.1.173" # rpi4 AdGuard Home
+        "192.168.1.176" # rpi4 AdGuard Home
         "1.1.1.1" # fallback
       ];
       IPv6AcceptRA = false;

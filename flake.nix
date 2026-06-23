@@ -87,6 +87,11 @@
   };
   outputs =
     { self, ... }@inputs:
+    let
+      # Builds deploy node `path`s with the cached nixpkgs deploy-rs binary
+      # instead of a source build. See lib/deploy-pkgs.nix for the full rationale.
+      inherit (import ./lib/deploy-pkgs.nix { inherit inputs; }) deployPkgsFor;
+    in
     inputs.snowfall-lib.mkFlake {
       inherit inputs;
       src = ./.;
@@ -110,7 +115,7 @@
           profiles = {
             system = {
               sshUser = "petee";
-              path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.x1;
+              path = (deployPkgsFor "x86_64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.x1;
               user = "root";
             };
           };
@@ -123,7 +128,7 @@
           profiles = {
             system = {
               sshUser = "petee";
-              path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.ripnix;
+              path = (deployPkgsFor "x86_64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.ripnix;
               user = "root";
             };
           };
@@ -135,7 +140,7 @@
           remoteBuild = true;
           profiles = {
             system = {
-              path = inputs.deploy-rs.lib.aarch64-darwin.activate.darwin self.darwinConfigurations.m4;
+              path = (deployPkgsFor "aarch64-darwin").deploy-rs.lib.activate.darwin self.darwinConfigurations.m4;
               user = "root";
               sshUser = "pete";
             };
@@ -148,7 +153,7 @@
           remoteBuild = true;
           profiles = {
             system = {
-              path = inputs.deploy-rs.lib.aarch64-darwin.activate.darwin self.darwinConfigurations.m3p;
+              path = (deployPkgsFor "aarch64-darwin").deploy-rs.lib.activate.darwin self.darwinConfigurations.m3p;
               user = "root";
               sshUser = "petee";
             };
@@ -161,7 +166,7 @@
           remoteBuild = true;
           profiles = {
             system = {
-              path = inputs.deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.rpi4;
+              path = (deployPkgsFor "aarch64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.rpi4;
               user = "root";
               sshUser = "petee";
             };

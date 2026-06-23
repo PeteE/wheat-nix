@@ -160,22 +160,26 @@ in
     environment.systemPackages = [ pkgs.kanidm_1_10 ];
 
     services.kanidm = {
-      enableServer = true;
-      enableClient = true;
       package = pkgs.kanidm_1_10.withSecretProvisioning;
 
-      clientSettings = {
-        uri = "https://localhost:${toString cfg.bindPort}";
-        verify_ca = false; # Using self-signed cert internally
+      client = {
+        enable = true;
+        settings = {
+          uri = "https://localhost:${toString cfg.bindPort}";
+          verify_ca = false; # Using self-signed cert internally
+        };
       };
 
-      serverSettings = {
-        inherit (cfg) domain;
-        origin = "https://${cfg.domain}";
-        bindaddress = "${cfg.bindAddress}:${toString cfg.bindPort}";
-        tls_chain = "/var/lib/kanidm/tls/chain.pem";
-        tls_key = "/var/lib/kanidm/tls/key.pem";
-        log_level = cfg.logLevel;
+      server = {
+        enable = true;
+        settings = {
+          inherit (cfg) domain;
+          origin = "https://${cfg.domain}";
+          bindaddress = "${cfg.bindAddress}:${toString cfg.bindPort}";
+          tls_chain = "/var/lib/kanidm/tls/chain.pem";
+          tls_key = "/var/lib/kanidm/tls/key.pem";
+          log_level = cfg.logLevel;
+        };
       };
 
       provision = mkIf cfg.provision.enable {
