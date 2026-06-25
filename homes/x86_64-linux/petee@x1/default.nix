@@ -47,6 +47,7 @@
 
     # neato tui for network
     inputs.matthart1983-netwatch.packages."${pkgs.stdenv.hostPlatform.system}".netwatch
+    pkgs.wheat.vim-kubernetes
   ];
 
   programs.zsh.initContent = ''
