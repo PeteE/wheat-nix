@@ -321,5 +321,4 @@
     "petee"
     "pete"
   ];
-  # nix.settings.substituters = [ "https://nix-cache-dev.corp.tooling.opaque-int.com/opaque" ];
 }

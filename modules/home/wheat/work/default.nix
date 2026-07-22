@@ -36,6 +36,13 @@ in
       python314
       python314Packages.pytest
       slack
+      flarectl
     ];
+
+    sops.secrets.op-cloudflare-api-token = { };
+
+    programs.zsh.envExtra = ''
+      export CF_API_TOKEN=$(cat ${config.sops.secrets.op-cloudflare-api-token.path})
+    '';
   };
 }

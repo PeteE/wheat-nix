@@ -168,9 +168,6 @@ in
     xdg.configFile."tmuxp/wheat-nix.yaml" = {
       source = ./tmuxp/wheat-nix.yaml;
     };
-    xdg.configFile."tmuxp/opaque-systems.yaml" = {
-      source = ./tmuxp/opaque-systems.yaml;
-    };
     programs.zsh.envExtra = ''
       export DISABLE_AUTO_TITLE=true
     '';

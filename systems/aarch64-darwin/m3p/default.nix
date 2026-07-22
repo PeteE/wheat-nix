@@ -33,12 +33,9 @@
 
   nix.settings.extra-substituters = [
     "https://virby-nix-darwin.cachix.org"
-    # "https://nix-cache-dev.corp.tooling.opaque-int.com/opaque"
   ];
   nix.settings.extra-trusted-public-keys = [
     "virby-nix-darwin.cachix.org-1:z9GiEZeBU5bEeoDQjyfHPMGPBaIQJOOvYOOjGMKIlLo="
-    # "opaque:VxHSDCiWBdYUnyYHsZ7BPLfx4TnYgwYBRgG4pyzGUEc="
-    # "opaque:SYZXsQ0ngwxYY2Ykum45nphoOKNnYRuWkRnUJtChGYU="
   ];
   services.virby = {
     debug = true;
