@@ -53,7 +53,7 @@
     };
 
     virby = {
-      url = "github:quinneden/virby-nix-darwin?ref=be19793779852006fe6bc498f8670c954b4adf96";
+      url = "github:quinneden/virby-nix-darwin?ref=a52216470a97ef5970939acf697a00ec61beb0c6";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-vscode-extensions = {
@@ -61,7 +61,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin = {
-      url = "github:catppuccin/nix/02dee881c3e644e2b561f407742f1fd927c40b83";
+      url = "github:catppuccin/nix/673f730d0fc8db3468c51575f1d3d777cc55e51f";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvirt = {
