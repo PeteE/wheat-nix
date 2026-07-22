@@ -13,8 +13,8 @@ in
     enable = mkEnableOption "Enable";
   };
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
-      minikube
+    home.packages = [
+      (lib.lowPrio pkgs.minikube)
     ];
   };
 }
