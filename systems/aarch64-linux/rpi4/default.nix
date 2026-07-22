@@ -139,7 +139,7 @@
   };
 
   services.open-webui = {
-    enable = true;
+    enable = false;
     port = 8888;
     openFirewall = true;
   };
