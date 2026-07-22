@@ -25,7 +25,7 @@
     clipcat.enable = true;
     firefox.enable = true;
     devenv.enable = true;
-    zed-editor.enable = true;
+    # zed-editor.enable = true;
     # vscode.enable = true;
     aws.enable = true;
     azure.enable = true;
