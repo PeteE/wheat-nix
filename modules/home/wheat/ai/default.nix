@@ -11,6 +11,7 @@ in
 {
   imports = [
     ./mcp/mcp.nix
+    ./skills.nix
   ];
 
   options.wheat.ai = {
@@ -41,7 +42,7 @@ in
     sops.secrets.openaiApiKey = { };
     # sops.secrets.anthropicApiKey = { };
     sops.secrets.assemblyAiApiKey = { };
-    sops.secrets.opaqueGithubToken = { };
+    sops.secrets.opGithubToken = { };
     programs.zsh = {
       envExtra = ''
         export OLLAMA_HOST=${cfg.ollamaHost}
@@ -49,7 +50,7 @@ in
         export OPENROUTER_API_KEY=$(cat ${config.sops.secrets.openrouerApiKey.path})
         # export ANTHROPIC_API_KEY=""
         export ASSEMBLYAI_API_KEY=$(cat ${config.sops.secrets.assemblyAiApiKey.path})
-        export OPAQUE_GITHUB_TOKEN=$(cat ${config.sops.secrets.opaqueGithubToken.path})
+        export OP_GITHUB_TOKEN=$(cat ${config.sops.secrets.opGithubToken.path})
       '';
       completionInit = ''
         _aichat_zsh() {

@@ -162,7 +162,6 @@ in
     services.kanidm = {
       enableServer = true;
       enableClient = true;
-
       package = pkgs.kanidm_1_10.withSecretProvisioning;
 
       client = {
@@ -175,7 +174,6 @@ in
 
       server = {
         enable = true;
-
         settings = {
           inherit (cfg) domain;
           origin = "https://${cfg.domain}";

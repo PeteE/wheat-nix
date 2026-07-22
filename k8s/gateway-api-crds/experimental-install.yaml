@@ -2882,7 +2882,6 @@ spec:
 
                           Support: Core - Reference to a Kubernetes TLS Secret (with the type `kubernetes.io/tls`).
                           Support: Implementation-specific - Other resource kinds or Secrets with a
-                          different type (e.g., `Opaque`).
                         properties:
                           group:
                             default: ""
@@ -4469,8 +4468,7 @@ spec:
                           an implementation-specific Reason and Message MUST be set.
 
                           Support: Core - Reference to a Kubernetes TLS Secret (with the type `kubernetes.io/tls`).
-                          Support: Implementation-specific - Other resource kinds or Secrets with a
-                          different type (e.g., `Opaque`).
+                          Support: Implementation-specific
                         properties:
                           group:
                             default: ""

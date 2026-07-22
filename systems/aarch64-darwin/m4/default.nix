@@ -33,9 +33,7 @@
   environment.systemPackages = with pkgs; [
     inputs.nixpkgs-stable.legacyPackages."${system}".llama-cpp
     python313Packages.huggingface-hub
-  ];
-  nix.settings.trusted-users = [
-    "pete"
+    nmap
   ];
   # hack to workaround nix group id changes
   ids.gids.nixbld = 350;

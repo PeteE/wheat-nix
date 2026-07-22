@@ -25,7 +25,11 @@
   };
   swapDevices = [ ];
 
-  boot.kernelPackages = pkgs.linuxPackages_rpi4;
+  # Mainline kernel (cached on cache.nixos.org) instead of the vendor
+  # linuxPackages_rpi4 (linux-rpi), which is uncached and compiles from source
+  # on the Pi for hours. RPi4 is well supported by mainline + the nixos-hardware
+  # raspberry-pi-4 module. Also clears the "linux-rpi will be removed" warning.
+  boot.kernelPackages = pkgs.linuxPackages;
   boot.initrd.allowMissingModules = true;
   boot.initrd.availableKernelModules = [
     "xhci_pci"
@@ -326,5 +330,4 @@
     "petee"
     "pete"
   ];
-  # nix.settings.substituters = [ "https://nix-cache-dev.corp.tooling.opaque-int.com/opaque" ];
 }

@@ -30,6 +30,8 @@
         "kvm"
         "dialout"
         "disk"
+        "input"
+        "uinput"
       ];
     };
     services.n8n = {
@@ -72,6 +74,11 @@
       enable = true;
     };
     services.niri.enable = true;
+    remote-desktop = {
+      enable = true;
+      backend = "sunshine";
+      openFirewall = true; # LAN access; tighten if you only want Tailscale
+    };
   };
 
   # SPIRE x509pop certificates for node attestation
@@ -179,7 +186,7 @@
     networkConfig = {
       Address = [ "192.168.100.1/24" ];
       DNS = [
-        "192.168.1.173" # rpi4 AdGuard Home
+        "192.168.1.176" # rpi4 AdGuard Home
         "1.1.1.1" # fallback
       ];
       IPv6AcceptRA = false;

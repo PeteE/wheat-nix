@@ -20,6 +20,7 @@ in
     enable = mkEnableOption "Enable custom sops secrets";
     defaultSopsFile = mkOption {
       default = ./secrets.yaml;
+      defaultText = lib.literalExpression "./secrets.yaml";
       description = "SOPS encrypted file containing all secrets";
       type = types.path;
     };

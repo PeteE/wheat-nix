@@ -41,6 +41,20 @@ in
     home-manager.backupFileExtension = ".hm-backup";
     programs.zsh.enable = true;
 
+    # Skip building the nix-darwin options manual. The options.json/manual
+    # derivations force-evaluate every module (emitting unrelated deprecation
+    # warnings) and embed the nixpkgs source path without proper context. We
+    # don't use the on-disk darwin manual, so disable it. Mirrors the NixOS
+    # `documentation.enable = false` in arm6/image.nix.
+    documentation.enable = false;
+
+    # Both Darwin hosts (m4, m3p) run Determinate Nix, which manages the Nix
+    # installation with its own daemon. nix-darwin must not also manage Nix or
+    # activation aborts ("Determinate detected, aborting activation"). Nix
+    # settings are configured through Determinate (/etc/nix/nix.custom.conf),
+    # not nix-darwin's nix.* options.
+    nix.enable = false;
+
     # Set locale for UTF-8 support (needed for starship, tmux, etc.)
     environment.variables = {
       LANG = "en_US.UTF-8";

@@ -14,7 +14,7 @@
   ...
 }:
 {
-  nix.enable = false;
+  # nix.enable = false is set in the shared darwin module (Determinate).
   wheat = {
     enable = true;
     user = {
@@ -31,7 +31,9 @@
     # services.podman.enable = true;
   };
 
-  nix.settings.extra-substituters = [ "https://virby-nix-darwin.cachix.org" ];
+  nix.settings.extra-substituters = [
+    "https://virby-nix-darwin.cachix.org"
+  ];
   nix.settings.extra-trusted-public-keys = [
     "virby-nix-darwin.cachix.org-1:z9GiEZeBU5bEeoDQjyfHPMGPBaIQJOOvYOOjGMKIlLo="
   ];

@@ -8,7 +8,7 @@
 
 # Commands may be slower in restricted environments, e.g. containers
 
-format = """$hostname$directory$git_branch$azure$git_commit$git_state$git_status\
+format = """$hostname$directory$git_branch$azure${custom.gcloud}$git_commit$git_state$git_status\
 $fill\
 $jobs$status$cmd_duration\
 $nix_shell$terraform$kubernetes$python$aws$nodejs$docker_context$golang$time$os
@@ -221,7 +221,24 @@ symbol = " "
 symbol = " "
 
 [gcloud]
+disabled = true
+
+[custom.gcloud]
+command = '''
+active=$(cat ~/.config/gcloud/active_config 2>/dev/null)
+proj=$(awk -F'= ' '/^project/{print $2}' ~/.config/gcloud/configurations/config_$active 2>/dev/null)
+len=${#proj}
+if [ "$len" -gt 9 ]; then
+  echo "${proj:0:4}..${proj: -3}"
+else
+  echo "$proj"
+fi
+'''
+when = true
+shell = ["bash", "--noprofile", "--norc"]
 symbol = "  "
+style = "yellow"
+format = '[ ❯ ](#767676)[$symbol$output]($style)'
 
 [git_commit]
 tag_symbol = '  '

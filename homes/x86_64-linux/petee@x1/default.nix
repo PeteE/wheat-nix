@@ -46,7 +46,9 @@
     tectonic
 
     # neato tui for network
-    inputs.matthart1983-netwatch.packages."${pkgs.system}".netwatch
+    inputs.matthart1983-netwatch.packages."${pkgs.stdenv.hostPlatform.system}".netwatch
+    # gateway API cli
+    pkgs.wheat.gwctl
   ];
 
   programs.zsh.initContent = ''
@@ -122,5 +124,5 @@
     # but in this case must include *all* settings.
   };
 
-  home.stateVersion = "25.11";
+  home.stateVersion = "26.05";
 }

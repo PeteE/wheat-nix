@@ -24,11 +24,11 @@ in
       mcp-k8s-go
       slack-mcp-server
     ];
-    sops.secrets.opaqueGithubToken = { };
+    sops.secrets.opGithubToken = { };
     sops.secrets.slack-mcp-server-oauth-user-token = { };
     programs.zsh = {
       envExtra = ''
-        export GITHUB_PERSONAL_ACCESS_TOKEN="$(cat ${config.sops.secrets.opaqueGithubToken.path})"
+        export GITHUB_PERSONAL_ACCESS_TOKEN="$(cat ${config.sops.secrets.opGithubToken.path})"
         export SLACK_MCP_XOXP_TOKEN="$(cat ${config.sops.secrets.slack-mcp-server-oauth-user-token.path})"
       '';
     };

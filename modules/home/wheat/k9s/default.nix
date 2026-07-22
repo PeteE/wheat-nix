@@ -54,6 +54,21 @@ in
         portForwardAddress = "localhost";
         skipLatestRevCheck = true;
 
+        # Log view settings. These govern how many lines are loaded into the
+        # log buffer, which is also what the `c` (copy) shortcut copies.
+        logger = {
+          # Lines fetched/shown when first opening the log view. Default 100.
+          tail = 1000;
+          # Max lines the log view holds in memory (and the most `c` can copy).
+          # Default 5000.
+          buffer = 10000;
+          # Time window for logs. -1 = since container start. Default -1.
+          sinceSeconds = -1;
+          # Wrap long log lines. Default false.
+          textWrap = false;
+          # Prefix each line with a timestamp. Default false.
+          showTime = false;
+        };
       };
 
     };

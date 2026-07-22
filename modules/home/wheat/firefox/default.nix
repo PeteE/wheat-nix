@@ -22,6 +22,10 @@ in
   config = mkIf cfg.enable {
     programs.firefox = {
       enable = true;
+      # Pin the legacy profile location. The 26.05 default moved this to
+      # $XDG_CONFIG_HOME/mozilla/firefox; keeping the old path avoids
+      # relocating (and effectively resetting) the existing profile.
+      configPath = ".mozilla/firefox";
       profiles.default = {
         id = 0;
         isDefault = true;
