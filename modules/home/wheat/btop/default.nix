@@ -18,6 +18,10 @@ in
     enable = mkEnableOption "Enable";
   };
   config = mkIf cfg.enable {
+    # We manage the catppuccin theme file ourselves below; avoid colliding
+    # with catppuccin/nix's own btop port writing the same target path.
+    catppuccin.btop.enable = false;
+
     home.packages = with pkgs; [
       btop
       wheat.btop-catppuccin-theme

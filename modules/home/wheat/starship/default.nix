@@ -22,6 +22,10 @@ in
     enable = mkEnableOption "Enable";
   };
   config = mkIf cfg.enable {
+    # We manage starship.toml ourselves below; avoid colliding with
+    # catppuccin/nix's own starship port writing the same target path.
+    catppuccin.starship.enable = false;
+
     programs.starship = {
       enable = true;
       enableZshIntegration = true;

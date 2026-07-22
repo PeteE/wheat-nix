@@ -205,6 +205,12 @@
           manual.json.enable = false;
           manual.manpages.enable = false;
         }
+        {
+          # Preserve current behavior (all catppuccin ports auto-enabled)
+          # ahead of catppuccin/nix's enable/autoEnable split.
+          catppuccin.enable = true;
+          catppuccin.autoEnable = true;
+        }
       ];
 
       systems = {
