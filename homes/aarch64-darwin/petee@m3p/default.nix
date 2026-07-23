@@ -108,8 +108,6 @@
     inputs.nixpkgs-stable.legacyPackages."${system}".tailscale
     python312Packages.huggingface-hub
     # moonlight-qt
-    # gateway API cli
-    pkgs.wheat.gwctl
     pkgs.wheat.openskills
   ];
   home.sessionVariables = {

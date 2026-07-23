@@ -9,6 +9,24 @@ with lib;
 let
   cfg = config.wheat.wifi;
   inherit (lib) mkEnableOption mkIf;
+
+  mkPskProfile = ssid: pskPlaceholder: {
+    connection = {
+      id = ssid;
+      type = "wifi";
+      autoconnect = true;
+    };
+    wifi = {
+      mode = "infrastructure";
+      inherit ssid;
+    };
+    wifi-security = {
+      key-mgmt = "wpa-psk";
+      psk = pskPlaceholder;
+    };
+    ipv4.method = "auto";
+    ipv6.method = "auto";
+  };
 in
 {
   options.wheat.wifi = {
@@ -16,29 +34,36 @@ in
   };
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      wpa_supplicant
       iw
     ];
-    networking.wireless = {
+
+    # NetworkManager owns wifi only; systemd-networkd keeps managing
+    # the wired uplink and VM bridge declaratively.
+    networking.networkmanager = {
       enable = true;
-      userControlled = true;
-      networks = {
-        soma20_5g = {
-          pskRaw = "121e447798031c71665a2728c57099b937b3a66b84b0ce21acb6ed7983a823ae";
+      unmanaged = [
+        "enp0s31f6"
+        "br0"
+        "interface-name:vm-*"
+      ];
+      ensureProfiles = {
+        environmentFiles = [ config.sops.templates."wifi.env".path ];
+        profiles = {
+          soma20_5g = mkPskProfile "soma20_5g" "$SOMA20_5G_PSK";
+          AA_zzz = mkPskProfile "AA_zzz" "$AA_ZZZ_PSK";
+          "cabin-2.4Ghz" = mkPskProfile "cabin-2.4Ghz" "$CABIN_PSK";
         };
-        AA_zzz = {
-          pskRaw = "0ca28caee11466a0f00e590972301f72a2deeb373d43a5534e77defeb4a60c6a";
-        };
-        "cabin-2.4Ghz" = {
-          pskRaw = "cb033f2f917b9b87e57d9702e1bea4561a4ef145af6a1c2387ee51a4052b8666";
-        };
-        "IHGWiFi.com" = {
-          psk = null;
-        };
-        # "SpectrumSetup-8F" = {
-        #   psk = "";
-        # };
       };
     };
+
+    sops.secrets."wifi/soma20_5g_psk" = { };
+    sops.secrets."wifi/aa_zzz_psk" = { };
+    sops.secrets."wifi/cabin_psk" = { };
+
+    sops.templates."wifi.env".content = ''
+      SOMA20_5G_PSK=${config.sops.placeholder."wifi/soma20_5g_psk"}
+      AA_ZZZ_PSK=${config.sops.placeholder."wifi/aa_zzz_psk"}
+      CABIN_PSK=${config.sops.placeholder."wifi/cabin_psk"}
+    '';
   };
 }

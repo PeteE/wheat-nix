@@ -41,6 +41,10 @@
       "m4" = {
         User = "pete";
       };
+      "192.168.1.4" = {
+        HostKeyAlgorithms = "+ssh-rsa";
+        PubkeyAcceptedAlgorithms = "+ssh-rsa";
+      };
     };
   };
 
@@ -52,6 +56,7 @@
     unzip
     dig
     bat
+    ookla-speedtest
     direnv
     curl
     wget

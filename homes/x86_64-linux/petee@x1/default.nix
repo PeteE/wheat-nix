@@ -47,8 +47,6 @@
 
     # neato tui for network
     inputs.matthart1983-netwatch.packages."${pkgs.stdenv.hostPlatform.system}".netwatch
-    # gateway API cli
-    pkgs.wheat.gwctl
   ];
 
   programs.zsh.initContent = ''
