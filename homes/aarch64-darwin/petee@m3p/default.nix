@@ -20,6 +20,38 @@
     dev-tools.enable = true;
     ai.enable = true;
     ai.mcp.enable = true;
+    ai.caveman.enable = true;
+    ai.claude.settings = {
+      env = {
+        CLAUDE_CODE_ENABLE_TELEMETRY = "0";
+        CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS = "1";
+      };
+      permissions = {
+        allow = [
+          "Bash"
+          "Read(*)"
+          "WebFetch(domain:github.com)"
+          "mcp__claude_ai_Notion__notion-fetch"
+        ];
+        deny = [ ];
+        defaultMode = "auto";
+      };
+      worktree.baseRef = "fresh";
+      enabledPlugins = {
+        "gopls-lsp@claude-plugins-official" = true;
+        "superpowers@claude-plugins-official" = false;
+      };
+      effortLevel = "medium";
+      awaySummaryEnabled = false;
+      tui = "fullscreen";
+      theme = "dark";
+      editorMode = "vim";
+      verbose = false;
+      teammateMode = "tmux";
+      remoteControlAtStartup = true;
+      skipAutoPermissionPrompt = true;
+      enableArtifact = false;
+    };
     # To add a skill: pick `rev` via `git ls-remote <repo-url> HEAD`, then
     # compute `hash` with:
     #   h=$(nix-prefetch-url --unpack https://github.com/<owner>/<repo>/archive/<rev>.tar.gz)
