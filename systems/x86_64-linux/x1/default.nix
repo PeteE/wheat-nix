@@ -35,7 +35,7 @@
       ];
     };
     services.n8n = {
-      enable = true;
+      enable = false;
     };
 
     # SPIRE agent connecting to rpi4 server
@@ -160,10 +160,12 @@
     hicolor-icon-theme # Base fallback icon theme
     thunar
   ];
-  networking.useDHCP = true;
   networking.useNetworkd = true;
   networking.hostName = "x1";
   systemd.network.enable = true;
+  # NetworkManager now owns wlp2s0; networkd-wait-online would otherwise
+  # block on an interface it no longer manages.
+  systemd.network.wait-online.enable = false;
   systemd.network.networks."10-lan" = {
     matchConfig.Name = [
       "enp0s31f6"
@@ -255,13 +257,11 @@
   };
   services.blueman.enable = true;
   services.libinput.enable = true;
+  services.fwupd.enable = true;
 
   # Power management
   powerManagement = {
     enable = true;
-    powertop = {
-      enable = true;
-    };
     # cpuFreqGovernor = "performance";
   };
   services.tlp = {

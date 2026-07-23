@@ -115,13 +115,16 @@ in
           "dom.battery.enabled" = false; # you don't need to see my battery...
           "dom.private-attribution.submission.enabled" = false; # No PPA for me pls
         };
-        extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
-          ublock-origin
-          darkreader
-          bitwarden
-          vimium
-          foxyproxy-standard
-        ];
+        extensions = {
+          force = true;
+          packages = with pkgs.nur.repos.rycee.firefox-addons; [
+            ublock-origin
+            darkreader
+            bitwarden
+            vimium
+            foxyproxy-standard
+          ];
+        };
         # search = {
         #   default = "ddg";
         #   engines = {
@@ -183,6 +186,7 @@ in
       profiles.alt = {
         id = 1;
         isDefault = false;
+        extensions.force = true;
         settings = {
           # General
           "intl.accept_languages" = "en-US,en";
