@@ -34,10 +34,12 @@
     inputs.nixpkgs-stable.legacyPackages."${system}".llama-cpp
     python313Packages.huggingface-hub
     macpm
+    nmap
   ];
   nix.settings.trusted-users = [
     "pete"
   ];
+  nix.enable = false;
   # hack to workaround nix group id changes
   ids.gids.nixbld = 350;
 
