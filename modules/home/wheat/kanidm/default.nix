@@ -5,9 +5,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.kanidm;
-in {
+in
+{
   options.wheat.kanidm = {
     enable = mkEnableOption "Kanidm CLI client";
 
@@ -25,7 +27,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.kanidm_1_8 ];
+    home.packages = [ pkgs.kanidm_1_10 ];
 
     xdg.configFile."kanidm".text = ''
       uri = "${cfg.serverUrl}"

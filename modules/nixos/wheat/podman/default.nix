@@ -5,9 +5,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.services.podman;
-in {
+in
+{
   options.wheat.services.podman = {
     enable = mkEnableOption "Enable podman";
   };

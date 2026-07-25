@@ -1,15 +1,12 @@
 # vim: ts=2:sw=2:et
 {
-    pkgs,
-    inputs,
-    system,
-    config,
-    lib,
-    ...
+  pkgs,
+  inputs,
+  system,
+  config,
+  lib,
+  ...
 }:
-let
-  isDarwin = pkgs.stdenv.isDarwin;
-in
 {
   home = {
     username = config.snowfallorg.user.name;
@@ -37,14 +34,16 @@ in
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
+    settings = {
       "*" = {
-        extraOptions = {
-          "AddKeysToAgent" = "yes";
-        };
+        AddKeysToAgent = "yes";
       };
       "m4" = {
-        user = "pete";
+        User = "pete";
+      };
+      "192.168.1.4" = {
+        HostKeyAlgorithms = "+ssh-rsa";
+        PubkeyAcceptedAlgorithms = "+ssh-rsa";
       };
     };
   };
@@ -53,9 +52,11 @@ in
     mosquitto
     mqttx-cli
     zip
+    gnumake
     unzip
     dig
     bat
+    ookla-speedtest
     direnv
     curl
     wget

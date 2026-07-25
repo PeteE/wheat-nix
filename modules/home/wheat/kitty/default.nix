@@ -1,21 +1,23 @@
 # vim: ts=2:sw=2:et
 {
-    lib,
-    pkgs,
-    inputs,
-    namespace,
-    system,
-    target,
-    format,
-    virtual,
-    systems,
-    config,
-    modulesPath,
-    ...
+  lib,
+  pkgs,
+  inputs,
+  namespace,
+  system,
+  target,
+  format,
+  virtual,
+  systems,
+  config,
+  modulesPath,
+  ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.kitty;
-in {
+in
+{
   options.wheat.kitty = {
     enable = mkEnableOption "Enable";
     themeFile = mkOption {
@@ -42,10 +44,10 @@ in {
       enable = true;
       shellIntegration.enableZshIntegration = false;
       font = {
-        name = cfg.font.name;
-        size = cfg.font.size;
+        inherit (cfg.font) name;
+        inherit (cfg.font) size;
       };
-      themeFile = cfg.themeFile;
+      inherit (cfg) themeFile;
       settings = {
         cursor_shape = "underline";
         strip_trailing_spaces = "smart";

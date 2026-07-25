@@ -1,25 +1,31 @@
 {
-    lib,
-    pkgs,
-    inputs,
-    namespace,
-    system,
-    target,
-    format,
-    virtual,
-    systems,
-    config,
-    ...
+  lib,
+  pkgs,
+  inputs,
+  namespace,
+  system,
+  target,
+  format,
+  virtual,
+  systems,
+  config,
+  ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.firefox;
-in {
+in
+{
   options.wheat.firefox = with types; {
     enable = mkEnableOption "Enable";
   };
   config = mkIf cfg.enable {
     programs.firefox = {
       enable = true;
+      # Pin the legacy profile location. The 26.05 default moved this to
+      # $XDG_CONFIG_HOME/mozilla/firefox; keeping the old path avoids
+      # relocating (and effectively resetting) the existing profile.
+      configPath = ".mozilla/firefox";
       profiles.default = {
         id = 0;
         isDefault = true;
@@ -109,13 +115,16 @@ in {
           "dom.battery.enabled" = false; # you don't need to see my battery...
           "dom.private-attribution.submission.enabled" = false; # No PPA for me pls
         };
-        extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
-          ublock-origin
-          darkreader
-          bitwarden
-          vimium
-          foxyproxy-standard
-        ];
+        extensions = {
+          force = true;
+          packages = with pkgs.nur.repos.rycee.firefox-addons; [
+            ublock-origin
+            darkreader
+            bitwarden
+            vimium
+            foxyproxy-standard
+          ];
+        };
         # search = {
         #   default = "ddg";
         #   engines = {
@@ -177,6 +186,7 @@ in {
       profiles.alt = {
         id = 1;
         isDefault = false;
+        extensions.force = true;
         settings = {
           # General
           "intl.accept_languages" = "en-US,en";

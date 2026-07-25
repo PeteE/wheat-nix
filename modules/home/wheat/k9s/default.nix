@@ -1,19 +1,21 @@
 {
-    lib,
-    pkgs,
-    inputs,
-    namespace,
-    system,
-    target,
-    format,
-    virtual,
-    systems,
-    config,
-    ...
+  lib,
+  pkgs,
+  inputs,
+  namespace,
+  system,
+  target,
+  format,
+  virtual,
+  systems,
+  config,
+  ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.k9s;
-in {
+in
+{
   # This module will contain any work-related stuff
   options.wheat.k9s = with types; {
     enable = mkEnableOption "Enable";
@@ -45,13 +47,28 @@ in {
         # Specifies if modification commands like delete/kill/edit are disabled. Default is false
         readOnly = false;
         # This setting allows users to specify the default view, but it is not set by default.
-        defaultView =  "";
+        defaultView = "";
         # Toggles whether k9s should exit when CTRL-C is pressed. When set to true, you will need to exist k9s via the :quit command. Default is false.
         noExitOnCtrlC = false;
         # Default port forward host
         portForwardAddress = "localhost";
         skipLatestRevCheck = true;
 
+        # Log view settings. These govern how many lines are loaded into the
+        # log buffer, which is also what the `c` (copy) shortcut copies.
+        logger = {
+          # Lines fetched/shown when first opening the log view. Default 100.
+          tail = 1000;
+          # Max lines the log view holds in memory (and the most `c` can copy).
+          # Default 5000.
+          buffer = 10000;
+          # Time window for logs. -1 = since container start. Default -1.
+          sinceSeconds = -1;
+          # Wrap long log lines. Default false.
+          textWrap = false;
+          # Prefix each line with a timestamp. Default false.
+          showTime = false;
+        };
       };
 
     };

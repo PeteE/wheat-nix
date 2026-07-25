@@ -1,12 +1,13 @@
 {
-    home,
-    pkgs,
-    ...
+  home,
+  pkgs,
+  ...
 }:
 {
   wheat = {
+    git.managedConfig = false;
     niri.enable = true;
-    kitty.font.size = 14.0;  # For scale 1.0 on ultrawide
+    kitty.font.size = 14.0; # For scale 1.0 on ultrawide
     ollama.enable = false;
     distrobox.enable = true;
     k8s = {
@@ -42,7 +43,7 @@
   # notificaiton system
   services.mako = {
     enable = true;
-    defaultTimeout = 5000;  # 5 seconds in milliseconds
+    settings.default-timeout = 5000; # 5 seconds in milliseconds
   };
 
   gtk = {
@@ -61,9 +62,9 @@
   home.packages = with pkgs; [
     socat
   ];
-  programs.noctalia-shell = {
+  programs.noctalia = {
     enable = true;
   };
- 
-  home.stateVersion = "25.11";
+
+  home.stateVersion = "26.05";
 }

@@ -1,23 +1,26 @@
 {
-    lib,
-    pkgs,
-    inputs,
-    namespace, # The namespace used for your flake, defaulting to "internal" if not set.
-    format, # A normalized name for the home target (eg. `home`).
-    virtual, # A boolean to determine whether this home is a virtual target using nixos-generators.
-    host, # The host name for this home.
-    config,
-    system,
-    ...
+  lib,
+  pkgs,
+  inputs,
+  namespace, # The namespace used for your flake, defaulting to "internal" if not set.
+  format, # A normalized name for the home target (eg. `home`).
+  virtual, # A boolean to determine whether this home is a virtual target using nixos-generators.
+  host, # The host name for this home.
+  config,
+  system,
+  ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.secrets;
   isDarwin = if lib.hasSuffix "darwin" system then true else false;
-in {
+in
+{
   options.wheat.secrets = {
     enable = mkEnableOption "Enable custom sops secrets";
-    defaultSopsFile  = mkOption {
+    defaultSopsFile = mkOption {
       default = ./secrets.yaml;
+      defaultText = lib.literalExpression "./secrets.yaml";
       description = "SOPS encrypted file containing all secrets";
       type = types.path;
     };
@@ -43,9 +46,11 @@ in {
       age
     ];
     sops.defaultSopsFile = cfg.defaultSopsFile;
-    sops.age.keyFile = if isDarwin
-      then "${config.home.homeDirectory}/Library/Application Support/sops/age/keys.txt"
-      else "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+    sops.age.keyFile =
+      if isDarwin then
+        "${config.home.homeDirectory}/Library/Application Support/sops/age/keys.txt"
+      else
+        "${config.home.homeDirectory}/.config/sops/age/keys.txt";
     sops.defaultSecretsMountPoint = cfg.defaultSecretsMountPoint;
     sops.defaultSymlinkPath = cfg.defaultSymlinkPath;
   };

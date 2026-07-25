@@ -6,11 +6,11 @@
   options,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.screenshot;
-  isDarwin = pkgs.stdenv.isDarwin;
-  hasNiri = options ? programs && options.programs ? niri;
-in {
+in
+{
   options.wheat.screenshot = {
     enable = mkEnableOption "Enable Wayland screenshot tools (grim + slurp + satty)";
   };

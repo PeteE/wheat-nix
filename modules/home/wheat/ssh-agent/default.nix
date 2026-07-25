@@ -1,18 +1,20 @@
 {
-    lib,
-    pkgs,
-    inputs,
-    namespace,
-    target,
-    format,
-    virtual,
-    host,
-    config,
-    ...
+  lib,
+  pkgs,
+  inputs,
+  namespace,
+  target,
+  format,
+  virtual,
+  host,
+  config,
+  ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.services.ssh-agent;
-in {
+in
+{
   options = {
     wheat.services.ssh-agent = with types; {
       enable = mkEnableOption "Enable";
@@ -23,4 +25,3 @@ in {
     services.ssh-agent.enable = true;
   };
 }
-

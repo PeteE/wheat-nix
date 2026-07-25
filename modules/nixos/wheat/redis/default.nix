@@ -5,9 +5,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.services.redis;
-in {
+in
+{
   options.wheat.services.redis = {
     enable = mkEnableOption "Enable";
   };
@@ -15,7 +17,7 @@ in {
     services.redis.servers."default" = {
       enable = true;
       openFirewall = false;
-      bind = "0.0.0.0";  # all interfaces
+      bind = "0.0.0.0"; # all interfaces
       port = 6379;
       logLevel = "notice";
       syslog = true;
@@ -26,4 +28,3 @@ in {
     };
   };
 }
-

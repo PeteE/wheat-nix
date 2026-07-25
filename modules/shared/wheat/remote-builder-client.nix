@@ -4,9 +4,11 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.remote-builder-client;
-in {
+in
+{
   options.wheat.remote-builder-client = with types; {
     enable = mkEnableOption "Enable";
   };
@@ -20,7 +22,10 @@ in {
         hostName = "ripnix";
         sshUser = "petee";
         protocol = "ssh-ng";
-        systems = [ "x86_64-linux" "aarch64-linux" ];
+        systems = [
+          "x86_64-linux"
+          "aarch64-linux"
+        ];
         maxJobs = 24;
       }
     ];

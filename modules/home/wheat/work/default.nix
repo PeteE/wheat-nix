@@ -4,9 +4,10 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.work;
-  
+
   work_scripts = pkgs.stdenv.mkDerivation {
     pname = "work-scripts";
     src = ./scripts;
@@ -17,7 +18,8 @@ with lib; let
       chmod +x $out/bin/*
     '';
   };
-in {
+in
+{
   options.wheat.work = with types; {
     enable = mkEnableOption "Enable";
   };
@@ -34,6 +36,13 @@ in {
       python314
       python314Packages.pytest
       slack
+      flarectl
     ];
+
+    sops.secrets.op-cloudflare-api-token = { };
+
+    programs.zsh.envExtra = ''
+      export CF_API_TOKEN=$(cat ${config.sops.secrets.op-cloudflare-api-token.path})
+    '';
   };
 }

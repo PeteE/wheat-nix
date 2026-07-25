@@ -1,10 +1,10 @@
 {
-    lib,
-    inputs,
-    namespace,
-    pkgs,
-    stdenvNoCC,
-    ...
+  lib,
+  inputs,
+  namespace,
+  pkgs,
+  stdenvNoCC,
+  ...
 }:
 {
   # todo

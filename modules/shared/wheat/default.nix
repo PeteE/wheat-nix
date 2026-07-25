@@ -6,16 +6,17 @@
   system,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat;
   isDarwin = if lib.hasSuffix "darwin" system then true else false;
 
-in {
-  imports =
-    [
-      (./remote-builder.nix)
-      (./remote-builder-client.nix)
-    ];
+in
+{
+  imports = [
+    (./remote-builder.nix)
+    (./remote-builder-client.nix)
+  ];
 
   options = {
     wheat = with types; {
@@ -54,7 +55,7 @@ in {
           192.168.1.51    ripper
           192.168.1.120   trunas
           192.168.1.222   rpi0
-          192.168.1.173   rpi4
+          192.168.1.176   rpi4
 
           # devices
           192.168.1.116   pixel-7a
@@ -107,7 +108,7 @@ in {
         authorizedKeys = mkOption {
           type = listOf str;
           default = [
-            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ3x/dtivaU+bPMRYzY1O+XQPEGnBahNnh9sBZMrJrIX petee"  # x1
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ3x/dtivaU+bPMRYzY1O+XQPEGnBahNnh9sBZMrJrIX petee" # x1
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMjd2zJEmRiuqMJz2kC4ABIiSVE2HWdRPkZTmcAxp6GS petee@nixos" # nixos vm (ripper)
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL1SMCMFF12YYwlYGIi/UATCPTQ+PEdYOygGFouYrd5N petee@m3p" # lappy
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEMv8uBStPXcU4V5+7L6TpP08HhpG5vumutAFogVd0ca pete@m4" # litle mac
@@ -120,14 +121,15 @@ in {
   config = mkIf cfg.enable {
     home-manager.backupFileExtension = "bak";
     programs.zsh.enable = true;
-    users.groups.${cfg.user.name} = {};
+    users.groups.${cfg.user.name} = { };
     users.users.${cfg.user.name} = {
       inherit (cfg.user) name extraGroups;
       home = if isDarwin then "/Users/${cfg.user.name}" else "/home/${cfg.user.name}";
       createHome = true;
       shell = "${pkgs.zsh}/bin/zsh";
       openssh.authorizedKeys.keys = cfg.user.authorizedKeys;
-    } // lib.optionalAttrs isDarwin {
+    }
+    // lib.optionalAttrs isDarwin {
       isHidden = false;
     };
     networking.extraHosts = cfg.extraHosts;
@@ -146,7 +148,7 @@ in {
     console.useXkbConfig = true;
 
     services.xserver = {
-      enable = cfg.xserver.enable;
+      inherit (cfg.xserver) enable;
       xkb = {
         options = "caps:escape";
       };
@@ -166,14 +168,18 @@ in {
       antialias = true;
       hinting = {
         enable = true;
-        style = "slight";  # full for sharper edges at ~109 DPI
+        style = "slight"; # full for sharper edges at ~109 DPI
       };
       subpixel = {
         rgba = cfg.fonts.subpixelRgba;
         lcdfilter = "default";
       };
       defaultFonts = {
-        monospace = [ "FiraCode Nerd Font Mono" "Fira Code" "DejaVu Sans Mono" ];
+        monospace = [
+          "FiraCode Nerd Font Mono"
+          "Fira Code"
+          "DejaVu Sans Mono"
+        ];
         sansSerif = [ "DejaVu Sans" ];
         serif = [ "DejaVu Serif" ];
       };

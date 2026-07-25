@@ -5,9 +5,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.services.suricata;
-in {
+in
+{
   options.wheat.services.suricata = {
     enable = mkEnableOption "Security settings";
     HOME_NET = mkOption {
@@ -35,7 +37,7 @@ in {
     services.suricata = {
       enable = true;
       settings = {
-        includes = cfg.includes;
+        inherit (cfg) includes;
         vars.address-groups.HOME_NET = cfg.HOME_NET;
         vars.address-groups.EXTERNAL_NET = cfg.EXTERNAL_NET;
         outputs = [
@@ -48,10 +50,11 @@ in {
                 server = "127.0.0.1";
                 port = 6379;
                 async = true;
-                mode = "list";     ## possible values: list|lpush (default), rpush, channel|publish
-                                   ## lpush and rpush are using a Redis list. "list" is an alias for lpush
-                                   ## publish is using a Redis channel. "channel" is an alias for publish
-                key = "suricata";  ## key or channel to use (default to suricata)
+                mode = "list";
+                ## possible values: list|lpush (default), rpush, channel|publish
+                ## lpush and rpush are using a Redis list. "list" is an alias for lpush
+                ## publish is using a Redis channel. "channel" is an alias for publish
+                key = "suricata"; # # key or channel to use (default to suricata)
                 pipelining = {
                   enabled = true;
                   batch-size = 10;
@@ -114,7 +117,7 @@ in {
         ];
         af-packet = [
           {
-            interface = cfg.interface;
+            inherit (cfg) interface;
             cluster-id = "99";
             cluster-type = "cluster_flow";
             defrag = "yes";

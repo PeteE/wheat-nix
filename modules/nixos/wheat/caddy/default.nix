@@ -5,82 +5,106 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.services.caddy;
 
   # Build caddy with layer4 plugin for TCP passthrough
   caddyWithL4 = pkgs.caddy.withPlugins {
     plugins = [ "github.com/mholt/caddy-l4@v0.0.0-20260116154418-93f52b6a03ba" ];
-    hash = "sha256-bPWjifx2L24g93NHeWoTW2poB52WjbpSuF/NYDdpITk=";
+    hash = "sha256-LIZcgHYChfNb0ggRAT6n5w/2ppGm+UmOeOjfGm4F6G8=";
   };
 
   # Get list of SNI hostnames from virtualHosts
   sniHosts = attrNames cfg.virtualHosts;
-  hasVirtualHosts = cfg.virtualHosts != {};
+  hasVirtualHosts = cfg.virtualHosts != { };
   hasDefaultUpstream = cfg.defaultUpstream != null;
 
   # Layer4 routes for SNI matching (TLS termination via internal server)
   layer4SniRoutes = map (host: {
-    match = [{ tls = { sni = [ host ]; }; }];
-    handle = [{
-      handler = "proxy";
-      upstreams = [{ dial = [ "127.0.0.1:8443" ]; }];
-    }];
+    match = [
+      {
+        tls = {
+          sni = [ host ];
+        };
+      }
+    ];
+    handle = [
+      {
+        handler = "proxy";
+        upstreams = [ { dial = [ "127.0.0.1:8443" ]; } ];
+      }
+    ];
   }) sniHosts;
 
   # Default passthrough route (must be last)
   layer4DefaultRoute = {
-    handle = [{
-      handler = "proxy";
-      upstreams = [{ dial = [ "${cfg.defaultUpstream}:443" ]; }];
-    }];
+    handle = [
+      {
+        handler = "proxy";
+        upstreams = [ { dial = [ "${cfg.defaultUpstream}:443" ]; } ];
+      }
+    ];
   };
 
   # Build reverse proxy handler for a virtual host
-  mkReverseProxyHandler = vhost: {
-    handler = "reverse_proxy";
-    upstreams = [{ dial = vhost.upstream; }];
-  } // optionalAttrs (vhost.upstreamScheme == "https") {
-    transport = {
-      protocol = "http";
-      tls = {} // optionalAttrs vhost.upstreamTlsInsecure {
-        insecure_skip_verify = true;
+  mkReverseProxyHandler =
+    vhost:
+    {
+      handler = "reverse_proxy";
+      upstreams = [ { dial = vhost.upstream; } ];
+    }
+    // optionalAttrs (vhost.upstreamScheme == "https") {
+      transport = {
+        protocol = "http";
+        tls =
+          { }
+          // optionalAttrs vhost.upstreamTlsInsecure {
+            insecure_skip_verify = true;
+          };
       };
     };
-  };
   # Build headers handler for a virtual host (if headers are configured)
-  hasHeaders = vhost: vhost.headers != {} || vhost.removeHeaders != [];
+  hasHeaders = vhost: vhost.headers != { } || vhost.removeHeaders != [ ];
   mkHeadersHandler = vhost: {
     handler = "headers";
     response = {
       deferred = true;
-    } // optionalAttrs (vhost.headers != {}) {
+    }
+    // optionalAttrs (vhost.headers != { }) {
       set = mapAttrs (_: value: [ value ]) vhost.headers;
-    } // optionalAttrs (vhost.removeHeaders != []) {
+    }
+    // optionalAttrs (vhost.removeHeaders != [ ]) {
       delete = vhost.removeHeaders;
     };
   };
 
   # HTTP routes for virtual hosts
   virtualHostRoutes = mapAttrsToList (host: vhost: {
-    match = [{ host = [ host ]; }];
-    handle = [{
-      handler = "subroute";
-      routes = [{
-        handle =
-          (optional (hasHeaders vhost) (mkHeadersHandler vhost))
-          ++ [ (mkReverseProxyHandler vhost) ];
-      }];
-    }];
+    match = [ { host = [ host ]; } ];
+    handle = [
+      {
+        handler = "subroute";
+        routes = [
+          {
+            handle = (optional (hasHeaders vhost) (mkHeadersHandler vhost)) ++ [
+              (mkReverseProxyHandler vhost)
+            ];
+          }
+        ];
+      }
+    ];
     terminal = true;
   }) cfg.virtualHosts;
 
   # Default HTTP route
   defaultHttpRoute = {
-    handle = [{
-      handler = "reverse_proxy";
-      upstreams = [{ dial = "${cfg.defaultUpstream}:80"; }];
-    }];
+    handle = [
+      {
+        handler = "reverse_proxy";
+        upstreams = [ { dial = "${cfg.defaultUpstream}:80"; } ];
+      }
+    ];
     terminal = true;
   };
 
@@ -99,51 +123,55 @@ with lib; let
         };
       })
       //
-      # HTTP server
-      {
-        http = {
-          # Disable automatic HTTPS - we handle TLS via layer4 passthrough
-          # and explicit TLS config for virtualHosts
-          http_port = 80;
-          https_port = 0;  # Disable implicit HTTPS listener
-          servers =
-            # Internal HTTPS server (only if we have virtualHosts)
-            (optionalAttrs hasVirtualHosts {
-              internal_https = {
-                listen = [ "127.0.0.1:8443" ];
-                routes = virtualHostRoutes;
+        # HTTP server
+        {
+          http = {
+            # Disable automatic HTTPS - we handle TLS via layer4 passthrough
+            # and explicit TLS config for virtualHosts
+            http_port = 80;
+            https_port = 0; # Disable implicit HTTPS listener
+            servers =
+              # Internal HTTPS server (only if we have virtualHosts)
+              (optionalAttrs hasVirtualHosts {
+                internal_https = {
+                  listen = [ "127.0.0.1:8443" ];
+                  routes = virtualHostRoutes;
+                };
+              })
+              //
+              # Main HTTP server
+              {
+                http = {
+                  listen = [ ":80" ];
+                  routes = virtualHostRoutes ++ (optional hasDefaultUpstream defaultHttpRoute);
+                };
               };
-            })
-            //
-            # Main HTTP server
-            {
-              http = {
-                listen = [ ":80" ];
-                routes = virtualHostRoutes
-                  ++ (optional hasDefaultUpstream defaultHttpRoute);
-              };
-            };
-        };
-      }
-      //
-      # TLS automation (only if we have virtualHosts)
-      (optionalAttrs hasVirtualHosts {
-        tls = {
-          automation = {
-            # Disable on-demand TLS to prevent automatic cert issuance
-            on_demand = null;
-            policies = [{
-              subjects = sniHosts;
-              issuers = [{
-                module = "acme";
-                email = cfg.email;
-              }];
-            }];
           };
-        };
-      });
+        }
+      //
+        # TLS automation (only if we have virtualHosts)
+        (optionalAttrs hasVirtualHosts {
+          tls = {
+            automation = {
+              # Disable on-demand TLS to prevent automatic cert issuance
+              on_demand = null;
+              policies = [
+                {
+                  subjects = sniHosts;
+                  issuers = [
+                    {
+                      module = "acme";
+                      inherit (cfg) email;
+                    }
+                  ];
+                }
+              ];
+            };
+          };
+        });
   };
-in {
+in
+{
   options.wheat.services.caddy = {
     enable = mkEnableOption "Caddy web server with automatic HTTPS";
 
@@ -161,43 +189,50 @@ in {
     };
 
     virtualHosts = mkOption {
-      type = types.attrsOf (types.submodule {
-        options = {
-          upstream = mkOption {
-            type = types.str;
-            description = "Upstream address to reverse proxy to (e.g., localhost:3000)";
-            example = "localhost:8080";
-          };
-          upstreamScheme = mkOption {
-            type = types.enum [ "http" "https" ];
-            default = "http";
-            description = "Scheme to use when connecting to upstream";
-          };
-          upstreamTlsInsecure = mkOption {
-            type = types.bool;
-            default = false;
-            description = "Skip TLS verification for HTTPS upstreams (useful for SPIFFE endpoints)";
-          };
-          headers = mkOption {
-            type = types.attrsOf types.str;
-            default = {};
-            description = "Response headers to set (header name -> value)";
-            example = {
-              "Strict-Transport-Security" = "max-age=63072000; includeSubDomains; preload";
+      type = types.attrsOf (
+        types.submodule {
+          options = {
+            upstream = mkOption {
+              type = types.str;
+              description = "Upstream address to reverse proxy to (e.g., localhost:3000)";
+              example = "localhost:8080";
+            };
+            upstreamScheme = mkOption {
+              type = types.enum [
+                "http"
+                "https"
+              ];
+              default = "http";
+              description = "Scheme to use when connecting to upstream";
+            };
+            upstreamTlsInsecure = mkOption {
+              type = types.bool;
+              default = false;
+              description = "Skip TLS verification for HTTPS upstreams (useful for SPIFFE endpoints)";
+            };
+            headers = mkOption {
+              type = types.attrsOf types.str;
+              default = { };
+              description = "Response headers to set (header name -> value)";
+              example = {
+                "Strict-Transport-Security" = "max-age=63072000; includeSubDomains; preload";
+              };
+            };
+            removeHeaders = mkOption {
+              type = types.listOf types.str;
+              default = [ ];
+              description = "Response header names to remove";
+              example = [ "Server" ];
             };
           };
-          removeHeaders = mkOption {
-            type = types.listOf types.str;
-            default = [];
-            description = "Response header names to remove";
-            example = [ "Server" ];
-          };
-        };
-      });
-      default = {};
+        }
+      );
+      default = { };
       description = "Virtual hosts to configure as reverse proxies";
       example = {
-        "adguard.example.com" = { upstream = "localhost:3000"; };
+        "adguard.example.com" = {
+          upstream = "localhost:3000";
+        };
       };
     };
 
@@ -220,14 +255,23 @@ in {
     systemd.services.caddy = {
       serviceConfig = {
         # Empty string first clears the existing ExecStart before setting new one
-        ExecStart = mkForce ["" "${caddyWithL4}/bin/caddy run --config /etc/caddy/config.json"];
-        ExecReload = mkForce ["" "${caddyWithL4}/bin/caddy reload --config /etc/caddy/config.json --force"];
+        ExecStart = mkForce [
+          ""
+          "${caddyWithL4}/bin/caddy run --config /etc/caddy/config.json"
+        ];
+        ExecReload = mkForce [
+          ""
+          "${caddyWithL4}/bin/caddy reload --config /etc/caddy/config.json --force"
+        ];
       };
     };
 
     # Open firewall ports
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 80 443 ];
+      allowedTCPPorts = [
+        80
+        443
+      ];
     };
   };
 }

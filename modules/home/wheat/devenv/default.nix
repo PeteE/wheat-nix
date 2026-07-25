@@ -1,13 +1,14 @@
-
 {
   lib,
   pkgs,
   config,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.wheat.devenv;
-in {
+in
+{
   options.wheat.devenv = {
     enable = mkEnableOption "Enable";
   };

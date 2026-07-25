@@ -1,0 +1,3 @@
+# W20 (repeated_keys) — statix has no autofixer and the existing codebase
+# uses dotted-key shorthand extensively. Revisit if/when statix gains a fixer.
+disabled = ["repeated_keys"]
