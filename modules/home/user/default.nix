@@ -31,6 +31,10 @@
 
   programs.home-manager.enable = true;
 
+  # Lets the already-configured catppuccin.gtk.icon settings (Papirus-Dark,
+  # mocha/mauve) actually get written and applied.
+  gtk.enable = true;
+
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
