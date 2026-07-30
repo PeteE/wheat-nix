@@ -16,6 +16,7 @@
       mcp.enable = true;
       aichat.enable = true;
       opencommit.enable = true;
+      caveman.enable = true;
     };
 
     misc.enable = true;
