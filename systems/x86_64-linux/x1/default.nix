@@ -159,6 +159,7 @@
     desktop-file-utils # for updating desktop database
     hicolor-icon-theme # Base fallback icon theme
     thunar
+    nautilus
   ];
   networking.useNetworkd = true;
   networking.hostName = "x1";
@@ -258,6 +259,7 @@
   services.blueman.enable = true;
   services.libinput.enable = true;
   services.fwupd.enable = true;
+  services.gvfs.enable = true;
 
   # Power management
   powerManagement = {

@@ -11,3 +11,4 @@ id_ed25519
 sessions/
 
 k8s/untars
+.claude/
