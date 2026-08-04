@@ -11,21 +11,35 @@ let
 
   skillModule = types.submodule {
     options = {
+      src = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = ''
+          Pre-fetched source tree to use instead of `pkgs.fetchFromGitHub`
+          (e.g. a private-repo flake input pinned via flake.lock, fetched
+          over SSH outside the build sandbox). When set, owner/repo/rev/hash
+          are ignored.
+        '';
+      };
       owner = mkOption {
         type = types.str;
-        description = "GitHub repository owner";
+        default = "";
+        description = "GitHub repository owner (ignored when `src` is set)";
       };
       repo = mkOption {
         type = types.str;
-        description = "GitHub repository name";
+        default = "";
+        description = "GitHub repository name (ignored when `src` is set)";
       };
       rev = mkOption {
         type = types.str;
-        description = "Git revision (commit sha) to pin the skill(s) to";
+        default = "";
+        description = "Git revision (commit sha) to pin the skill(s) to (ignored when `src` is set)";
       };
       hash = mkOption {
         type = types.str;
-        description = "SRI hash of the fetched source tree (nix-prefetch-url --unpack <archive-url>, then nix hash convert)";
+        default = "";
+        description = "SRI hash of the fetched source tree (nix-prefetch-url --unpack <archive-url>, then nix hash convert); ignored when `src` is set";
       };
       subpaths = mkOption {
         type = types.listOf types.str;
@@ -43,14 +57,18 @@ let
   skillEntries = concatMap (
     skill:
     let
-      src = pkgs.fetchFromGitHub {
-        inherit (skill)
-          owner
-          repo
-          rev
-          hash
-          ;
-      };
+      src =
+        if skill.src != null then
+          skill.src
+        else
+          pkgs.fetchFromGitHub {
+            inherit (skill)
+              owner
+              repo
+              rev
+              hash
+              ;
+          };
     in
     map (subpath: {
       name = ".claude/skills/${if subpath == "" then skill.repo else baseNameOf subpath}";

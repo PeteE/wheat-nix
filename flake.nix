@@ -84,6 +84,10 @@
       url = "github:matthart1983/netwatch";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    claude-skills-opaque = {
+      url = "git+ssh://git@github.com/opaque-systems/claude-skills.git";
+      flake = false;
+    };
   };
   outputs =
     { self, ... }@inputs:
@@ -214,7 +218,6 @@
       ];
 
       systems = {
-        overlays = with inputs; [ ];
         modules = {
           darwin = with inputs; [
             sops-nix.darwinModules.sops
@@ -251,8 +254,6 @@
           rpi4.modules = with inputs; [
             nixos-hardware.nixosModules.raspberry-pi-4
           ];
-          m4.modules = with inputs; [ ];
-          m3p.modules = with inputs; [ ];
           microvm-poc.modules = with inputs; [
             microvm.nixosModules.microvm
           ];

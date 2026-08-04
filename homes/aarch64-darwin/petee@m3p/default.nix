@@ -82,6 +82,17 @@
           "skills/using-git-worktrees"
         ];
       }
+      {
+        # Private repo, fetched over SSH via the flake input (pinned in flake.lock)
+        # instead of pkgs.fetchFromGitHub. Requires SSH access to
+        # github.com/opaque-systems from this machine.
+        src = inputs.claude-skills-opaque;
+        subpaths = [
+          ".claude/skills/nix-builder"
+          ".claude/skills/report-azure-costs"
+          ".claude/skills/report-gcp-costs"
+        ];
+      }
       # {
       #   owner = "anthropics";
       #   repo = "skills";
