@@ -15,6 +15,7 @@ in
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
+      jq
       terraform-ls
       nixpkgs-fmt
       lazygit
@@ -696,6 +697,10 @@ in
 
         -- remap Y to yy
         vim.keymap.set('n', 'Y', 'yy')
+
+        -- pretty-print JSON in the buffer via jq
+        vim.keymap.set('n', '<leader>jq', ':%!jq .<CR>', { desc = 'Pretty-print JSON' })
+        vim.keymap.set('v', '<leader>jq', ':!jq .<CR>', { desc = 'Pretty-print JSON (selection)' })
 
         -- TODO test
         -- vim.keymap.set('n', '<C-n>', '<Cmd>NvimTreeToggle<CR>')
