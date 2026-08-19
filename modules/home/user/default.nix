@@ -32,8 +32,8 @@
   programs.home-manager.enable = true;
 
   # Lets the already-configured catppuccin.gtk.icon settings (Papirus-Dark,
-  # mocha/mauve) actually get written and applied.
-  gtk.enable = true;
+  # mocha/mauve) actually get written and applied. Papirus-folders is Linux-only.
+  gtk.enable = !pkgs.stdenv.isDarwin;
 
   programs.ssh = {
     enable = true;
