@@ -17,6 +17,7 @@
   # nix.enable = false is set in the shared darwin module (Determinate).
   wheat = {
     enable = true;
+    keyboard.enable = true;
     user = {
       name = "pete";
       authorizedKeys = [
