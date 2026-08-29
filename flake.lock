@@ -16,8 +16,8 @@
       },
       "original": {
         "owner": "catppuccin",
+        "ref": "673f730d0fc8db3468c51575f1d3d777cc55e51f",
         "repo": "nix",
-        "rev": "673f730d0fc8db3468c51575f1d3d777cc55e51f",
         "type": "github"
       }
     },
@@ -38,6 +38,7 @@
       },
       "original": {
         "owner": "sadjow",
+        "ref": "da78262708d858861afbe1f68ea65fedda4054c4",
         "repo": "claude-code-nix",
         "type": "github"
       }
@@ -58,6 +59,7 @@
       },
       "original": {
         "owner": "lnl7",
+        "ref": "57a3171f94705599a2499248ca5758d5eb47c0e0",
         "repo": "nix-darwin",
         "type": "github"
       }
@@ -80,6 +82,7 @@
       },
       "original": {
         "owner": "serokell",
+        "ref": "6d3087eedff75a715b40c0e124ba15d2dd7bec28",
         "repo": "deploy-rs",
         "type": "github"
       }
@@ -121,11 +124,11 @@
         "nixpkgs-lib": "nixpkgs-lib"
       },
       "locked": {
-        "lastModified": 1782949081,
-        "narHash": "sha256-vp6Y/Grm98ESt6ceOkWiHWyZRDV3J1RID4w+6NWK9yA=",
+        "lastModified": 1785627969,
+        "narHash": "sha256-4dtXQk/NMePegK/nWp5NSeuZKLATItOq61lpEvmXqGw=",
         "owner": "hercules-ci",
         "repo": "flake-parts",
-        "rev": "17c9d6cdfc60c64f4ee8d306f9bc0b4ccb51481e",
+        "rev": "427bf4bd9435fdf21321c8cc628c24efc14c0f7a",
         "type": "github"
       },
       "original": {
@@ -262,7 +265,7 @@
       },
       "original": {
         "owner": "nix-community",
-        "ref": "master",
+        "ref": "041a999e8c1c5b731913855909e68d30ca69b8e0",
         "repo": "home-manager",
         "type": "github"
       }
@@ -284,6 +287,7 @@
       },
       "original": {
         "owner": "ggml-org",
+        "ref": "1a064ab0921238c1daa397d6f4a900ef33884de2",
         "repo": "llama.cpp",
         "type": "github"
       }
@@ -305,6 +309,7 @@
       },
       "original": {
         "owner": "matthart1983",
+        "ref": "2b5d9119a33c7198c19d537f22b35cd2de38b827",
         "repo": "netwatch",
         "type": "github"
       }
@@ -326,6 +331,7 @@
       },
       "original": {
         "owner": "microvm-nix",
+        "ref": "fa5340ac684cdce8a22b6d4a0bcebb0cc999275e",
         "repo": "microvm.nix",
         "type": "github"
       }
@@ -351,6 +357,7 @@
       },
       "original": {
         "owner": "sodiboo",
+        "ref": "4dfd38bad6150c07be6cc3fd7682787765092eea",
         "repo": "niri-flake",
         "type": "github"
       }
@@ -404,8 +411,8 @@
       },
       "original": {
         "owner": "nix-community",
+        "ref": "4b5d357fd9b7ffce8fded947e3e4e883ed1b2109",
         "repo": "nix-vscode-extensions",
-        "rev": "4b5d357fd9b7ffce8fded947e3e4e883ed1b2109",
         "type": "github"
       }
     },
@@ -423,6 +430,7 @@
       },
       "original": {
         "owner": "nixos",
+        "ref": "a017f5b72210026af5b3ac5949f08d94380a6fbd",
         "repo": "nixos-hardware",
         "type": "github"
       }
@@ -442,11 +450,11 @@
     },
     "nixpkgs-lib": {
       "locked": {
-        "lastModified": 1782614948,
-        "narHash": "sha256-ePjCwr1sNm9NYUqywL7QfK3JnlS015msC+eBu2zKlp8=",
+        "lastModified": 1785031560,
+        "narHash": "sha256-OmshNvn2vupOFpYinLUu+1Dnpu4n7Q5N3ggGVNHpkUI=",
         "owner": "nix-community",
         "repo": "nixpkgs.lib",
-        "rev": "db3f255737b94216eb71cce308e2912cf6bc2d7c",
+        "rev": "0e79af5e3d4dcfcd676ab5ba3f95d2e3352e078c",
         "type": "github"
       },
       "original": {
@@ -497,7 +505,7 @@
       },
       "original": {
         "owner": "NixOS",
-        "ref": "nixos-25.05",
+        "ref": "ac62194c3917d5f474c1a844b6fd6da2db95077d",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -513,7 +521,7 @@
       },
       "original": {
         "owner": "NixOS",
-        "ref": "nixos-unstable",
+        "ref": "241313f4e8e508cb9b13278c2b0fa25b9ca27163",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -534,7 +542,7 @@
       },
       "original": {
         "owner": "AshleyYakeley",
-        "ref": "v0.6.0",
+        "ref": "5dfe108fd859b122f9a96981cb6bc12297653d6c",
         "repo": "NixVirt",
         "type": "github"
       }
@@ -555,6 +563,7 @@
       },
       "original": {
         "owner": "noctalia-dev",
+        "ref": "632e65e1e93dbe2fa281d3ee7c2aceef903e5578",
         "repo": "noctalia-shell",
         "type": "github"
       }
@@ -576,6 +585,7 @@
       },
       "original": {
         "owner": "nix-community",
+        "ref": "65d694ac8f65a6395a948aee60032170dcd402df",
         "repo": "NUR",
         "type": "github"
       }
@@ -622,6 +632,7 @@
       },
       "original": {
         "owner": "snowfallorg",
+        "ref": "6ee3542cb459ca4b038cfe50ceb8797f05cdabad",
         "repo": "lib",
         "type": "github"
       }
@@ -642,6 +653,7 @@
       },
       "original": {
         "owner": "Mic92",
+        "ref": "f1406619a3884cd5c47992a70b8b35c9c0fcb4c9",
         "repo": "sops-nix",
         "type": "github"
       }
@@ -775,6 +787,7 @@
       },
       "original": {
         "owner": "nix-community",
+        "ref": "2f984dfbe7e5271b5c413d3e734374cc1306c921",
         "repo": "nixos-vscode-server",
         "type": "github"
       }
