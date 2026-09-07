@@ -3,7 +3,7 @@
   description = "Pete's NixOS Flake";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs?ref=241313f4e8e508cb9b13278c2b0fa25b9ca27163";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs?ref=ac62194c3917d5f474c1a844b6fd6da2db95077d";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs?ref=c6c67b3106cb8a5380c37c24d8ef71679ea11774";
     home-manager = {
       url = "github:nix-community/home-manager?ref=041a999e8c1c5b731913855909e68d30ca69b8e0";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -13,31 +13,31 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     microvm = {
-      url = "github:microvm-nix/microvm.nix?ref=fa5340ac684cdce8a22b6d4a0bcebb0cc999275e";
+      url = "github:microvm-nix/microvm.nix?ref=174e28de151e069a95d03c86dd174c3b71bdfba7";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix = {
-      url = "github:Mic92/sops-nix?ref=f1406619a3884cd5c47992a70b8b35c9c0fcb4c9";
+      url = "github:Mic92/sops-nix?ref=a8627b21b9107c5711c96b84f32a9a4b3d45295f";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     darwin = {
-      url = "github:lnl7/nix-darwin?ref=57a3171f94705599a2499248ca5758d5eb47c0e0";
+      url = "github:lnl7/nix-darwin?ref=4cff07de74b50e64bdd68cd4e722ab5b6b35ee48";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # Hardware Configuration
     nixos-hardware = {
-      url = "github:nixos/nixos-hardware?ref=a017f5b72210026af5b3ac5949f08d94380a6fbd";
+      url = "github:nixos/nixos-hardware?ref=dc3f0cfde2050172abf6c3cdb684f735c15a57c5";
     };
     nur = {
-      url = "github:nix-community/NUR?ref=65d694ac8f65a6395a948aee60032170dcd402df";
+      url = "github:nix-community/NUR?ref=3a2f576eece2265fc6079a4ebca6b4c5e48f1839";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     niri = {
-      url = "github:sodiboo/niri-flake?ref=4dfd38bad6150c07be6cc3fd7682787765092eea";
+      url = "github:sodiboo/niri-flake?ref=9ee3e13b60643448228353097880521658b2fe0e";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     noctalia = {
-      url = "github:noctalia-dev/noctalia-shell?ref=632e65e1e93dbe2fa281d3ee7c2aceef903e5578";
+      url = "github:noctalia-dev/noctalia-shell?ref=15151333352501ee6483fce94520e6ae1875f48a";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # Generate System Images
@@ -48,7 +48,7 @@
 
     # System Deployment
     deploy-rs = {
-      url = "github:serokell/deploy-rs?ref=6d3087eedff75a715b40c0e124ba15d2dd7bec28";
+      url = "github:serokell/deploy-rs?ref=16901271e5b30b591e56f7a84f25f186fb20f3e1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -57,15 +57,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-vscode-extensions = {
-      url = "github:nix-community/nix-vscode-extensions?ref=4b5d357fd9b7ffce8fded947e3e4e883ed1b2109";
+      url = "github:nix-community/nix-vscode-extensions?ref=835647e781aa71e7ea1b21169daed842a3ca0142";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin = {
-      url = "github:catppuccin/nix?ref=673f730d0fc8db3468c51575f1d3d777cc55e51f";
+      url = "github:catppuccin/nix?ref=35d78c213b65e38789bcb359aae2380fcb4dc3e8";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvirt = {
-      url = "github:AshleyYakeley/NixVirt?ref=5dfe108fd859b122f9a96981cb6bc12297653d6c";
+      url = "github:AshleyYakeley/NixVirt?ref=6d213ab42f72ba41c2eb4e6bdb97581c0642d942";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vscode-server = {
@@ -73,7 +73,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     claude-code = {
-      url = "github:sadjow/claude-code-nix?ref=da78262708d858861afbe1f68ea65fedda4054c4";
+      url = "github:sadjow/claude-code-nix?ref=610372fec14515281ef2c4bb6f383fab7881e1ee";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     llama-cpp = {
@@ -81,7 +81,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     matthart1983-netwatch = {
-      url = "github:matthart1983/netwatch?ref=2b5d9119a33c7198c19d537f22b35cd2de38b827";
+      url = "github:matthart1983/netwatch?ref=554741876369772c496d3d2c4563ff1bd35bbc13";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
