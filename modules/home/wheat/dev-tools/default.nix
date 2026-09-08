@@ -26,7 +26,6 @@ in
       dig
       tcpdump
       oras
-      uv
       nodejs_24
       postgresql_18
       vim

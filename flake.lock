@@ -42,6 +42,22 @@
         "type": "github"
       }
     },
+    "claude-skills-opaque": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787252917,
+        "narHash": "sha256-MWUfpoWGdxFTmK4sNNSwQALmMrZXD9YXW/BecnBoHu8=",
+        "ref": "refs/heads/main",
+        "rev": "4c094cd026e4e5a9298809196692e9e25e6868bc",
+        "revCount": 28,
+        "type": "git",
+        "url": "ssh://git@github.com/opaque-systems/claude-skills.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@github.com/opaque-systems/claude-skills.git"
+      }
+    },
     "darwin": {
       "inputs": {
         "nixpkgs": [
@@ -584,6 +600,7 @@
       "inputs": {
         "catppuccin": "catppuccin",
         "claude-code": "claude-code",
+        "claude-skills-opaque": "claude-skills-opaque",
         "darwin": "darwin",
         "deploy-rs": "deploy-rs",
         "home-manager": "home-manager",

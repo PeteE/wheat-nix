@@ -32,7 +32,6 @@ in
       tilt
       k6
       ngrok
-      uv
       python314
       python314Packages.pytest
       slack
