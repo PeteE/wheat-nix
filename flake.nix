@@ -3,9 +3,9 @@
   description = "Pete's NixOS Flake";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs?ref=241313f4e8e508cb9b13278c2b0fa25b9ca27163";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs?ref=c6c67b3106cb8a5380c37c24d8ef71679ea11774";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs?ref=4674dc7b68f722f217685a5c80564c0ed7c4a55a";
     home-manager = {
-      url = "github:nix-community/home-manager?ref=041a999e8c1c5b731913855909e68d30ca69b8e0";
+      url = "github:nix-community/home-manager?ref=6fa0edfe6a025d4d98f44a6c0d704d690dce3378";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     snowfall-lib = {
@@ -13,11 +13,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     microvm = {
-      url = "github:microvm-nix/microvm.nix?ref=174e28de151e069a95d03c86dd174c3b71bdfba7";
+      url = "github:microvm-nix/microvm.nix?ref=68f2670367e03da7d0cceef0594a7b2c173849de";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix = {
-      url = "github:Mic92/sops-nix?ref=a8627b21b9107c5711c96b84f32a9a4b3d45295f";
+      url = "github:Mic92/sops-nix?ref=2bd00bd9bb35fe6d114888c8f1c2e946c541dd8f";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     darwin = {
@@ -26,10 +26,10 @@
     };
     # Hardware Configuration
     nixos-hardware = {
-      url = "github:nixos/nixos-hardware?ref=dc3f0cfde2050172abf6c3cdb684f735c15a57c5";
+      url = "github:nixos/nixos-hardware?ref=30d48a0ec6035f8140d0125af274f0de95f1e9b5";
     };
     nur = {
-      url = "github:nix-community/NUR?ref=3a2f576eece2265fc6079a4ebca6b4c5e48f1839";
+      url = "github:nix-community/NUR?ref=acc660eb1096e33a452d632c731adaaf3f883fc4";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     niri = {
@@ -37,7 +37,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     noctalia = {
-      url = "github:noctalia-dev/noctalia-shell?ref=15151333352501ee6483fce94520e6ae1875f48a";
+      url = "github:noctalia-dev/noctalia-shell?ref=ad4c5a3817ccb096d20f948b67eeee8d8ba75be3";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # Generate System Images
@@ -48,7 +48,7 @@
 
     # System Deployment
     deploy-rs = {
-      url = "github:serokell/deploy-rs?ref=16901271e5b30b591e56f7a84f25f186fb20f3e1";
+      url = "github:serokell/deploy-rs?ref=e760371d631165e7d8de5b0dcf148e21ec4c16f0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -57,11 +57,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-vscode-extensions = {
-      url = "github:nix-community/nix-vscode-extensions?ref=835647e781aa71e7ea1b21169daed842a3ca0142";
+      url = "github:nix-community/nix-vscode-extensions?ref=86c56105e1e11b1d2a927e93bda8801088747aa2";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin = {
-      url = "github:catppuccin/nix?ref=35d78c213b65e38789bcb359aae2380fcb4dc3e8";
+      url = "github:catppuccin/nix?ref=89b3eacf59d6b5eefbc2d69c3a4eb5aaf66d63bc";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvirt = {
@@ -73,11 +73,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     claude-code = {
-      url = "github:sadjow/claude-code-nix?ref=610372fec14515281ef2c4bb6f383fab7881e1ee";
+      url = "github:sadjow/claude-code-nix?ref=f10421316cc6df045497f5aa0009adce648e89ee";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     llama-cpp = {
-      url = "github:ggml-org/llama.cpp?ref=1a064ab0921238c1daa397d6f4a900ef33884de2";
+      url = "github:ggml-org/llama.cpp?ref=fcc891545b0f06de346d8f67d1e6c61f9bf0e777";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     matthart1983-netwatch = {
