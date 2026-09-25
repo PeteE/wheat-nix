@@ -7,17 +7,82 @@
 {
 
   wheat = {
+    minikube.enable = true;
     ollama.enable = false;
     distrobox.enable = true;
     ai = {
       enable = true;
-
-      ollamaHost = "192.168.1.149"; # m4
-      mcp.enable = true;
+      mcp = {
+        enable = true;
+      };
       aichat.enable = true;
-      opencommit.enable = true;
       caveman.enable = true;
+      ollamaHost = "192.168.1.149"; # m4
+      claude = {
+        settings = {
+          env = {
+            CLAUDE_CODE_ENABLE_TELEMETRY = "0";
+            CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS = "1";
+          };
+          permissions = {
+            allow = [
+              "Bash"
+              "Read(*)"
+              "WebFetch(domain:github.com)"
+              "mcp__claude_ai_Notion__notion-fetch"
+            ];
+            deny = [ ];
+            defaultMode = "auto";
+          };
+          worktree.baseRef = "fresh";
+          enabledPlugins = {
+            "gopls-lsp@claude-plugins-official" = true;
+            "superpowers@claude-plugins-official" = false;
+          };
+          effortLevel = "medium";
+          awaySummaryEnabled = false;
+          tui = "fullscreen";
+          theme = "dark";
+          editorMode = "vim";
+          verbose = false;
+          teammateMode = "tmux";
+          remoteControlAtStartup = true;
+          skipAutoPermissionPrompt = true;
+          enableArtifact = false;
+        };
+        skills = [
+          {
+            owner = "obra";
+            repo = "superpowers";
+            rev = "d884ae04edebef577e82ff7c4e143debd0bbec99";
+            hash = "sha256-kHdQ9e44doBk2yYW88tMSCqVG8ycYcvJSZlrIziXhpA=";
+            subpaths = [
+              "skills/brainstorming"
+              "skills/requesting-code-review"
+              "skills/using-superpowers"
+              "skills/dispatching-parallel-agents"
+              "skills/subagent-driven-development"
+              "skills/verification-before-completion"
+              "skills/executing-plans"
+              "skills/systematic-debugging"
+              "skills/writing-plans"
+              "skills/finishing-a-development-branch"
+              "skills/test-driven-development"
+              "skills/writing-skills"
+              "skills/receiving-code-review"
+              "skills/using-git-worktrees"
+            ];
+          }
+        ];
+      };
     };
+    # To add a skill: pick `rev` via `git ls-remote <repo-url> HEAD`, then
+    # compute `hash` with:
+    #   h=$(nix-prefetch-url --unpack https://github.com/<owner>/<repo>/archive/<rev>.tar.gz)
+    #   nix hash convert --hash-algo sha256 --to sri "$h"
+    # (nix hash convert takes the hash as an argument, not via stdin)
+    # `subpaths` lists the skill directories (each containing a SKILL.md) to
+    # install from the repo; add more entries to pull in additional skills.
 
     misc.enable = true;
     zoom.enable = true;
@@ -45,6 +110,7 @@
     spotify
     pandoc
     tectonic
+    chromium
 
     # neato tui for network
     inputs.matthart1983-netwatch.packages."${pkgs.stdenv.hostPlatform.system}".netwatch

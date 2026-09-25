@@ -1,9 +1,5 @@
 # CLAUDE.md
 
-## TODO for homelab:
-- install gateway api and kgateway
-- install coco - try out cloud runtimeclass
-
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Overview
@@ -50,18 +46,11 @@ This is Pete's NixOS Flake configuration repository that manages system configur
 This is a Nix Flake repository. Common commands:
 
 ```bash
-# Build and switch system configuration (NixOS) - preferred method using nh
+# Build and switch system configuration (NixOS) and home-manager - preferred method using nh
 nh os switch ~/dev/wheat-nix#nixosConfigurations.<hostname>
-
-# Alternative: Build and switch system configuration (NixOS)
-sudo nixos-rebuild switch --flake .#<hostname>
-
-# Build and switch user configuration (Home Manager)
-home-manager switch --flake .#<user>@<hostname>
 
 # Build specific configuration without switching
 nix build .#nixosConfigurations.<hostname>.config.system.build.toplevel
-nix build .#homeConfigurations."<user>@<hostname>".activationPackage
 
 # Update flake inputs
 nix flake update
@@ -80,8 +69,8 @@ deploy .#rpi4 --skip-checks --auto-rollback false --magic-rollback false
 ### Active Hosts
 
 - **x1**: x86_64-linux laptop (Lenovo ThinkPad X1 6th gen)
-- **m4**: aarch64-darwin Mac
-- **m3p**: aarch64-darwin Mac
+- **m4**: aarch64-darwin Mac - home imac
+- **m3p**: aarch64-darwin Mac - work computer
 - **rpi4**: aarch64-linux Raspberry Pi 4
 - **rpinix**: x86_64-linux -- my main nixos desktop (VM running on `ripper` debian host)
 
