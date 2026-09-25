@@ -3,9 +3,9 @@
   description = "Pete's NixOS Flake";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs?ref=241313f4e8e508cb9b13278c2b0fa25b9ca27163";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs?ref=ac62194c3917d5f474c1a844b6fd6da2db95077d";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs?ref=4674dc7b68f722f217685a5c80564c0ed7c4a55a";
     home-manager = {
-      url = "github:nix-community/home-manager?ref=041a999e8c1c5b731913855909e68d30ca69b8e0";
+      url = "github:nix-community/home-manager?ref=6fa0edfe6a025d4d98f44a6c0d704d690dce3378";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     snowfall-lib = {
@@ -13,31 +13,31 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     microvm = {
-      url = "github:microvm-nix/microvm.nix?ref=fa5340ac684cdce8a22b6d4a0bcebb0cc999275e";
+      url = "github:microvm-nix/microvm.nix?ref=68f2670367e03da7d0cceef0594a7b2c173849de";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix = {
-      url = "github:Mic92/sops-nix?ref=f1406619a3884cd5c47992a70b8b35c9c0fcb4c9";
+      url = "github:Mic92/sops-nix?ref=2bd00bd9bb35fe6d114888c8f1c2e946c541dd8f";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     darwin = {
-      url = "github:lnl7/nix-darwin?ref=57a3171f94705599a2499248ca5758d5eb47c0e0";
+      url = "github:lnl7/nix-darwin?ref=4cff07de74b50e64bdd68cd4e722ab5b6b35ee48";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # Hardware Configuration
     nixos-hardware = {
-      url = "github:nixos/nixos-hardware?ref=a017f5b72210026af5b3ac5949f08d94380a6fbd";
+      url = "github:nixos/nixos-hardware?ref=30d48a0ec6035f8140d0125af274f0de95f1e9b5";
     };
     nur = {
-      url = "github:nix-community/NUR?ref=65d694ac8f65a6395a948aee60032170dcd402df";
+      url = "github:nix-community/NUR?ref=acc660eb1096e33a452d632c731adaaf3f883fc4";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     niri = {
-      url = "github:sodiboo/niri-flake?ref=4dfd38bad6150c07be6cc3fd7682787765092eea";
+      url = "github:sodiboo/niri-flake?ref=9ee3e13b60643448228353097880521658b2fe0e";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     noctalia = {
-      url = "github:noctalia-dev/noctalia-shell?ref=632e65e1e93dbe2fa281d3ee7c2aceef903e5578";
+      url = "github:noctalia-dev/noctalia-shell?ref=ad4c5a3817ccb096d20f948b67eeee8d8ba75be3";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # Generate System Images
@@ -48,7 +48,7 @@
 
     # System Deployment
     deploy-rs = {
-      url = "github:serokell/deploy-rs?ref=6d3087eedff75a715b40c0e124ba15d2dd7bec28";
+      url = "github:serokell/deploy-rs?ref=e760371d631165e7d8de5b0dcf148e21ec4c16f0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -57,15 +57,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-vscode-extensions = {
-      url = "github:nix-community/nix-vscode-extensions?ref=4b5d357fd9b7ffce8fded947e3e4e883ed1b2109";
+      url = "github:nix-community/nix-vscode-extensions?ref=86c56105e1e11b1d2a927e93bda8801088747aa2";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin = {
-      url = "github:catppuccin/nix?ref=673f730d0fc8db3468c51575f1d3d777cc55e51f";
+      url = "github:catppuccin/nix?ref=89b3eacf59d6b5eefbc2d69c3a4eb5aaf66d63bc";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvirt = {
-      url = "github:AshleyYakeley/NixVirt?ref=5dfe108fd859b122f9a96981cb6bc12297653d6c";
+      url = "github:AshleyYakeley/NixVirt?ref=6d213ab42f72ba41c2eb4e6bdb97581c0642d942";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vscode-server = {
@@ -73,15 +73,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     claude-code = {
-      url = "github:sadjow/claude-code-nix?ref=da78262708d858861afbe1f68ea65fedda4054c4";
+      url = "github:sadjow/claude-code-nix?ref=f10421316cc6df045497f5aa0009adce648e89ee";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     llama-cpp = {
-      url = "github:ggml-org/llama.cpp?ref=1a064ab0921238c1daa397d6f4a900ef33884de2";
+      url = "github:ggml-org/llama.cpp?ref=fcc891545b0f06de346d8f67d1e6c61f9bf0e777";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     matthart1983-netwatch = {
-      url = "github:matthart1983/netwatch?ref=2b5d9119a33c7198c19d537f22b35cd2de38b827";
+      url = "github:matthart1983/netwatch?ref=554741876369772c496d3d2c4563ff1bd35bbc13";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
