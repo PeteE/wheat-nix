@@ -50,31 +50,31 @@
           skipAutoPermissionPrompt = true;
           enableArtifact = false;
         };
-        skills = [
-          {
-            owner = "obra";
-            repo = "superpowers";
-            rev = "d884ae04edebef577e82ff7c4e143debd0bbec99";
-            hash = "sha256-kHdQ9e44doBk2yYW88tMSCqVG8ycYcvJSZlrIziXhpA=";
-            subpaths = [
-              "skills/brainstorming"
-              "skills/requesting-code-review"
-              "skills/using-superpowers"
-              "skills/dispatching-parallel-agents"
-              "skills/subagent-driven-development"
-              "skills/verification-before-completion"
-              "skills/executing-plans"
-              "skills/systematic-debugging"
-              "skills/writing-plans"
-              "skills/finishing-a-development-branch"
-              "skills/test-driven-development"
-              "skills/writing-skills"
-              "skills/receiving-code-review"
-              "skills/using-git-worktrees"
-            ];
-          }
-        ];
       };
+      skills = [
+        {
+          owner = "obra";
+          repo = "superpowers";
+          rev = "d884ae04edebef577e82ff7c4e143debd0bbec99";
+          hash = "sha256-kHdQ9e44doBk2yYW88tMSCqVG8ycYcvJSZlrIziXhpA=";
+          subpaths = [
+            "skills/brainstorming"
+            "skills/requesting-code-review"
+            "skills/using-superpowers"
+            "skills/dispatching-parallel-agents"
+            "skills/subagent-driven-development"
+            "skills/verification-before-completion"
+            "skills/executing-plans"
+            "skills/systematic-debugging"
+            "skills/writing-plans"
+            "skills/finishing-a-development-branch"
+            "skills/test-driven-development"
+            "skills/writing-skills"
+            "skills/receiving-code-review"
+            "skills/using-git-worktrees"
+          ];
+        }
+      ];
     };
     # To add a skill: pick `rev` via `git ls-remote <repo-url> HEAD`, then
     # compute `hash` with:
