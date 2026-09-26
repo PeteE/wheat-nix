@@ -2,42 +2,42 @@
 {
   description = "Pete's NixOS Flake";
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs?ref=241313f4e8e508cb9b13278c2b0fa25b9ca27163";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs?ref=4674dc7b68f722f217685a5c80564c0ed7c4a55a";
     home-manager = {
-      url = "github:nix-community/home-manager/master";
+      url = "github:nix-community/home-manager?ref=6fa0edfe6a025d4d98f44a6c0d704d690dce3378";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     snowfall-lib = {
-      url = "github:snowfallorg/lib";
+      url = "github:snowfallorg/lib?ref=6ee3542cb459ca4b038cfe50ceb8797f05cdabad";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     microvm = {
-      url = "github:microvm-nix/microvm.nix";
+      url = "github:microvm-nix/microvm.nix?ref=68f2670367e03da7d0cceef0594a7b2c173849de";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix = {
-      url = "github:Mic92/sops-nix";
+      url = "github:Mic92/sops-nix?ref=2bd00bd9bb35fe6d114888c8f1c2e946c541dd8f";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     darwin = {
-      url = "github:lnl7/nix-darwin";
+      url = "github:lnl7/nix-darwin?ref=4cff07de74b50e64bdd68cd4e722ab5b6b35ee48";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # Hardware Configuration
     nixos-hardware = {
-      url = "github:nixos/nixos-hardware";
+      url = "github:nixos/nixos-hardware?ref=30d48a0ec6035f8140d0125af274f0de95f1e9b5";
     };
     nur = {
-      url = "github:nix-community/NUR";
+      url = "github:nix-community/NUR?ref=acc660eb1096e33a452d632c731adaaf3f883fc4";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     niri = {
-      url = "github:sodiboo/niri-flake";
+      url = "github:sodiboo/niri-flake?ref=9ee3e13b60643448228353097880521658b2fe0e";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
+      url = "github:noctalia-dev/noctalia-shell?ref=ad4c5a3817ccb096d20f948b67eeee8d8ba75be3";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # Generate System Images
@@ -48,7 +48,7 @@
 
     # System Deployment
     deploy-rs = {
-      url = "github:serokell/deploy-rs";
+      url = "github:serokell/deploy-rs?ref=e760371d631165e7d8de5b0dcf148e21ec4c16f0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -57,31 +57,31 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-vscode-extensions = {
-      url = "github:nix-community/nix-vscode-extensions/4b5d357fd9b7ffce8fded947e3e4e883ed1b2109";
+      url = "github:nix-community/nix-vscode-extensions?ref=86c56105e1e11b1d2a927e93bda8801088747aa2";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin = {
-      url = "github:catppuccin/nix/673f730d0fc8db3468c51575f1d3d777cc55e51f";
+      url = "github:catppuccin/nix?ref=89b3eacf59d6b5eefbc2d69c3a4eb5aaf66d63bc";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvirt = {
-      url = "github:AshleyYakeley/NixVirt/v0.6.0";
+      url = "github:AshleyYakeley/NixVirt?ref=6d213ab42f72ba41c2eb4e6bdb97581c0642d942";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vscode-server = {
-      url = "github:nix-community/nixos-vscode-server";
+      url = "github:nix-community/nixos-vscode-server?ref=2f984dfbe7e5271b5c413d3e734374cc1306c921";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     claude-code = {
-      url = "github:sadjow/claude-code-nix";
+      url = "github:sadjow/claude-code-nix?ref=f10421316cc6df045497f5aa0009adce648e89ee";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     llama-cpp = {
-      url = "github:ggml-org/llama.cpp";
+      url = "github:ggml-org/llama.cpp?ref=fcc891545b0f06de346d8f67d1e6c61f9bf0e777";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     matthart1983-netwatch = {
-      url = "github:matthart1983/netwatch";
+      url = "github:matthart1983/netwatch?ref=554741876369772c496d3d2c4563ff1bd35bbc13";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
