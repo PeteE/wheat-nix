@@ -1,4 +1,5 @@
 {
+  pkgs,
   home,
   ...
 }:
@@ -13,11 +14,13 @@
     dev-tools.enable = true;
     ai.enable = true;
     ai.caveman.enable = true;
+    ai.mcp.enable = true;
     gcloud.enable = true;
     embedded.enable = false;
     yazi.enable = true;
     attic-client.enable = true;
     work.enable = true;
+    rclone.enable = true;
   };
   home.stateVersion = "26.05";
 }
