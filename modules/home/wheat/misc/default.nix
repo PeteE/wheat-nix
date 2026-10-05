@@ -24,7 +24,6 @@ in
       attic-client
       glow
       delve
-      links2
       presenterm
       asciinema
       tree

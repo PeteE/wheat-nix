@@ -12,7 +12,6 @@
 }:
 {
   home.packages = with pkgs; [
-    fasd
     zoxide
     zsh-histdb
     zsh-fzf-tab

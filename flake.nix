@@ -2,10 +2,10 @@
 {
   description = "Pete's NixOS Flake";
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs?ref=241313f4e8e508cb9b13278c2b0fa25b9ca27163";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs?ref=4674dc7b68f722f217685a5c80564c0ed7c4a55a";
+    nixpkgs.url = "github:NixOS/nixpkgs?ref=9adf22f23c377fa740fa1a643ea3e368cb085b9c";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs?ref=9adf22f23c377fa740fa1a643ea3e368cb085b9c";
     home-manager = {
-      url = "github:nix-community/home-manager?ref=6fa0edfe6a025d4d98f44a6c0d704d690dce3378";
+      url = "github:nix-community/home-manager?ref=f53f3267f5d009dd8f99443505e609389d7ff267";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     snowfall-lib = {
@@ -13,11 +13,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     microvm = {
-      url = "github:microvm-nix/microvm.nix?ref=68f2670367e03da7d0cceef0594a7b2c173849de";
+      url = "github:microvm-nix/microvm.nix?ref=3f1540f254fe73ac907281b7de7d396bb3d54850";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix = {
-      url = "github:Mic92/sops-nix?ref=2bd00bd9bb35fe6d114888c8f1c2e946c541dd8f";
+      url = "github:Mic92/sops-nix?ref=dcd241ba97088c22569d1573286e1b9daad340c0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     darwin = {
@@ -26,10 +26,10 @@
     };
     # Hardware Configuration
     nixos-hardware = {
-      url = "github:nixos/nixos-hardware?ref=30d48a0ec6035f8140d0125af274f0de95f1e9b5";
+      url = "github:nixos/nixos-hardware?ref=31cc5f4d9b9ba601071e8b8504601b9b176e2756";
     };
     nur = {
-      url = "github:nix-community/NUR?ref=acc660eb1096e33a452d632c731adaaf3f883fc4";
+      url = "github:nix-community/NUR?ref=82f46d73b9b4331ba2cf3bf81cd3bea189726deb";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     niri = {
@@ -37,7 +37,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     noctalia = {
-      url = "github:noctalia-dev/noctalia-shell?ref=ad4c5a3817ccb096d20f948b67eeee8d8ba75be3";
+      url = "github:noctalia-dev/noctalia-shell?ref=e639a87e811ad3268c73f6d5e77669c94184ba15";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # Generate System Images
@@ -48,7 +48,7 @@
 
     # System Deployment
     deploy-rs = {
-      url = "github:serokell/deploy-rs?ref=e760371d631165e7d8de5b0dcf148e21ec4c16f0";
+      url = "github:serokell/deploy-rs?ref=cf64c8cbadd9b13ea79ba7720aa2930500f2ece7";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -57,7 +57,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-vscode-extensions = {
-      url = "github:nix-community/nix-vscode-extensions?ref=86c56105e1e11b1d2a927e93bda8801088747aa2";
+      url = "github:nix-community/nix-vscode-extensions?ref=10cb8298d5bf73196c70f7ba25a7aac01d3b9b4f";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin = {
@@ -65,7 +65,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvirt = {
-      url = "github:AshleyYakeley/NixVirt?ref=6d213ab42f72ba41c2eb4e6bdb97581c0642d942";
+      url = "github:AshleyYakeley/NixVirt?ref=1718a120e0b5d6af4df53a5c95ab3c670ae2d6b7";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vscode-server = {
@@ -73,15 +73,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     claude-code = {
-      url = "github:sadjow/claude-code-nix?ref=f10421316cc6df045497f5aa0009adce648e89ee";
+      url = "github:sadjow/claude-code-nix?ref=b17e42820330bd34ab890632c2f6f80daf4e517f";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     llama-cpp = {
-      url = "github:ggml-org/llama.cpp?ref=fcc891545b0f06de346d8f67d1e6c61f9bf0e777";
+      url = "github:ggml-org/llama.cpp?ref=e117148a41d8e9bedb72e4c6c3f003ab0fe7f857";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     matthart1983-netwatch = {
-      url = "github:matthart1983/netwatch?ref=554741876369772c496d3d2c4563ff1bd35bbc13";
+      url = "github:matthart1983/netwatch?ref=029e49a4b9aeae0bc0a1608bb555881a10e35b58";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     claude-skills-opaque = {
@@ -185,6 +185,16 @@
         llama-cpp.overlays.default
         claude-code.overlays.default
         niri.overlays.niri
+        # anyio 4.14.2 test suite fails (test_tls server_hostname, uvloop flakes)
+        (_final: prev: {
+          pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+            (_pyfinal: pyprev: {
+              anyio = pyprev.anyio.overridePythonAttrs (_: {
+                doCheck = false;
+              });
+            })
+          ];
+        })
       ];
 
       channels-config = {
