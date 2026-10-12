@@ -76,6 +76,10 @@
       url = "github:sadjow/claude-code-nix?ref=b17e42820330bd34ab890632c2f6f80daf4e517f";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    antigravity-nix = {
+      url = "github:jacopone/antigravity-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     llama-cpp = {
       url = "github:ggml-org/llama.cpp?ref=e117148a41d8e9bedb72e4c6c3f003ab0fe7f857";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -184,6 +188,7 @@
         nur.overlays.default
         llama-cpp.overlays.default
         claude-code.overlays.default
+        antigravity-nix.overlays.default
         niri.overlays.niri
         # anyio 4.14.2 test suite fails (test_tls server_hostname, uvloop flakes)
         (_final: prev: {

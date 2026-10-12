@@ -369,6 +369,7 @@ in
                     filetypes =  { "nix" },
                     rootPatterns = { "flake.nix" },
                     flake = {
+                      autoArchive = false,
                       autoEvalInputs = false,
                     },
                   },
@@ -522,6 +523,13 @@ in
           plugin = fzf-lua;
           type = "lua";
           config = ''
+            -- nix-shell sets a long $TMPDIR on macOS; fzf-lua's socket path then
+            -- exceeds the 104-byte sun_path limit and serverstart() fails.
+            -- Pre-start the server at a short path so fzf-lua reuses it.
+            if not vim.g.fzf_lua_server and #vim.fn.stdpath("run") > 60 then
+              vim.g.fzf_lua_server = vim.fn.serverstart(
+                string.format("/tmp/fzf-lua.%s.%d", vim.env.USER or "nvim", vim.fn.getpid()))
+            end
             require("fzf-lua").setup({ "fzf-vim" })
           '';
         }
