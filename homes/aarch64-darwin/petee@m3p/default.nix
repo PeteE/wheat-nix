@@ -115,6 +115,7 @@
   home.packages = with pkgs; [
     vault
     codex
+    google-antigravity-cli
     azure-storage-azcopy
     inputs.nixpkgs-stable.legacyPackages."${system}".tailscale
     python312Packages.huggingface-hub
