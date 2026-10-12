@@ -70,7 +70,6 @@
     };
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server?ref=2f984dfbe7e5271b5c413d3e734374cc1306c921";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     claude-code = {
       url = "github:sadjow/claude-code-nix?ref=b17e42820330bd34ab890632c2f6f80daf4e517f";
