@@ -65,6 +65,7 @@
     curl
     wget
     nh
+    deploy-rs # cached nixpkgs build; flake input only supplies lib.activate (see lib/deploy-pkgs.nix)
     git
     git-credential-manager
     fd

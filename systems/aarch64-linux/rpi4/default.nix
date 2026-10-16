@@ -138,6 +138,20 @@
     ];
   };
 
+  # Tailnet-only HTTPS endpoints via `tailscale serve` (never Funnel).
+  # Port 443 is left to Caddy, which listens on all interfaces.
+  wheat.services.tailscale-serve = {
+    enable = true;
+    services = {
+      # rocketmoney-mcp: holds a live financial session, must stay tailnet-only.
+      # https://rpi4.porcupine-python.ts.net:10443/mcp
+      rocketmoney = {
+        httpsPort = 10443;
+        target = "http://127.0.0.1:8090";
+      };
+    };
+  };
+
   services.open-webui = {
     enable = false;
     port = 8888;
