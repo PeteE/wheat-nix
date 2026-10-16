@@ -285,11 +285,53 @@ in
         cmp-tmux
         cmp-git
         vim-python-pep8-indent
-        nvim-treesitter.withAllGrammars
-        # nvim-treesitter-parsers.just
-        # nvim-treesitter-parsers.rust
-        # nvim-treesitter-parsers.yaml
-        # nvim-treesitter-parsers.starlark
+        # Only the grammars actually used, instead of withAllGrammars (300+ parsers)
+        (nvim-treesitter.withPlugins (
+          p: with p; [
+            # neovim core (help, :checkhealth, query files)
+            vim
+            vimdoc
+            lua
+            query
+            regex
+            comment
+            # languages
+            python
+            go
+            gomod
+            gosum
+            gowork
+            rust
+            nix
+            bash
+            nu
+            terraform
+            hcl
+            starlark
+            sql
+            javascript
+            typescript
+            proto
+            # config / data
+            yaml
+            helm
+            json
+            toml
+            kdl
+            xml
+            csv
+            dockerfile
+            make
+            just
+            # docs / git
+            markdown
+            markdown_inline
+            gitcommit
+            git_rebase
+            gitignore
+            diff
+          ]
+        ))
         # nvim-treesitter-textobjects
         # nvim-treesitter-refactor
         # rustaceanvim

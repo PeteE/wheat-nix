@@ -35,7 +35,7 @@
     "xhci_pci"
     "usbhid"
   ];
-  boot.kernelModules = [ ];
+  boot.kernelModules = [ "bfq" ];
   boot.extraModulePackages = [ ];
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;
@@ -48,6 +48,22 @@
 
   time.timeZone = "America/Chicago";
 
+  # Pin CPU at max clock (1.5 GHz) instead of scaling down to 600 MHz at idle
+  powerManagement.cpuFreqGovernor = "performance";
+
+  # Run nix-daemon builds/substitutions at idle IO + CPU priority so store
+  # writes to the SD card don't starve sshd and other services during deploys
+  nix.daemonIOSchedClass = "idle";
+  nix.daemonCPUSchedPolicy = "idle";
+  # The idle IO class is only fully honored by BFQ (default mq-deadline mostly
+  # ignores it); bfq module is loaded via boot.kernelModules, set by udev below
+
+  # vcgencmd (get_throttled, measure_temp, ...); /dev/vchiq is root-only by default
+  services.udev.extraRules = ''
+    KERNEL=="vchiq", GROUP="video", MODE="0660"
+    ACTION=="add|change", KERNEL=="mmcblk[0-9]", ATTR{queue/scheduler}="bfq"
+  '';
+
   wheat = {
     enable = true;
     user = {
@@ -57,6 +73,7 @@
         "wheel"
         "NetworkManager"
         "dialout"
+        "video" # /dev/vchiq access for vcgencmd
       ];
     };
     sudo.enable = true;
@@ -334,6 +351,7 @@
 
   environment.systemPackages = with pkgs; [
     nodejs_24
+    libraspberrypi # vcgencmd
     gnumake
     glibc
     cmake
