@@ -202,6 +202,9 @@
         android_sdk.accept_license = true;
         permittedInsecurePackages = [
           # "electron-25.9.0"
+          # kanidm 1.10 marked insecure upstream; drop once bumped to a supported release
+          "kanidm-1.10.5" # x1 home CLI (wheat.kanidm)
+          "kanidm-with-secret-provisioning-1.10.5" # rpi4 server (wheat.services.kanidm)
         ];
 
       };
