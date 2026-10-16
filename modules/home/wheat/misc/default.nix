@@ -16,7 +16,7 @@ in
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       meld
-      # inputs.deploy-rs.packages."${system}".deploy-rs # https://github.com/serokell/deploy-rs
+      deploy-rs # https://github.com/serokell/deploy-rs (cached nixpkgs build, not the flake input)
       # ollama  # disabled: aarch64-darwin build requires Xcode + Metal toolchain
       bat
       openbao
