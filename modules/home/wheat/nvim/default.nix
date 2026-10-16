@@ -564,16 +564,6 @@ in
           plugin = fzf-lua;
           type = "lua";
           config = ''
-            -- fzf-lua's RPC socket defaults to stdpath("run")/fzf-lua.<time>.0. On macOS
-            -- inside a nix devShell, TMPDIR is a long .../T/nix-shell.XXXXXX dir and the
-            -- path exceeds the 103-byte unix socket limit ("invalid argument"). Start it
-            -- on a short path first; fzf-lua reuses vim.g.fzf_lua_server if set.
-            if not vim.g.fzf_lua_server then
-              local ok, srv = pcall(vim.fn.serverstart, "/tmp/nvim-fzf-" .. vim.fn.getpid() .. ".sock")
-              if ok then
-                vim.g.fzf_lua_server = srv
-              end
-            end
             require("fzf-lua").setup({ "fzf-vim" })
           '';
         }
