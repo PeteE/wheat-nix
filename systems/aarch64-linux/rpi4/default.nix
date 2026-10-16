@@ -48,6 +48,14 @@
 
   time.timeZone = "America/Chicago";
 
+  # Pin CPU at max clock (1.5 GHz) instead of scaling down to 600 MHz at idle
+  powerManagement.cpuFreqGovernor = "performance";
+
+  # vcgencmd (get_throttled, measure_temp, ...); /dev/vchiq is root-only by default
+  services.udev.extraRules = ''
+    KERNEL=="vchiq", GROUP="video", MODE="0660"
+  '';
+
   wheat = {
     enable = true;
     user = {
@@ -57,6 +65,7 @@
         "wheel"
         "NetworkManager"
         "dialout"
+        "video" # /dev/vchiq access for vcgencmd
       ];
     };
     sudo.enable = true;
@@ -334,6 +343,7 @@
 
   environment.systemPackages = with pkgs; [
     nodejs_24
+    libraspberrypi # vcgencmd
     gnumake
     glibc
     cmake
