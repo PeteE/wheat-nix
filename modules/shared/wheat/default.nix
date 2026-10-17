@@ -69,6 +69,9 @@ in
   config = mkIf cfg.enable {
     home-manager.backupFileExtension = "bak";
     programs.zsh.enable = true;
+    # home-manager writes dconf settings on activation; without the dconf
+    # D-Bus service it fails ("The name is not activatable") on headless hosts
+    programs.dconf.enable = true;
     users.groups.${cfg.user.name} = { };
     users.users.${cfg.user.name} = {
       inherit (cfg.user) name extraGroups;
