@@ -10,6 +10,8 @@ let
   cfg = config.wheat;
 in
 {
+  imports = [ ../../../shared/hosts ];
+
   options = {
     wheat = with types; {
       enable = mkEnableOption "Enable";
