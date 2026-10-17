@@ -94,7 +94,7 @@
     # zed-editor.enable = true;
     # vscode.enable = true;
     aws.enable = true;
-    azure.enable = true;
+    # azure.enable = true;
     dev-tools.enable = true;
     gcloud.enable = true;
     embedded.enable = true;

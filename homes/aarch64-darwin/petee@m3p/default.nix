@@ -15,7 +15,7 @@
       enable = true;
     };
     misc.enable = true;
-    azure.enable = true;
+    # azure.enable = true;
     aws.enable = true;
     dev-tools.enable = true;
     ai.enable = true;
