@@ -111,9 +111,6 @@ in
   systemd.services.spire-agent.after = [ "sops-nix.service" ];
   systemd.services.spire-agent.wants = [ "sops-nix.service" ];
 
-  # home-manager writes dconf settings on activation; niri used to pull this in
-  programs.dconf.enable = true;
-
   networking.hostName = "ripnix";
   systemd.network.enable = true;
   systemd.network.networks."10-lan" = {
