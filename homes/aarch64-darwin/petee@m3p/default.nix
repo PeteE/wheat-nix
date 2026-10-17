@@ -118,7 +118,7 @@
     google-antigravity-cli
     azure-storage-azcopy
     inputs.nixpkgs-stable.legacyPackages."${system}".tailscale
-    python312Packages.huggingface-hub
+    python3Packages.huggingface-hub
     # moonlight-qt
     pkgs.wheat.openskills
   ];
