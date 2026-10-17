@@ -189,16 +189,6 @@
         claude-code.overlays.default
         antigravity-nix.overlays.default
         niri.overlays.niri
-        # anyio 4.14.2 test suite fails (test_tls server_hostname, uvloop flakes)
-        (_final: prev: {
-          pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
-            (_pyfinal: pyprev: {
-              anyio = pyprev.anyio.overridePythonAttrs (_: {
-                doCheck = false;
-              });
-            })
-          ];
-        })
       ];
 
       channels-config = {
