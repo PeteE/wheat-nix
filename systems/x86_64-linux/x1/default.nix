@@ -119,6 +119,8 @@
     wireshark
     rpi-imager
     intel-gpu-tools
+    config.boot.kernelPackages.turbostat
+    config.boot.kernelPackages.cpupower
     gthumb
     shotwell
     dvdplusrwtools
