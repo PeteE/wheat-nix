@@ -30,7 +30,7 @@ in
   ];
 
   services.vscode-server = {
-    enable = true;
+    enable = false;
     enableFHS = true;
     nodejsPackage = pkgs.nodejs_24;
   };
@@ -203,6 +203,8 @@ in
   };
 
   swapDevices = [ ];
+  # compressed in-RAM swap; gives headroom so big builds don't hard-OOM
+  zramSwap.enable = true;
 
   hardware.enableRedistributableFirmware = true;
   hardware.bluetooth = {
@@ -231,6 +233,11 @@ in
     # };
   };
 
+  # limit build parallelism (default 24 jobs x 24 cores OOMs this 19GiB VM)
+  nix.settings.max-jobs = 2;
+  nix.settings.cores = 4;
+  # make the OOM killer pick build processes before the desktop session
+  systemd.services.nix-daemon.serviceConfig.OOMScoreAdjust = 500;
   nix.settings.trusted-users = [
     "root"
     "petee"

@@ -84,10 +84,6 @@
       url = "github:matthart1983/netwatch?ref=029e49a4b9aeae0bc0a1608bb555881a10e35b58";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    claude-skills-opaque = {
-      url = "git+ssh://git@github.com/opaque-systems/claude-skills.git";
-      flake = false;
-    };
   };
   outputs =
     { self, ... }@inputs:
@@ -185,15 +181,19 @@
         llama-cpp.overlays.default
         claude-code.overlays.default
         niri.overlays.niri
-        # anyio 4.14.2 test suite fails (test_tls server_hostname, uvloop flakes)
+        # niri-flake still asserts libdisplay-info 0.2.0, but nixpkgs replaced
+        # libdisplay-info_0_2 with a removal throw. Rebuild 0.2.0 ourselves.
         (_final: prev: {
-          pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
-            (_pyfinal: pyprev: {
-              anyio = pyprev.anyio.overridePythonAttrs (_: {
-                doCheck = false;
-              });
-            })
-          ];
+          libdisplay-info_0_2 = prev.libdisplay-info.overrideAttrs (_: {
+            version = "0.2.0";
+            src = prev.fetchFromGitLab {
+              domain = "gitlab.freedesktop.org";
+              owner = "emersion";
+              repo = "libdisplay-info";
+              rev = "0.2.0";
+              hash = "sha256-6xmWBrPHghjok43eIDGeshpUEQTuwWLXNHg7CnBUt3Q=";
+            };
+          });
         })
       ];
 
