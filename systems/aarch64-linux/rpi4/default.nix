@@ -35,7 +35,7 @@
     "xhci_pci"
     "usbhid"
   ];
-  boot.kernelModules = [ ];
+  boot.kernelModules = [ "bfq" ];
   boot.extraModulePackages = [ ];
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;
@@ -48,6 +48,22 @@
 
   time.timeZone = "America/Chicago";
 
+  # Pin CPU at max clock (1.5 GHz) instead of scaling down to 600 MHz at idle
+  powerManagement.cpuFreqGovernor = "performance";
+
+  # Run nix-daemon builds/substitutions at idle IO + CPU priority so store
+  # writes to the SD card don't starve sshd and other services during deploys
+  nix.daemonIOSchedClass = "idle";
+  nix.daemonCPUSchedPolicy = "idle";
+  # The idle IO class is only fully honored by BFQ (default mq-deadline mostly
+  # ignores it); bfq module is loaded via boot.kernelModules, set by udev below
+
+  # vcgencmd (get_throttled, measure_temp, ...); /dev/vchiq is root-only by default
+  services.udev.extraRules = ''
+    KERNEL=="vchiq", GROUP="video", MODE="0660"
+    ACTION=="add|change", KERNEL=="mmcblk[0-9]", ATTR{queue/scheduler}="bfq"
+  '';
+
   wheat = {
     enable = true;
     user = {
@@ -57,6 +73,7 @@
         "wheel"
         "NetworkManager"
         "dialout"
+        "video" # /dev/vchiq access for vcgencmd
       ];
     };
     sudo.enable = true;
@@ -98,35 +115,38 @@
       };
     };
 
-    # Kanidm - user identity provider (OIDC, LDAP)
-    services.kanidm = {
-      enable = true;
-      domain = "idp.wheat-dn42.net";
-      bindAddress = "127.0.0.1";
-      bindPort = 8445;
-      adminPasswordFile = config.sops.secrets."kanidm/admin-password".path;
-      idmAdminPasswordFile = config.sops.secrets."kanidm/idm-admin-password".path;
+    # DISABLED 2026-10-17: DB is at domain level 12 (kanidm 1.8); 1.10 needs an
+    # intermediate 1.9 upgrade first (MG0008SkipUpgradeAttempted). Re-enable with the
+    # sops secrets + systemd ordering below once migrated.
+    # # Kanidm - user identity provider (OIDC, LDAP)
+    # services.kanidm = {
+    # enable = true;
+    # domain = "idp.wheat-dn42.net";
+    # bindAddress = "127.0.0.1";
+    # bindPort = 8445;
+    # adminPasswordFile = config.sops.secrets."kanidm/admin-password".path;
+    # idmAdminPasswordFile = config.sops.secrets."kanidm/idm-admin-password".path;
 
-      provision = {
-        enable = true;
-        groups = {
-          homelab-users = { };
-          homelab-admins = {
-            members = [ "petee" ];
-          };
-        };
-        persons = {
-          petee = {
-            displayName = "Pete Erickson";
-            mailAddresses = [ "pete.perickson@gmail.com" ];
-            groups = [
-              "homelab-users"
-              "homelab-admins"
-            ];
-          };
-        };
-      };
-    };
+    # provision = {
+    # enable = true;
+    # groups = {
+    # homelab-users = { };
+    # homelab-admins = {
+    # members = [ "petee" ];
+    # };
+    # };
+    # persons = {
+    # petee = {
+    # displayName = "Pete Erickson";
+    # mailAddresses = [ "pete.perickson@gmail.com" ];
+    # groups = [
+    # "homelab-users"
+    # "homelab-admins"
+    # ];
+    # };
+    # };
+    # };
+    # };
   };
   # Tailscale subnet router and exit node for home network
   services.tailscale = {
@@ -136,6 +156,20 @@
       "--advertise-routes=192.168.1.0/24"
       "--advertise-exit-node"
     ];
+  };
+
+  # Tailnet-only HTTPS endpoints via `tailscale serve` (never Funnel).
+  # Port 443 is left to Caddy, which listens on all interfaces.
+  wheat.services.tailscale-serve = {
+    enable = true;
+    services = {
+      # rocketmoney-mcp: holds a live financial session, must stay tailnet-only.
+      # https://rpi4.porcupine-python.ts.net:10443/mcp
+      rocketmoney = {
+        httpsPort = 10443;
+        target = "http://127.0.0.1:8090";
+      };
+    };
   };
 
   services.open-webui = {
@@ -160,23 +194,23 @@
     path = "/etc/spire/rpi4-cert.pem";
   };
 
-  # Kanidm admin passwords
-  sops.secrets."kanidm/admin-password" = {
-    mode = "0400";
-    owner = "kanidm";
-  };
-  sops.secrets."kanidm/idm-admin-password" = {
-    mode = "0400";
-    owner = "kanidm";
-  };
+  # # Kanidm admin passwords
+  # sops.secrets."kanidm/admin-password" = {
+  # mode = "0400";
+  # owner = "kanidm";
+  # };
+  # sops.secrets."kanidm/idm-admin-password" = {
+  # mode = "0400";
+  # owner = "kanidm";
+  # };
 
   # Ensure SPIRE services start after sops secrets are decrypted
   systemd.services.spire-agent.after = [ "sops-nix.service" ];
   systemd.services.spire-agent.wants = [ "sops-nix.service" ];
 
-  # Ensure Kanidm starts after sops secrets are decrypted
-  systemd.services.kanidm.after = [ "sops-nix.service" ];
-  systemd.services.kanidm.wants = [ "sops-nix.service" ];
+  # # Ensure Kanidm starts after sops secrets are decrypted
+  # systemd.services.kanidm.after = [ "sops-nix.service" ];
+  # systemd.services.kanidm.wants = [ "sops-nix.service" ];
 
   # Cloudflare Dynamic DNS
   sops.age.keyFile = "/home/petee/.config/sops/age/keys.txt";
@@ -206,11 +240,6 @@
       };
       "oidc.wheat-dn42.net" = {
         upstream = "localhost:8082";
-      };
-      "oidc-discovery.op3.wheat-dn42.net" = {
-        upstream = "192.168.1.40:443";
-        upstreamScheme = "https";
-        upstreamTlsInsecure = true; # SPIRE uses SPIFFE certs, not web PKI
       };
       "spire-bundle.wheat-dn42.net" = {
         upstream = "localhost:8444";
@@ -262,10 +291,6 @@
         domain = "idp.wheat-dn42.net";
         answer = "192.168.1.173";
       } # rpi4 - Kanidm
-      {
-        domain = "oidc-discovery.op3.wheat-dn42.net";
-        answer = "192.168.1.40";
-      } # Gateway on wheat-k3s cluster
       # Automation
       {
         domain = "mqtt.wheat-dn42.net";
@@ -320,6 +345,7 @@
 
   environment.systemPackages = with pkgs; [
     nodejs_24
+    libraspberrypi # vcgencmd
     gnumake
     glibc
     cmake

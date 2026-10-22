@@ -285,11 +285,53 @@ in
         cmp-tmux
         cmp-git
         vim-python-pep8-indent
-        nvim-treesitter.withAllGrammars
-        # nvim-treesitter-parsers.just
-        # nvim-treesitter-parsers.rust
-        # nvim-treesitter-parsers.yaml
-        # nvim-treesitter-parsers.starlark
+        # Only the grammars actually used, instead of withAllGrammars (300+ parsers)
+        (nvim-treesitter.withPlugins (
+          p: with p; [
+            # neovim core (help, :checkhealth, query files)
+            vim
+            vimdoc
+            lua
+            query
+            regex
+            comment
+            # languages
+            python
+            go
+            gomod
+            gosum
+            gowork
+            rust
+            nix
+            bash
+            nu
+            terraform
+            hcl
+            starlark
+            sql
+            javascript
+            typescript
+            proto
+            # config / data
+            yaml
+            helm
+            json
+            toml
+            kdl
+            xml
+            csv
+            dockerfile
+            make
+            just
+            # docs / git
+            markdown
+            markdown_inline
+            gitcommit
+            git_rebase
+            gitignore
+            diff
+          ]
+        ))
         # nvim-treesitter-textobjects
         # nvim-treesitter-refactor
         # rustaceanvim
@@ -369,6 +411,7 @@ in
                     filetypes =  { "nix" },
                     rootPatterns = { "flake.nix" },
                     flake = {
+                      autoArchive = false,
                       autoEvalInputs = false,
                     },
                   },
@@ -522,6 +565,13 @@ in
           plugin = fzf-lua;
           type = "lua";
           config = ''
+            -- nix-shell sets a long $TMPDIR on macOS; fzf-lua's socket path then
+            -- exceeds the 104-byte sun_path limit and serverstart() fails.
+            -- Pre-start the server at a short path so fzf-lua reuses it.
+            if not vim.g.fzf_lua_server and #vim.fn.stdpath("run") > 60 then
+              vim.g.fzf_lua_server = vim.fn.serverstart(
+                string.format("/tmp/fzf-lua.%s.%d", vim.env.USER or "nvim", vim.fn.getpid()))
+            end
             require("fzf-lua").setup({ "fzf-vim" })
           '';
         }

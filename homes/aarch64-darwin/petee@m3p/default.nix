@@ -15,7 +15,7 @@
       enable = true;
     };
     misc.enable = true;
-    azure.enable = true;
+    # azure.enable = true;
     aws.enable = true;
     dev-tools.enable = true;
     ai.enable = true;
@@ -104,9 +104,10 @@
   home.packages = with pkgs; [
     vault
     codex
+    google-antigravity-cli
     azure-storage-azcopy
     inputs.nixpkgs-stable.legacyPackages."${system}".tailscale
-    python312Packages.huggingface-hub
+    python3Packages.huggingface-hub
     # moonlight-qt
     pkgs.wheat.openskills
   ];

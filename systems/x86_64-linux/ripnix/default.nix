@@ -63,7 +63,7 @@ in
     services.docker.enable = true;
     remote-builder.enable = true;
 
-    services.niri.enable = true;
+    services.niri.enable = false; # rarely use a GUI here; niri-flake also fails to eval (libdisplay-info_0_2)
     services.clipcat.enable = true;
 
     virtualisation = {
@@ -102,20 +102,6 @@ in
   # Ensure SPIRE agent starts after sops secrets are decrypted
   systemd.services.spire-agent.after = [ "sops-nix.service" ];
   systemd.services.spire-agent.wants = [ "sops-nix.service" ];
-
-  # k3s Kubernetes cluster
-  services.k3s = {
-    enable = true;
-    role = "server";
-    extraFlags = toString [
-      "--disable=traefik" # We'll use kgateway/Gateway API
-      "--write-kubeconfig-mode=644"
-      "--flannel-backend=host-gw"
-    ];
-  };
-
-  # Open firewall for k3s
-  networking.firewall.allowedTCPPorts = [ 6443 ]; # k3s API server
 
   networking.hostName = "ripnix";
   systemd.network.enable = true;

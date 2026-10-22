@@ -133,6 +133,11 @@ in
         bind k select-pane -U
         bind l select-pane -R
 
+        # cycle / toggle panes while keeping the window zoomed (-Z)
+        bind -r o select-pane -t :.+ -Z
+        bind -r O select-pane -t :.- -Z
+        bind \; last-pane -Z
+
         bind-key V select-layout even-vertical
         bind-key H select-layout even-horizontal
         bind-key T select-layout tiled

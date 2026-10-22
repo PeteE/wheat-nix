@@ -59,9 +59,9 @@ in
     #   enable = true;
     # };
 
-    # home.sessionVariables = {
-    #   OLLAMA_HOST = "192.168.1.115";
-    # };
+    home.sessionVariables = {
+      OLLAMA_HOST = "192.168.1.115";
+    };
 
     sops.secrets.openrouerApiKey = { };
     sops.secrets.openaiApiKey = { };
