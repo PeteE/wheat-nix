@@ -4,10 +4,10 @@
 }:
 {
   wheat = {
-    embedded.enable = true;
+    embedded.enable = false;
     secrets.enable = true;
     aws.enable = true;
-    tor.enable = true;
+    tor.enable = false;
   };
   home.stateVersion = "26.05";
 }
