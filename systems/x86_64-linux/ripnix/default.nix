@@ -2,15 +2,7 @@
 {
   lib,
   pkgs,
-  inputs,
-  namespace,
-  system,
-  target,
-  format,
-  virtual,
-  systems,
   config,
-  modulesPath,
   ...
 }:
 let
@@ -234,8 +226,8 @@ in
   };
 
   # limit build parallelism (default 24 jobs x 24 cores OOMs this 19GiB VM)
-  nix.settings.max-jobs = 2;
-  nix.settings.cores = 4;
+  nix.settings.max-jobs = 8;
+  nix.settings.cores = 12;
   # make the OOM killer pick build processes before the desktop session
   systemd.services.nix-daemon.serviceConfig.OOMScoreAdjust = 500;
   nix.settings.trusted-users = [
