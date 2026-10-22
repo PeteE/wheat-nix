@@ -70,13 +70,10 @@
     };
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server?ref=2f984dfbe7e5271b5c413d3e734374cc1306c921";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     claude-code = {
       url = "github:sadjow/claude-code-nix?ref=b17e42820330bd34ab890632c2f6f80daf4e517f";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    antigravity-nix = {
-      url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     llama-cpp = {
@@ -86,10 +83,6 @@
     matthart1983-netwatch = {
       url = "github:matthart1983/netwatch?ref=029e49a4b9aeae0bc0a1608bb555881a10e35b58";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-    claude-skills-opaque = {
-      url = "git+ssh://git@github.com/opaque-systems/claude-skills.git";
-      flake = false;
     };
   };
   outputs =
@@ -187,8 +180,21 @@
         nur.overlays.default
         llama-cpp.overlays.default
         claude-code.overlays.default
-        antigravity-nix.overlays.default
         niri.overlays.niri
+        # niri-flake still asserts libdisplay-info 0.2.0, but nixpkgs replaced
+        # libdisplay-info_0_2 with a removal throw. Rebuild 0.2.0 ourselves.
+        (_final: prev: {
+          libdisplay-info_0_2 = prev.libdisplay-info.overrideAttrs (_: {
+            version = "0.2.0";
+            src = prev.fetchFromGitLab {
+              domain = "gitlab.freedesktop.org";
+              owner = "emersion";
+              repo = "libdisplay-info";
+              rev = "0.2.0";
+              hash = "sha256-6xmWBrPHghjok43eIDGeshpUEQTuwWLXNHg7CnBUt3Q=";
+            };
+          });
+        })
       ];
 
       channels-config = {
@@ -196,9 +202,6 @@
         android_sdk.accept_license = true;
         permittedInsecurePackages = [
           # "electron-25.9.0"
-          # kanidm 1.10 marked insecure upstream; drop once bumped to a supported release
-          "kanidm-1.10.5" # x1 home CLI (wheat.kanidm)
-          "kanidm-with-secret-provisioning-1.10.5" # rpi4 server (wheat.services.kanidm)
         ];
 
       };

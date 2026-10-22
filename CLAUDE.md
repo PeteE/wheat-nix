@@ -72,7 +72,7 @@ deploy .#rpi4 --skip-checks --auto-rollback false --magic-rollback false
 - **m4**: aarch64-darwin Mac - home imac
 - **m3p**: aarch64-darwin Mac - work computer
 - **rpi4**: aarch64-linux Raspberry Pi 4
-- **rpinix**: x86_64-linux -- my main nixos desktop (VM running on `ripper` debian host)
+- **ripnix**: x86_64-linux -- my main nixos desktop (VM running on `ripper` debian host)
 
 ## Module System
 
