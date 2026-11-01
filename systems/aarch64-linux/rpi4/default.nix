@@ -36,6 +36,11 @@
     "usbhid"
   ];
   boot.kernelModules = [ "bfq" ];
+  # No wifi: keep the onboard brcmfmac radio from loading at all
+  boot.blacklistedKernelModules = [
+    "brcmfmac"
+    "brcmutil"
+  ];
   boot.extraModulePackages = [ ];
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;
@@ -71,13 +76,11 @@
       hashedPassword = "$y$j9T$ysACyCk2sIkE4gjt8JfgK0$ZS1H7jaFrrMbZj1QGX2xm/omN8rGAwl6cAcZbfKQykC";
       extraGroups = [
         "wheel"
-        "NetworkManager"
         "dialout"
         "video" # /dev/vchiq access for vcgencmd
       ];
     };
     sudo.enable = true;
-    wifi.enable = true;
 
     # SPIRE Server - primary identity provider for wheat-dn42.net
     services.spire = {
