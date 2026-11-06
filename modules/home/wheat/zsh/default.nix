@@ -44,6 +44,7 @@
       ];
     };
     shellAliases = {
+      weather = "curl https://wttr.in/";
       c = "claude";
       arduino = "_JAVA_AWT_WM_NONREPARENTING=1 arduino";
       icat = "kitty +kitten icat";

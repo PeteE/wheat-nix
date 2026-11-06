@@ -157,12 +157,10 @@ in
 
   config = mkIf cfg.enable {
     # Add kanidm CLI tools to system path
-    environment.systemPackages = [ pkgs.kanidm_1_10 ];
+    environment.systemPackages = [ pkgs.kanidm_1_11 ];
 
     services.kanidm = {
-      enableServer = true;
-      enableClient = true;
-      package = pkgs.kanidm_1_10.withSecretProvisioning;
+      package = pkgs.kanidm_1_11.withSecretProvisioning;
 
       client = {
         enable = true;

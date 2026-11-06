@@ -36,6 +36,11 @@
     "usbhid"
   ];
   boot.kernelModules = [ "bfq" ];
+  # No wifi: keep the onboard brcmfmac radio from loading at all
+  boot.blacklistedKernelModules = [
+    "brcmfmac"
+    "brcmutil"
+  ];
   boot.extraModulePackages = [ ];
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;
@@ -71,13 +76,11 @@
       hashedPassword = "$y$j9T$ysACyCk2sIkE4gjt8JfgK0$ZS1H7jaFrrMbZj1QGX2xm/omN8rGAwl6cAcZbfKQykC";
       extraGroups = [
         "wheel"
-        "NetworkManager"
         "dialout"
         "video" # /dev/vchiq access for vcgencmd
       ];
     };
     sudo.enable = true;
-    wifi.enable = true;
 
     # SPIRE Server - primary identity provider for wheat-dn42.net
     services.spire = {
@@ -115,38 +118,35 @@
       };
     };
 
-    # DISABLED 2026-10-17: DB is at domain level 12 (kanidm 1.8); 1.10 needs an
-    # intermediate 1.9 upgrade first (MG0008SkipUpgradeAttempted). Re-enable with the
-    # sops secrets + systemd ordering below once migrated.
-    # # Kanidm - user identity provider (OIDC, LDAP)
-    # services.kanidm = {
-    # enable = true;
-    # domain = "idp.wheat-dn42.net";
-    # bindAddress = "127.0.0.1";
-    # bindPort = 8445;
-    # adminPasswordFile = config.sops.secrets."kanidm/admin-password".path;
-    # idmAdminPasswordFile = config.sops.secrets."kanidm/idm-admin-password".path;
+    # Kanidm - user identity provider (OIDC, LDAP)
+    services.kanidm = {
+      enable = true;
+      domain = "idp.wheat-dn42.net";
+      bindAddress = "127.0.0.1";
+      bindPort = 8445;
+      adminPasswordFile = config.sops.secrets."kanidm/admin-password".path;
+      idmAdminPasswordFile = config.sops.secrets."kanidm/idm-admin-password".path;
 
-    # provision = {
-    # enable = true;
-    # groups = {
-    # homelab-users = { };
-    # homelab-admins = {
-    # members = [ "petee" ];
-    # };
-    # };
-    # persons = {
-    # petee = {
-    # displayName = "Pete Erickson";
-    # mailAddresses = [ "pete.perickson@gmail.com" ];
-    # groups = [
-    # "homelab-users"
-    # "homelab-admins"
-    # ];
-    # };
-    # };
-    # };
-    # };
+      provision = {
+        enable = true;
+        groups = {
+          homelab-users = { };
+          homelab-admins = {
+            members = [ "petee" ];
+          };
+        };
+        persons = {
+          petee = {
+            displayName = "Pete Erickson";
+            mailAddresses = [ "pete.perickson@gmail.com" ];
+            groups = [
+              "homelab-users"
+              "homelab-admins"
+            ];
+          };
+        };
+      };
+    };
   };
   # Tailscale subnet router and exit node for home network
   services.tailscale = {
@@ -194,23 +194,23 @@
     path = "/etc/spire/rpi4-cert.pem";
   };
 
-  # # Kanidm admin passwords
-  # sops.secrets."kanidm/admin-password" = {
-  # mode = "0400";
-  # owner = "kanidm";
-  # };
-  # sops.secrets."kanidm/idm-admin-password" = {
-  # mode = "0400";
-  # owner = "kanidm";
-  # };
+  # Kanidm admin passwords
+  sops.secrets."kanidm/admin-password" = {
+    mode = "0400";
+    owner = "kanidm";
+  };
+  sops.secrets."kanidm/idm-admin-password" = {
+    mode = "0400";
+    owner = "kanidm";
+  };
 
   # Ensure SPIRE services start after sops secrets are decrypted
   systemd.services.spire-agent.after = [ "sops-nix.service" ];
   systemd.services.spire-agent.wants = [ "sops-nix.service" ];
 
-  # # Ensure Kanidm starts after sops secrets are decrypted
-  # systemd.services.kanidm.after = [ "sops-nix.service" ];
-  # systemd.services.kanidm.wants = [ "sops-nix.service" ];
+  # Ensure Kanidm starts after sops secrets are decrypted
+  systemd.services.kanidm.after = [ "sops-nix.service" ];
+  systemd.services.kanidm.wants = [ "sops-nix.service" ];
 
   # Cloudflare Dynamic DNS
   sops.age.keyFile = "/home/petee/.config/sops/age/keys.txt";
