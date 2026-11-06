@@ -1,12 +1,13 @@
 {
   home,
+  lib,
   pkgs,
   ...
 }:
 {
   wheat = {
     git.managedConfig = false;
-    niri.enable = false;
+    niri.enable = true;
     kitty.font.size = 14.0; # For scale 1.0 on ultrawide
     ollama.enable = false;
     distrobox.enable = true;
@@ -19,6 +20,7 @@
       ollamaHost = "192.168.1.149"; # m4
       mcp.enable = true;
       aichat.enable = true;
+      vllm.enable = true;
     };
     chromium.enable = true;
     misc.enable = true;
@@ -58,6 +60,10 @@
     gtk3.extraConfig.gtk-application-prefer-dark-theme = true;
     gtk4.extraConfig.gtk-application-prefer-dark-theme = true;
   };
+
+  # VM has no CPU temperature sensor (k10temp needs the host northbridge);
+  # btop otherwise shows a bogus 3000°C.
+  programs.btop.settings.check_temp = lib.mkForce false;
 
   home.packages = with pkgs; [
     socat

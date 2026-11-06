@@ -12,7 +12,7 @@ let
   # Build caddy with layer4 plugin for TCP passthrough
   caddyWithL4 = pkgs.caddy.withPlugins {
     plugins = [ "github.com/mholt/caddy-l4@v0.0.0-20260116154418-93f52b6a03ba" ];
-    hash = "sha256-XoDiFUyd37PvnrEVdeeiPuVf3WW4rxrr8qqHcEkccaw=";
+    hash = "sha256-V9m/Un76G3GoYHJytRxlPFGyHC3uZ4wcTpTuPmuXNQQ=";
   };
 
   # Get list of SNI hostnames from virtualHosts
