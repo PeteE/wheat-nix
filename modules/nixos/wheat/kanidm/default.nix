@@ -157,16 +157,16 @@ in
 
   config = mkIf cfg.enable {
     # Add kanidm CLI tools to system path
-    environment.systemPackages = [ pkgs.kanidm_1_11 ];
+    environment.systemPackages = [ pkgs.kanidm_1_12 ];
 
     services.kanidm = {
-      package = pkgs.kanidm_1_11.withSecretProvisioning;
+      package = pkgs.kanidm_1_12.withSecretProvisioning;
 
       client = {
         enable = true;
         settings = {
           uri = "https://localhost:${toString cfg.bindPort}";
-          verify_ca = false;  # Using self-signed cert internally
+          verify_ca = false; # Using self-signed cert internally
         };
       };
 
