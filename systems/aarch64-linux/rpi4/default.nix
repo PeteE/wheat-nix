@@ -172,6 +172,10 @@
     };
   };
 
+  # netboot.xyz over TFTP; router dnsmasq (192.168.1.33) sends UEFI PXE
+  # clients here with dhcp-boot=tag:efi64,netboot.xyz.efi,,192.168.1.173
+  wheat.services.netboot.enable = true;
+
   services.open-webui = {
     enable = false;
     port = 8888;
