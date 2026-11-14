@@ -15,7 +15,18 @@ with lib;
 let
   cfg = config.wheat.services.netboot;
 
-  # netbootxyz-efi's output is the .efi file itself; wrap it in a directory
+  # Fetched directly instead of pkgs.netbootxyz-efi:
+  # - nixpkgs ships 2.0.88; netboot.xyz 3.0.0 rotated its code-signing CA, so
+  #   pre-3.x bootloaders fail on the live menus with "Could not verify:
+  #   Permission denied" (https://ipxe.org/0216eb8f)
+  # - netbootxyz-efi picks the binary for its host platform, which on an
+  #   aarch64 server (rpi4) is the ARM64 build; the clients are x86-64
+  netbootxyzEfi = pkgs.fetchurl {
+    url = "https://github.com/netbootxyz/netboot.xyz/releases/download/3.0.3/netboot.xyz.efi";
+    hash = "sha256-Vrsh6fbXnq25R+cDGgiMmvzEiqHrmbJQLRYfCxxYaoI=";
+  };
+
+  # The .efi is a single file; wrap it in a directory
   tftpRoot = pkgs.linkFarm "netboot-tftp-root" [
     {
       name = "netboot.xyz.efi";
@@ -29,11 +40,8 @@ in
 
     efiPackage = mkOption {
       type = types.package;
-      # netbootxyz-efi picks the binary for its host platform, so on an
-      # aarch64 server (rpi4) plain pkgs.netbootxyz-efi is the ARM64 build.
-      # The clients are x86-64; it's only a fetchurl, so cross costs nothing.
-      default = pkgs.pkgsCross.gnu64.netbootxyz-efi;
-      defaultText = literalExpression "pkgs.pkgsCross.gnu64.netbootxyz-efi";
+      default = netbootxyzEfi;
+      defaultText = literalExpression "netboot.xyz 3.0.3 x86-64 netboot.xyz.efi";
       description = "netboot.xyz UEFI binary (x86-64) served as netboot.xyz.efi";
     };
 
