@@ -345,6 +345,10 @@
         domain = "ripper";
         answer = "192.168.1.51";
       }
+      {
+        domain = "k8s-worker-300";
+        answer = "192.168.1.30";
+      }
     ];
   };
 
