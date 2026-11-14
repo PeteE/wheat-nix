@@ -51,6 +51,11 @@
       url = "github:serokell/deploy-rs?ref=cf64c8cbadd9b13ea79ba7720aa2930500f2ece7";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Declarative partitioning (used by nixos-anywhere installs)
+    disko = {
+      url = "github:nix-community/disko?ref=1dd30c29c88d99ce295f15e27f93c49bc5fbae07";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     virby = {
       url = "github:quinneden/virby-nix-darwin?ref=a52216470a97ef5970939acf697a00ec61beb0c6";
@@ -173,6 +178,19 @@
             };
           };
         };
+        nodes.k8s-worker-300 = {
+          hostname = "192.168.1.30";
+          fastConnection = true;
+          interactiveSudo = false;
+          remoteBuild = false;
+          profiles = {
+            system = {
+              path = (deployPkgsFor "x86_64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.k8s-worker-300;
+              user = "root";
+              sshUser = "petee";
+            };
+          };
+        };
       };
 
       # overlays
@@ -264,6 +282,9 @@
           ];
           rpi4.modules = with inputs; [
             nixos-hardware.nixosModules.raspberry-pi-4
+          ];
+          k8s-worker-300.modules = with inputs; [
+            disko.nixosModules.disko
           ];
           microvm-poc.modules = with inputs; [
             microvm.nixosModules.microvm
