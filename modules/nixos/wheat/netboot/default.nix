@@ -29,9 +29,12 @@ in
 
     efiPackage = mkOption {
       type = types.package;
-      default = pkgs.netbootxyz-efi;
-      defaultText = literalExpression "pkgs.netbootxyz-efi";
-      description = "netboot.xyz UEFI binary served as netboot.xyz.efi";
+      # netbootxyz-efi picks the binary for its host platform, so on an
+      # aarch64 server (rpi4) plain pkgs.netbootxyz-efi is the ARM64 build.
+      # The clients are x86-64; it's only a fetchurl, so cross costs nothing.
+      default = pkgs.pkgsCross.gnu64.netbootxyz-efi;
+      defaultText = literalExpression "pkgs.pkgsCross.gnu64.netbootxyz-efi";
+      description = "netboot.xyz UEFI binary (x86-64) served as netboot.xyz.efi";
     };
 
     openFirewall = mkOption {
