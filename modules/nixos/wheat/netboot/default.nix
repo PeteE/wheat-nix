@@ -21,9 +21,13 @@ let
   #   Permission denied" (https://ipxe.org/0216eb8f)
   # - netbootxyz-efi picks the binary for its host platform, which on an
   #   aarch64 server (rpi4) is the ARM64 build; the clients are x86-64
+  # The -legacy build omits iPXE's USB NIC drivers, which in 3.x unhook the
+  # firmware's USB keyboard (dead keyboard at the menu on the ThinkCentre).
+  # Trade-off: no USB ethernet adapters. See
+  # https://netboot.xyz/docs/kb/hardware/usb-keyboard
   netbootxyzEfi = pkgs.fetchurl {
-    url = "https://github.com/netbootxyz/netboot.xyz/releases/download/3.0.3/netboot.xyz.efi";
-    hash = "sha256-Vrsh6fbXnq25R+cDGgiMmvzEiqHrmbJQLRYfCxxYaoI=";
+    url = "https://github.com/netbootxyz/netboot.xyz/releases/download/3.0.3/netboot.xyz-legacy.efi";
+    hash = "sha256-xns+RnTf5ZJ71ujLSiA+VCLlCiyPWQ6ZGSlKX5ONWMQ=";
   };
 
   # The .efi is a single file; wrap it in a directory
@@ -41,7 +45,7 @@ in
     efiPackage = mkOption {
       type = types.package;
       default = netbootxyzEfi;
-      defaultText = literalExpression "netboot.xyz 3.0.3 x86-64 netboot.xyz.efi";
+      defaultText = literalExpression "netboot.xyz 3.0.3 x86-64 netboot.xyz-legacy.efi";
       description = "netboot.xyz UEFI binary (x86-64) served as netboot.xyz.efi";
     };
 
