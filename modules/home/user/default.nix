@@ -42,8 +42,16 @@
       "*" = {
         AddKeysToAgent = "yes";
       };
-      "m4" = {
+      "m4 m4-wired m4-wifi petee-m4.porcupine-python.ts.net" = {
         User = "pete";
+      };
+      # Pin LAN IPs so ssh skips name resolution: Tailscale MagicDNS (search
+      # domain) answers NXDOMAIN for these and can beat /etc/hosts on macOS.
+      "m4-wired" = {
+        HostName = "192.168.1.149";
+      };
+      "m4-wifi" = {
+        HostName = "192.168.1.115";
       };
       "192.168.1.4" = {
         HostKeyAlgorithms = "+ssh-rsa";

@@ -1,44 +1,59 @@
 #!/usr/bin/env bash
 # Update one or more github: flake inputs in flake.nix to the latest commit
-# on their default branch, then verify the flake still builds. Reverts
-# flake.nix/flake.lock for any input whose build check fails.
+# on their default branch and relock. By default no build is run — changes
+# are left in the working tree for review (revert with git if needed).
 #
 # Usage:
-#   update-input.sh                # update every github-type input
-#   update-input.sh nixpkgs niri   # update only the named inputs
+#   update-input.sh                        # update every github-type input
+#   update-input.sh nixpkgs niri           # update only the named inputs
+#   update-input.sh --build nixpkgs        # also run one build check at the end
 #
 # Env:
-#   BUILD_TARGETS  space-separated nix build targets used as the smoke test
-#                  (default: the local host's nixosConfigurations toplevel)
+#   BUILD_TARGETS  space-separated nix build targets used by --build
+#                  (default: the local host's nixos/darwin system toplevel)
 
 set -euo pipefail
 
 repo_root="$(git rev-parse --show-toplevel)"
 cd "$repo_root"
 
-default_target="nixosConfigurations.$(hostname).config.system.build.toplevel"
+do_build=0
+args=()
+for a in "$@"; do
+  case "$a" in
+    --build) do_build=1 ;;
+    *) args+=("$a") ;;
+  esac
+done
+
+host="$(hostname -s)"
+if [ "$(uname)" = "Darwin" ]; then
+  default_target="darwinConfigurations.$host.system"
+else
+  default_target="nixosConfigurations.$host.config.system.build.toplevel"
+fi
 BUILD_TARGETS="${BUILD_TARGETS:-$default_target}"
 
 metadata="$(nix flake metadata --json)"
 
 mapfile -t all_inputs < <(jq -r '.locks.nodes.root.inputs | keys[]' <<<"$metadata")
 
-if [ "$#" -gt 0 ]; then
-  targets=("$@")
+if [ "${#args[@]}" -gt 0 ]; then
+  targets=("${args[@]}")
 else
   targets=("${all_inputs[@]}")
 fi
 
-declare -A results
+# Inputs that track a branch other than the repo's default. nixpkgs master
+# runs ahead of Hydra (uncached, sometimes broken); nixpkgs-unstable only
+# advances after CI passes.
+declare -A branches=(
+  [nixpkgs]=nixpkgs-unstable
+  [nixpkgs-stable]=nixpkgs-unstable
+)
 
-build_ok() {
-  for t in $BUILD_TARGETS; do
-    echo "  building $t ..." >&2
-    if ! nix build ".#$t" --no-link 2>&1 | tail -40; then
-      return 1
-    fi
-  done
-}
+declare -A results
+updated=()
 
 for name in "${targets[@]}"; do
   echo "== $name =="
@@ -68,9 +83,14 @@ for name in "${targets[@]}"; do
     continue
   fi
 
-  latest="$(git ls-remote "https://github.com/$owner/$repo" HEAD | cut -f1)"
+  ref="HEAD"
+  if [ -n "${branches[$name]:-}" ]; then
+    ref="refs/heads/${branches[$name]}"
+  fi
+
+  latest="$(git ls-remote "https://github.com/$owner/$repo" "$ref" | cut -f1)"
   if [ -z "$latest" ]; then
-    echo "  FAILED: could not resolve default-branch HEAD for $owner/$repo"
+    echo "  FAILED: could not resolve $ref for $owner/$repo"
     results["$name"]="failed (ls-remote)"
     continue
   fi
@@ -83,42 +103,45 @@ for name in "${targets[@]}"; do
 
   echo "  ${current:0:12} -> ${latest:0:12}"
 
-  before_nix="$(cat flake.nix)"
-  before_lock="$(cat flake.lock)"
-
   sed -i "s/$current/$latest/" flake.nix
 
   if ! grep -q "$latest" flake.nix; then
     echo "  FAILED: sed didn't find $current in flake.nix (input url may not embed a bare ref=<sha>)"
-    printf '%s' "$before_nix" >flake.nix
     results["$name"]="failed (edit)"
     continue
   fi
 
-  if ! nix flake lock --update-input "$name" >/tmp/update-flake-lock.$$ 2>&1; then
-    echo "  FAILED: nix flake lock --update-input $name"
-    tail -20 /tmp/update-flake-lock.$$
-    printf '%s' "$before_nix" >flake.nix
-    printf '%s' "$before_lock" >flake.lock
-    results["$name"]="failed (lock)"
-    rm -f /tmp/update-flake-lock.$$
-    continue
-  fi
-  rm -f /tmp/update-flake-lock.$$
-
-  if build_ok; then
-    echo "  OK: updated and build verified"
-    results["$name"]="updated ${current:0:12} -> ${latest:0:12}"
-  else
-    echo "  FAILED: build broke, reverting"
-    printf '%s' "$before_nix" >flake.nix
-    printf '%s' "$before_lock" >flake.lock
-    results["$name"]="failed (build, reverted)"
-  fi
+  results["$name"]="updated ${current:0:12} -> ${latest:0:12}"
+  updated+=("$name")
 done
+
+# One relock for everything that changed, rather than one per input.
+if [ "${#updated[@]}" -gt 0 ]; then
+  echo
+  echo "== relocking: ${updated[*]} =="
+  nix flake lock
+fi
+
+build_status=""
+if [ "$do_build" = 1 ] && [ "${#updated[@]}" -gt 0 ]; then
+  build_status="OK"
+  for t in $BUILD_TARGETS; do
+    echo "== building $t =="
+    if ! nix build ".#$t" --no-link; then
+      build_status="FAILED ($t)"
+      break
+    fi
+  done
+fi
 
 echo
 echo "== summary =="
 for name in "${targets[@]}"; do
   printf '%-24s %s\n' "$name" "${results[$name]:-(not processed)}"
 done
+if [ -n "$build_status" ]; then
+  echo "build: $build_status"
+fi
+if [ "${#updated[@]}" -gt 0 ]; then
+  echo "review: git diff flake.nix flake.lock   revert: git checkout flake.nix flake.lock"
+fi

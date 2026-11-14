@@ -38,23 +38,6 @@ in
         "docker"
       ];
     };
-
-    # SPIRE agent connecting to rpi4 server
-    services.spire = {
-      enable = true;
-      trustDomain = "wheat-dn42.net";
-      server.enable = false; # Server runs on rpi4
-      agent = {
-        enable = true;
-        serverAddress = "192.168.1.173"; # rpi4
-        insecureBootstrap = true; # Required for initial trust bundle fetch
-        x509pop = {
-          enable = true;
-          privateKeyPath = config.sops.secrets."spire/nodes/ripnix/key".path;
-          certificatePath = "/etc/spire/ripnix-cert.pem";
-        };
-      };
-    };
     sudo.enable = true;
     xserver.enable = true;
     coco.enable = true;
@@ -63,7 +46,7 @@ in
     services.docker.enable = true;
     remote-builder.enable = true;
 
-    services.niri.enable = false; # rarely use a GUI here; niri-flake also fails to eval (libdisplay-info_0_2)
+    services.niri.enable = true;
     services.clipcat.enable = true;
 
     virtualisation = {
@@ -80,28 +63,6 @@ in
       interface = bridgeInterface;
     };
   };
-
-  # SPIRE x509pop CA certificate for node attestation
-  # This is the same CA cert used across all hosts in the trust domain
-  environment.etc."spire/x509pop-ca-bundle.pem" = {
-    source = ../x1/spire-x509pop-ca.pem;
-    mode = "0644";
-  };
-
-  # NixOS-level sops secrets for SPIRE agent
-  sops.defaultSopsFile = ../../../modules/home/wheat/secrets/secrets.yaml;
-  sops.age.keyFile = "/home/petee/.config/sops/age/keys.txt";
-  sops.secrets."spire/nodes/ripnix/key" = {
-    mode = "0400";
-  };
-  sops.secrets."spire/nodes/ripnix/cert" = {
-    mode = "0444";
-    path = "/etc/spire/ripnix-cert.pem";
-  };
-
-  # Ensure SPIRE agent starts after sops secrets are decrypted
-  systemd.services.spire-agent.after = [ "sops-nix.service" ];
-  systemd.services.spire-agent.wants = [ "sops-nix.service" ];
 
   networking.hostName = "ripnix";
   systemd.network.enable = true;
@@ -150,6 +111,8 @@ in
   boot.kernelModules = [ "amdgpu" ];
   boot.extraModulePackages = [ ];
   boot.blacklistedKernelModules = [ "qxl" ]; # Prevent QXL from conflicting with GPU passthrough
+  # QXL is still the boot VGA, so point X at the passed-through AMD GPU explicitly
+  services.xserver.deviceSection = ''BusID "PCI:8:0:0"'';
   boot.binfmt.emulatedSystems = [
     "armv6l-linux"
     "aarch64-linux"
@@ -211,9 +174,9 @@ in
     # };
   };
 
-  # limit build parallelism (default 24 jobs x 24 cores OOMs this 19GiB VM)
-  nix.settings.max-jobs = 8;
-  nix.settings.cores = 12;
+  # limit build parallelism to the 12 pinned vCPUs (default jobs x cores OOMs this 19GiB VM)
+  nix.settings.max-jobs = 3;
+  nix.settings.cores = 4;
   # make the OOM killer pick build processes before the desktop session
   systemd.services.nix-daemon.serviceConfig.OOMScoreAdjust = 500;
   nix.settings.trusted-users = [

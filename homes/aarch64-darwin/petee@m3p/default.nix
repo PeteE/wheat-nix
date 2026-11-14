@@ -104,10 +104,10 @@
   home.packages = with pkgs; [
     vault
     codex
-    google-antigravity-cli
+    # google-antigravity-cli
+    huggingface-cli
     azure-storage-azcopy
     inputs.nixpkgs-stable.legacyPackages."${system}".tailscale
-    python3Packages.huggingface-hub
     # moonlight-qt
     pkgs.wheat.openskills
   ];

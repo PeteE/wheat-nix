@@ -2,8 +2,8 @@
 {
   description = "Pete's NixOS Flake";
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs?ref=9adf22f23c377fa740fa1a643ea3e368cb085b9c";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs?ref=9adf22f23c377fa740fa1a643ea3e368cb085b9c";
+    nixpkgs.url = "github:NixOS/nixpkgs?ref=6dadaf4375be35033e1c84395adbd53ff5fded96";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs?ref=6dadaf4375be35033e1c84395adbd53ff5fded96";
     home-manager = {
       url = "github:nix-community/home-manager?ref=f53f3267f5d009dd8f99443505e609389d7ff267";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -163,7 +163,8 @@
           hostname = "192.168.1.173";
           fastConnection = true;
           interactiveSudo = false;
-          remoteBuild = true;
+          # Build locally; Determinate Nix's native aarch64-linux VM is faster than the Pi
+          remoteBuild = false;
           profiles = {
             system = {
               path = (deployPkgsFor "aarch64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.rpi4;

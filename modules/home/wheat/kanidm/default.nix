@@ -27,7 +27,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.kanidm_1_11 ];
+    home.packages = [ pkgs.kanidm_1_12 ];
 
     xdg.configFile."kanidm".text = ''
       uri = "${cfg.serverUrl}"

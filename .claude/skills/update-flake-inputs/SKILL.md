@@ -1,6 +1,6 @@
 ---
 name: update-flake-inputs
-description: Update one or all flake.nix inputs to the latest commit on their default branch, then verify the flake still builds. Use when Pete asks to "update flake inputs", "bump nixpkgs", "update the flake", or "update <input-name>" in this wheat-nix repo. Every input here is pinned via `?ref=<commit-sha>` (see flake.nix), not a floating branch name, so "latest" always means resolving the default branch's current HEAD and rewriting that sha.
+description: Update one or all flake.nix inputs to the latest commit on their default branch and relock (build check optional via --build). Use when Pete asks to "update flake inputs", "bump nixpkgs", "update the flake", or "update <input-name>" in this wheat-nix repo. Every input here is pinned via `?ref=<commit-sha>` (see flake.nix), not a floating branch name, so "latest" always means resolving the default branch's current HEAD and rewriting that sha.
 ---
 
 # Update flake inputs
@@ -13,8 +13,9 @@ of each repo's default branch, and if it moved, rewrite the sha in
 
 ## Running it
 
-Use the bundled script — it does the lookup, edit, relock, and build-check,
-and reverts automatically if the build breaks:
+Use the bundled script. It looks up each input, edits `flake.nix`, and runs a
+single `nix flake lock`. It does **not** build by default. Pete prefers fast
+turnaround: changes stay in the working tree and git is the undo button.
 
 ```bash
 # update every github-type input
@@ -22,47 +23,34 @@ and reverts automatically if the build breaks:
 
 # update just specific inputs
 .claude/skills/update-flake-inputs/scripts/update-input.sh nixpkgs niri home-manager
+
+# opt in to one build check after all updates
+.claude/skills/update-flake-inputs/scripts/update-input.sh --build nixpkgs
 ```
 
-By default it build-checks against `nixosConfigurations.$(hostname).config.system.build.toplevel`
-(i.e. whichever host you're running it on — x1, ripnix, etc). Override with:
+`--build` builds the local host's system: `darwinConfigurations.<host>.system`
+on macOS, `nixosConfigurations.<host>.config.system.build.toplevel` on Linux.
+Override with `BUILD_TARGETS="<target> <target>"`. A failed build is reported
+but nothing is reverted.
 
-```bash
-BUILD_TARGETS="nixosConfigurations.x1.config.system.build.toplevel nixosConfigurations.rpi4.config.system.build.toplevel" \
-  .claude/skills/update-flake-inputs/scripts/update-input.sh
-```
-
-Darwin hosts (m4, m3p) can't be built from a Linux machine without a remote
-builder — skip them unless you're running this on a Mac or have `darwin`
-remote build configured.
-
-## What it does, per input
+## What it does
 
 1. Reads `nix flake metadata --json` to get each input's `owner`/`repo`/current
    pinned sha (skips anything not `type: github`, and anything not already
    pinned to a bare 40-char sha ref).
 2. Resolves the repo's default-branch HEAD with `git ls-remote
    https://github.com/<owner>/<repo> HEAD`.
-3. If unchanged, reports "up to date" and moves on.
-4. If changed: `sed`-replaces the old sha with the new one in `flake.nix`
-   (safe because a full commit sha is unique in the file), then
-   `nix flake lock --update-input <name>`.
-5. Runs the build-check target(s). On success, leaves the changes staged for
-   review/commit. On failure, reverts `flake.nix` and `flake.lock` for that
-   input and reports it as failed — other inputs in the same run are
-   unaffected.
+3. If changed, `sed`-replaces the old sha with the new one in `flake.nix`.
+   Inputs sharing the same sha (e.g. `nixpkgs` and `nixpkgs-stable`) move
+   together.
+4. Runs one `nix flake lock` for all changed inputs.
+5. With `--build`, runs the build target(s) once at the end.
 
 ## After it finishes
 
-- Review the diff (`git diff flake.nix flake.lock`) before committing —
-  especially for inputs like `home-manager` or `niri` that can carry
-  breaking option changes.
-- Anything reported as `failed (build, reverted)` needs a manual look: the
-  new upstream commit broke evaluation or the build. Read the tail of the
-  build log the script printed, fix the fallout in the relevant module, or
-  leave that input pinned and revisit later.
-- Nothing is auto-committed — commit deliberately once you're happy with
-  the diff.
+- Review: `git diff flake.nix flake.lock`. Revert: `git checkout flake.nix flake.lock`.
+- Watch `home-manager` / `niri` bumps for breaking option changes.
+- Nothing is auto-committed.
 
 ## Manual fallback (if you'd rather not use the script)
 

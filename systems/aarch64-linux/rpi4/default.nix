@@ -271,10 +271,11 @@
         domain = "adguard.wheat-dn42.net";
         answer = "192.168.1.173";
       }
-      {
-        domain = "unifi.wheat-dn42.net";
-        answer = "192.168.1.245";
-      }
+      # unifi IngressRoute is tailscale-class; resolve via public DNS (edge -> traefik-ts)
+      # {
+      #   domain = "unifi.wheat-dn42.net";
+      #   answer = "192.168.1.245";
+      # }
       {
         domain = "hs.wheat-dn42.net";
         answer = "192.168.1.245";
@@ -287,19 +288,19 @@
         domain = "authentik.wheat-dn42.net";
         answer = "192.168.1.245";
       }
-      {
-        domain = "s3.wheat-dn42.net";
-        answer = "192.168.1.245";
-      }
+      # {
+      #   domain = "s3.wheat-dn42.net";
+      #   answer = "192.168.1.245";
+      # }
       {
         domain = "idp.wheat-dn42.net";
         answer = "192.168.1.173";
       } # rpi4 - Kanidm
       # Automation
-      {
-        domain = "mqtt.wheat-dn42.net";
-        answer = "192.168.1.245";
-      }
+      # {
+      #   domain = "mqtt.wheat-dn42.net";
+      #   answer = "192.168.1.245";
+      # }
       # Media
       {
         domain = "overseerr.wheat-dn42.net";

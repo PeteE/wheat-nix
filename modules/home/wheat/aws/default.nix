@@ -21,7 +21,7 @@ in
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs-stable; [
-      awscli
+      awscli2
 
     ];
     sops.secrets.aws-env = { };
