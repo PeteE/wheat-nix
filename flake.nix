@@ -191,6 +191,19 @@
             };
           };
         };
+        nodes.hv = {
+          hostname = "192.168.1.50";
+          fastConnection = true;
+          interactiveSudo = false;
+          remoteBuild = false;
+          profiles = {
+            system = {
+              path = (deployPkgsFor "x86_64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.hv;
+              user = "root";
+              sshUser = "petee";
+            };
+          };
+        };
       };
 
       # overlays
@@ -284,6 +297,9 @@
             nixos-hardware.nixosModules.raspberry-pi-4
           ];
           k8s-worker-300.modules = with inputs; [
+            disko.nixosModules.disko
+          ];
+          hv.modules = with inputs; [
             disko.nixosModules.disko
           ];
           microvm-poc.modules = with inputs; [
