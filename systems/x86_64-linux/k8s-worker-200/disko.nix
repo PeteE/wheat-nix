@@ -25,7 +25,9 @@
         };
       };
     };
-    # 223GB SATA SSD (ex k8s-worker-200 disk): VM images
+    # 223GB SATA SSD: k3s data (containerd images, local-path volumes).
+    # Partition name kept from the hypervisor layout so the existing
+    # filesystem is reused as-is.
     vms = {
       type = "disk";
       device = "/dev/disk/by-id/ata-SATA_SSD_17110324001257";
@@ -37,9 +39,9 @@
             content = {
               type = "filesystem";
               format = "ext4";
-              mountpoint = "/var/lib/libvirt";
-              # VM storage only: if this disk is missing or slow to appear,
-              # boot anyway (libvirt just has no images) instead of emergency mode
+              mountpoint = "/var/lib/rancher";
+              # Missing disk must not drop boot to emergency mode (no SSH);
+              # k3s itself requires this mount, see default.nix
               mountOptions = [
                 "defaults"
                 "nofail"

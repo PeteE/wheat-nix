@@ -191,14 +191,14 @@
             };
           };
         };
-        nodes.hv = {
+        nodes.k8s-worker-200 = {
           hostname = "192.168.1.50";
           fastConnection = true;
           interactiveSudo = false;
           remoteBuild = false;
           profiles = {
             system = {
-              path = (deployPkgsFor "x86_64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.hv;
+              path = (deployPkgsFor "x86_64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.k8s-worker-200;
               user = "root";
               sshUser = "petee";
             };
@@ -299,7 +299,7 @@
           k8s-worker-300.modules = with inputs; [
             disko.nixosModules.disko
           ];
-          hv.modules = with inputs; [
+          k8s-worker-200.modules = with inputs; [
             disko.nixosModules.disko
           ];
           microvm-poc.modules = with inputs; [

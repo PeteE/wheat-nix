@@ -338,7 +338,7 @@
         answer = "192.168.1.120";
       }
       {
-        domain = "hv";
+        domain = "k8s-worker-200";
         answer = "192.168.1.50";
       }
       {
