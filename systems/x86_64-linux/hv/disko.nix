@@ -38,6 +38,13 @@
               type = "filesystem";
               format = "ext4";
               mountpoint = "/var/lib/libvirt";
+              # VM storage only: if this disk is missing or slow to appear,
+              # boot anyway (libvirt just has no images) instead of emergency mode
+              mountOptions = [
+                "defaults"
+                "nofail"
+                "x-systemd.device-timeout=30s"
+              ];
             };
           };
         };
