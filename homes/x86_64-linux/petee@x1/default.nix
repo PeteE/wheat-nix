@@ -111,9 +111,14 @@
     pandoc
     tectonic
     chromium
+    ipmitool # BMC on the Supermicro (k8s-worker-200) at 192.168.1.49
 
     # neato tui for network
-    inputs.matthart1983-netwatch.packages."${pkgs.stdenv.hostPlatform.system}".netwatch
+    # doCheck off: its procfs connection-polling test is timing-sensitive and
+    # fails in the build sandbox (controlled_polling_matrix_matches_independent_processes)
+    (inputs.matthart1983-netwatch.packages."${pkgs.stdenv.hostPlatform.system}".netwatch.overrideAttrs {
+      doCheck = false;
+    })
   ];
 
   programs.zsh.initContent = ''

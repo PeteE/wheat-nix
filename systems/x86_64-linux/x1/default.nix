@@ -102,6 +102,14 @@
   systemd.services.spire-agent.after = [ "sops-nix.service" ];
   systemd.services.spire-agent.wants = [ "sops-nix.service" ];
 
+  # i7-8650U (4c/8t) + 16GB: default auto/0 runs ~8 parallel rustc jobs
+  # (niri, netwatch) each using every core, which swaps the laptop.
+  # Cap at 2 builds x 2 threads.
+  nix.settings = {
+    max-jobs = 2;
+    cores = 2;
+  };
+
   hardware.graphics.enable = true;
   console.useXkbConfig = true;
   services.upower.enable = true;
