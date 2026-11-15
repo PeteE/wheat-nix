@@ -64,6 +64,12 @@
       pb = "pbcopy";
       j = "just";
       netshoot = "kubectl run netshoot --rm -it --image=nicolaka/netshoot --restart=Never -- bash";
+    }
+    // lib.optionalAttrs config.wheat.secrets.enable {
+      # Supermicro BMC of k8s-worker-200, e.g. `w200-ipmi power on`.
+      # ipmitool -f reads the password from the decrypted sops file, so it's
+      # never in the store, this config, the environment, or argv.
+      w200-ipmi = "ipmitool -I lanplus -H 192.168.1.49 -U ADMIN -f ${config.sops.secrets.impi_password.path}";
     };
     enableCompletion = true;
     autocd = false;
@@ -98,4 +104,7 @@
       [[ -f ~/.config/zsh/zsh-local.zsh ]] && source ~/.config/zsh/zsh-local.zsh
     '';
   };
+
+  # BMC password for the w200-ipmi alias
+  sops.secrets.impi_password = lib.mkIf config.wheat.secrets.enable { };
 }
