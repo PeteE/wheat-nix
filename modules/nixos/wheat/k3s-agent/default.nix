@@ -79,5 +79,9 @@ in
       nvme-cli
       openiscsi
     ];
+
+    # in-tree `nfs:` volumes; kubelet shells out to mount, which needs the
+    # mount.nfs helper from nfs-utils (and rpcbind for NFSv3)
+    boot.supportedFilesystems = [ "nfs" ];
   };
 }
