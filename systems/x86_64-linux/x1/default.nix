@@ -21,6 +21,8 @@
 
   wheat = {
     enable = true;
+    # use per-link DNS from DHCP (AdGuard on LAN) instead of global Cloudflare
+    nameservers = [ ];
     user = {
       name = "petee";
       hashedPassword = "$y$j9T$u3UjEvsXkdk4AxzFSYg7L0$1Yg9xzafdDTg/BAZKtzXngrpaVrxUk9nkGcKBRax9Y/";
