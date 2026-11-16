@@ -51,6 +51,9 @@ in
           };
           core = {
             editor = "${pkgs.neovim}/bin/nvim";
+            # empty stops git falling back to $SSH_ASKPASS (x11-ssh-askpass on
+            # NixOS) so credential prompts stay in the terminal
+            askPass = "";
           };
 
           # TODO(pete): This was a cluade suggested hack since i'm having issues with libsecret on macos
@@ -130,6 +133,7 @@ in
         	name = PeteE
         [core]
         	editor = ${pkgs.neovim}/bin/nvim
+        	askPass =
         [credential "https://github.com"]
         	helper = !f() { echo username=petee; echo password=$(${pkgs.gh}/bin/gh auth token); }; f
         [pull]
