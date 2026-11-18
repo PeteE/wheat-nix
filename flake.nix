@@ -169,7 +169,7 @@
           fastConnection = true;
           interactiveSudo = false;
           # Build locally; Determinate Nix's native aarch64-linux VM is faster than the Pi
-          remoteBuild = false;
+          remoteBuild = true;
           profiles = {
             system = {
               path = (deployPkgsFor "aarch64-linux").deploy-rs.lib.activate.nixos self.nixosConfigurations.rpi4;
