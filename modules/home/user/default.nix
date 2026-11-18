@@ -42,7 +42,7 @@
       "*" = {
         AddKeysToAgent = "yes";
       };
-      "m4 m4-wired m4-wifi petee-m4.porcupine-python.ts.net" = {
+      "m4 m4-wired m4-wifi petee-m4.porcupine-python.ts.net 192.168.1.149" = {
         User = "pete";
       };
       # Pin LAN IPs so ssh skips name resolution: Tailscale MagicDNS (search
