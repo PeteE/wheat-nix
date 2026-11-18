@@ -26,7 +26,7 @@ in
     enableFHS = true;
     nodejsPackage = pkgs.nodejs_24;
   };
-  services.tailscale.enable = true;
+  wheat.services.tailscale.enable = true;
   wheat = {
     enable = true;
     user = {

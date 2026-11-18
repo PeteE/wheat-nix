@@ -20,6 +20,17 @@ creation_rules:
       age1gvd83mnsq3wpxtcncsr26r9eyzfv8s7vwcz4a37wd0vaum4x95nsnnate3,
       age1r2arxn8clwj08fraq8c9amafctqtnjg9hjhmvwuct80a7sz9qykqfm95vn,
       age164phulqx2ttfp3qpn5zrpj6hcmkqtm3j3yt25pwlr2xrv8caaeuqhz8uv7
+  # tailscale client (tag:client) secrets - your machines + client SSH host
+  # keys (ssh-to-age: x1, ripnix, rpi4); must precede the catch-all rule below
+  - path_regex: wheat/tailscale/secrets/[^/]+\.yaml$
+    age: >-
+      age1u8dqa38qkztrzcuppkezy7mt7500aa0yex65e7h7qxyze59sdgpssksa62,
+      age14t2x3suh4qec8rwmls580er6fef9ct4du6vcyqlv874qkvknf4uqtkk3r7,
+      age1ff0ec8nqfjaetdcgszfrjd03uuptjuepp4l32ha7x6lplzrflg4q74cah5,
+      age1gvd83mnsq3wpxtcncsr26r9eyzfv8s7vwcz4a37wd0vaum4x95nsnnate3,
+      age1s9uf6zwk0aqyzz3jtjqf89skmew43f26459vntlu58fvrdwt4aesrq9epp,
+      age1gkjpfrzhx3r5z3a3k0yqw3puyg8zplfdxdpvpypguv5j2sc2pp8qtfsnkx,
+      age1gz3d6at2k0pq0a8f4z83hxx3a2xafzedk58gar8c3hwnfn9ha3xstsyqgz
   # NixOS/Home-manager secrets
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
     age: >-

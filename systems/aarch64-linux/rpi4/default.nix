@@ -149,8 +149,8 @@
     };
   };
   # Tailscale subnet router and exit node for home network
+  wheat.services.tailscale.enable = true;
   services.tailscale = {
-    enable = true;
     useRoutingFeatures = "server"; # enables IP forwarding
     extraUpFlags = [
       "--advertise-routes=192.168.1.0/24"

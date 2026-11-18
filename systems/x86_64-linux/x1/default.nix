@@ -257,7 +257,7 @@
 
   hardware.cpu.intel.updateMicrocode = true;
   hardware.bluetooth.enable = true;
-  services.tailscale.enable = true;
+  wheat.services.tailscale.enable = true;
   services.printing.enable = true;
   security.rtkit.enable = true;
   security.polkit.enable = true;
