@@ -13,7 +13,7 @@
     aws.enable = true;
     dev-tools.enable = true;
     ai.enable = true;
-    ai.caveman.enable = true;
+    ai.claude.manage = true;
     ai.mcp.enable = true;
     gcloud.enable = true;
     embedded.enable = false;

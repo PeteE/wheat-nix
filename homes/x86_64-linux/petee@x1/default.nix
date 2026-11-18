@@ -16,9 +16,9 @@
         enable = true;
       };
       aichat.enable = true;
-      caveman.enable = true;
       ollamaHost = "192.168.1.149"; # m4
       claude = {
+        manage = true;
         settings = {
           env = {
             CLAUDE_CODE_ENABLE_TELEMETRY = "0";

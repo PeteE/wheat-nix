@@ -12,7 +12,6 @@ in
   imports = [
     ./mcp/mcp.nix
     ./skills.nix
-    ./caveman.nix
   ];
 
   options.wheat.ai = {
@@ -27,7 +26,7 @@ in
       default = { };
       description = ''
         Declarative contents of ~/.claude/settings.json. Contributions from
-        multiple modules (e.g. wheat.ai.caveman's hook wiring) are deep-merged
+        multiple modules are deep-merged
         by the module system. Only written to disk when `claude.manage` is true.
       '';
     };

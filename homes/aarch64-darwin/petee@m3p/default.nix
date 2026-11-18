@@ -20,7 +20,7 @@
     dev-tools.enable = true;
     ai.enable = true;
     ai.mcp.enable = true;
-    ai.caveman.enable = true;
+    ai.claude.manage = true;
     ai.claude.settings = {
       env = {
         CLAUDE_CODE_ENABLE_TELEMETRY = "0";
