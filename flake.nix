@@ -113,7 +113,7 @@
       # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
       deploy = {
         nodes.x1 = {
-          hostname = "192.168.1.7";
+          hostname = "100.123.72.38";
           fastConnection = true;
           interactiveSudo = false;
           remoteBuild = true;
@@ -126,7 +126,7 @@
           };
         };
         nodes.ripnix = {
-          hostname = "192.168.1.143";
+          hostname = "100.84.143.78";
           fastConnection = true;
           interactiveSudo = false;
           remoteBuild = true;
@@ -139,7 +139,8 @@
           };
         };
         nodes.m4 = {
-          hostname = "192.168.1.149";
+          # hostname = "192.168.1.149";
+          hostname = "100.109.186.34";
           fastConnection = true;
           interactiveSudo = false;
           remoteBuild = true;
@@ -152,7 +153,7 @@
           };
         };
         nodes.m3p = {
-          hostname = "192.168.1.210";
+          hostname = "100.84.53.48";
           fastConnection = true;
           interactiveSudo = false;
           remoteBuild = true;
@@ -165,7 +166,7 @@
           };
         };
         nodes.rpi4 = {
-          hostname = "192.168.1.173";
+          hostname = "100.108.228.26";
           fastConnection = true;
           interactiveSudo = false;
           # Build locally; Determinate Nix's native aarch64-linux VM is faster than the Pi
