@@ -180,7 +180,7 @@
           };
         };
         nodes.k8s-worker-300 = {
-          hostname = "192.168.1.30";
+          hostname = "100.123.175.10";
           fastConnection = true;
           interactiveSudo = false;
           remoteBuild = false;
@@ -193,7 +193,7 @@
           };
         };
         nodes.k8s-worker-200 = {
-          hostname = "192.168.1.50";
+          hostname = "100.73.90.49";
           fastConnection = true;
           interactiveSudo = false;
           remoteBuild = false;
