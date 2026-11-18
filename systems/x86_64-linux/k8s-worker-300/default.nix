@@ -35,6 +35,8 @@
 
   time.timeZone = "America/Chicago";
 
+  services.tailscale.enable = true;
+
   wheat = {
     enable = true;
     user = {

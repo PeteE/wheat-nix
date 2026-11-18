@@ -58,6 +58,8 @@
   # k3s state lives on the data SSD; never let it start on the root disk
   systemd.services.k3s.unitConfig.RequiresMountsFor = [ "/var/lib/rancher" ];
 
+  services.tailscale.enable = true;
+
   wheat = {
     enable = true;
     user = {
