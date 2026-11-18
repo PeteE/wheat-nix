@@ -91,15 +91,24 @@ in
         # extraSetFlags is applied on every start, so it also covers nodes that
         # were logged in by hand
         extraSetFlags = [ "--accept-dns=false" ];
-        extraUpFlags = [ "--accept-dns=false" ];
         # Never add --accept-routes here: rpi4 advertises 192.168.1.0/24 and
         # tailscale would steal node-to-node (flannel) traffic from the LAN
-        authKeyFile = config.sops.secrets."tailscale/auth-key".path;
+        extraUpFlags = [
+          "--accept-dns=false"
+          "--advertise-tags=tag:k8s-node"
+        ];
+        # OAuth client secret (auth_keys scope, tag:k8s-node) used directly as
+        # the auth key; tagged nodes don't expire
+        authKeyFile = config.sops.secrets."tailscale/client-secret".path;
+        authKeyParameters = {
+          ephemeral = false;
+          preauthorized = true;
+        };
       };
 
       # Decrypted with the host's SSH key (sops.age.sshKeyPaths default); the
       # host must be a recipient in .sops.yaml
-      sops.secrets."tailscale/auth-key".sopsFile = ./secrets/tailscale.yaml;
+      sops.secrets."tailscale/client-secret".sopsFile = ./secrets/tailscale.yaml;
       systemd.services.tailscaled-autoconnect = {
         after = [ "sops-nix.service" ];
         wants = [ "sops-nix.service" ];
