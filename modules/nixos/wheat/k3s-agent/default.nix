@@ -48,40 +48,62 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    services.k3s = {
-      enable = true;
-      role = "agent";
-      inherit (cfg) package serverAddr tokenFile;
-      extraFlags = concatStringsSep " " (
-        mapAttrsToList (k: v: "--node-label=${k}=${v}") cfg.nodeLabels
-      );
-    };
+  config = mkIf cfg.enable (mkMerge [
+    {
+      services.k3s = {
+        enable = true;
+        role = "agent";
+        inherit (cfg) package serverAddr tokenFile;
+        extraFlags = concatStringsSep " " (mapAttrsToList (k: v: "--node-label=${k}=${v}") cfg.nodeLabels);
+      };
 
-    # democratic-csi iSCSI
-    services.openiscsi = {
-      enable = true;
-      name = "iqn.2026-11.net.wheat-dn42:${config.networking.hostName}";
-    };
-    # democratic-csi runs `chroot /host /usr/bin/env -i PATH=/sbin:/bin:/usr/bin
-    # iscsiadm`; NixOS has nothing on that PATH, so link it in
-    systemd.tmpfiles.rules = [
-      "L+ /usr/bin/iscsiadm - - - - ${pkgs.openiscsi}/bin/iscsiadm"
-    ];
+      # democratic-csi iSCSI
+      services.openiscsi = {
+        enable = true;
+        name = "iqn.2026-11.net.wheat-dn42:${config.networking.hostName}";
+      };
+      # democratic-csi runs `chroot /host /usr/bin/env -i PATH=/sbin:/bin:/usr/bin
+      # iscsiadm`; NixOS has nothing on that PATH, so link it in
+      systemd.tmpfiles.rules = [
+        "L+ /usr/bin/iscsiadm - - - - ${pkgs.openiscsi}/bin/iscsiadm"
+      ];
 
-    # democratic-csi NVMe-oF (nvme-tcp); the driver pod can't modprobe from
-    # NixOS's module path, so load them at boot
-    boot.kernelModules = [
-      "nvme_tcp"
-      "nvme_fabrics"
-    ];
-    environment.systemPackages = with pkgs; [
-      nvme-cli
-      openiscsi
-    ];
+      # democratic-csi NVMe-oF (nvme-tcp); the driver pod can't modprobe from
+      # NixOS's module path, so load them at boot
+      boot.kernelModules = [
+        "nvme_tcp"
+        "nvme_fabrics"
+      ];
+      environment.systemPackages = with pkgs; [
+        nvme-cli
+        openiscsi
+      ];
 
-    # in-tree `nfs:` volumes; kubelet shells out to mount, which needs the
-    # mount.nfs helper from nfs-utils (and rpcbind for NFSv3)
-    boot.supportedFilesystems = [ "nfs" ];
-  };
+      # in-tree `nfs:` volumes; kubelet shells out to mount, which needs the
+      # mount.nfs helper from nfs-utils (and rpcbind for NFSv3)
+      boot.supportedFilesystems = [ "nfs" ];
+    }
+
+    (mkIf config.services.tailscale.enable {
+      services.tailscale = {
+        # MagicDNS would rewrite the node's resolver (100.100.100.100 + tailnet
+        # search domain), which CoreDNS and dnsPolicy=Default pods inherit.
+        # extraSetFlags is applied on every start, so it also covers nodes that
+        # were logged in by hand
+        extraSetFlags = [ "--accept-dns=false" ];
+        extraUpFlags = [ "--accept-dns=false" ];
+        # Never add --accept-routes here: rpi4 advertises 192.168.1.0/24 and
+        # tailscale would steal node-to-node (flannel) traffic from the LAN
+        authKeyFile = config.sops.secrets."tailscale/auth-key".path;
+      };
+
+      # Decrypted with the host's SSH key (sops.age.sshKeyPaths default); the
+      # host must be a recipient in .sops.yaml
+      sops.secrets."tailscale/auth-key".sopsFile = ./secrets/tailscale.yaml;
+      systemd.services.tailscaled-autoconnect = {
+        after = [ "sops-nix.service" ];
+        wants = [ "sops-nix.service" ];
+      };
+    })
+  ]);
 }
