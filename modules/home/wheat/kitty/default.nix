@@ -63,7 +63,6 @@ in
       };
     };
     home.packages = with pkgs; [
-      kitty
       kitty-themes
     ];
   };

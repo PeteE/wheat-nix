@@ -9,7 +9,7 @@
 with lib;
 let
   cfg = config.wheat.niri;
-  inherit (pkgs.stdenv) isDarwin;
+  inherit (pkgs.stdenv.hostPlatform) isDarwin;
   hasNiri = options ? programs && options.programs ? niri;
 in
 {

@@ -75,7 +75,6 @@
     };
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server?ref=2f984dfbe7e5271b5c413d3e734374cc1306c921";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     claude-code = {
       url = "github:sadjow/claude-code-nix?ref=b17e42820330bd34ab890632c2f6f80daf4e517f";
@@ -87,6 +86,10 @@
     };
     matthart1983-netwatch = {
       url = "github:matthart1983/netwatch?ref=029e49a4b9aeae0bc0a1608bb555881a10e35b58";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixgl = {
+      url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

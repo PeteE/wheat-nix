@@ -17,7 +17,6 @@ in
     home.packages = with pkgs; [
       meld
       # ollama  # disabled: aarch64-darwin build requires Xcode + Metal toolchain
-      bat
       openbao
       go_1_26
       attic-client

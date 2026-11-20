@@ -12,46 +12,26 @@
 }:
 {
   home.packages = with pkgs; [
-    zoxide
     zsh-histdb
     zsh-fzf-tab
-    fzf
     sqlite
     eza
     fd
   ];
-
+  programs.direnv = { 
+    enable = true;
+    nix-direnv.enable = true;
+  };
+  programs.fzf.enable = true;
   programs.zsh = {
     enable = true;
-    oh-my-zsh = {
-      enable = true;
-      plugins = [
-        "argocd"
-        "azure"
-        "colored-man-pages"
-        "vi-mode"
-        "git"
-        "gh"
-        "kubectl"
-        "helm"
-        "aliases"
-        "direnv"
-        "encode64"
-        "extract"
-        "zoxide"
-        "fzf"
-        "systemd"
-      ];
-    };
     shellAliases = {
       weather = "curl https://wttr.in/";
       c = "claude";
       arduino = "_JAVA_AWT_WM_NONREPARENTING=1 arduino";
       icat = "kitty +kitten icat";
       g = "git";
-      tg = "terragrunt";
       ll = "ls -l";
-      nos-update = "sudo nixos-rebuild switch --flake .#x1";
       nos-list = "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system";
       nos-delete = "sudo nix-env --delete-generations --profile /nix/var/nix/profiles/system $@";
       k = "kubectl";
@@ -59,11 +39,14 @@
       gdu = "git diff origin main";
       gs = "git status";
       nd = "nix develop -c zsh";
+      v = "nvim";
       vi = "nvim";
       vim = "nvim";
       pb = "pbcopy";
       j = "just";
       netshoot = "kubectl run netshoot --rm -it --image=nicolaka/netshoot --restart=Never -- bash";
+      e64 = "base64";
+      d64 = "base64 -d";
     }
     // lib.optionalAttrs config.wheat.secrets.enable {
       # Supermicro BMC of k8s-worker-200, e.g. `w200-ipmi power on`.
@@ -72,10 +55,16 @@
       w200-ipmi = "ipmitool -I lanplus -H 192.168.1.49 -U ADMIN -f ${config.sops.secrets.impi_password.path}";
     };
     enableCompletion = true;
+    syntaxHighlighting.enable = true;
+    defaultKeymap = "viins";
     autocd = false;
-    syntaxHighlighting = {
-      enable = true;
-    };
+    plugins =
+      let omz = "${pkgs.oh-my-zsh}/share/oh-my-zsh"; in [
+        { name = "omz-lib-git"; src = "${omz}/lib"; file = "git.zsh"; }
+        { name = "git";     src = "${omz}/plugins/git";     file = "git.plugin.zsh"; }
+        { name = "kubectl"; src = "${omz}/plugins/kubectl"; file = "kubectl.plugin.zsh"; }
+    ];
+
     initContent = ''
       setopt nocorrectall
       setopt correct

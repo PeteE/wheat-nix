@@ -30,6 +30,7 @@
   };
 
   programs.home-manager.enable = true;
+  programs.bat.enable = true;
 
   # Lets the already-configured catppuccin.gtk.icon settings (Papirus-Dark,
   # mocha/mauve) actually get written and applied. Papirus-folders is Linux-only.

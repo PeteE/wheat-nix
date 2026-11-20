@@ -35,7 +35,6 @@ in
       swaylock
       catppuccin-cursors
       wheat.rofi-scripts
-      kitty
       xwayland-satellite
       thunar
       gpu-screen-recorder # screen recording backend for noctalia-shell

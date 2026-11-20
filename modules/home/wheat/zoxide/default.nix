@@ -25,9 +25,9 @@ in
     programs.zoxide = {
       enable = true;
       enableZshIntegration = true;
-      options = [
-        "--no-aliases"
-      ];
+      # options = [
+      #   "--no-aliases"
+      # ];
     };
   };
 }
