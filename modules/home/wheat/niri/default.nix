@@ -15,15 +15,64 @@ in
 {
   options.wheat.niri = {
     enable = mkEnableOption "Enable niri window manager home configuration";
+
+    package = mkOption {
+      type = types.nullOr types.package;
+      default =
+        if config.targets.genericLinux.enable
+        then config.lib.nixGL.wrap pkgs.niri-unstable
+        else null;   # NixOS hosts: the system module sets it
+      defaultText = literalExpression "nixGL-wrapped pkgs.niri-unstable on non-NixOS, else null";
+      example = literalExpression "config.lib.nixGL.wrap pkgs.niri-stable";
+      description = ''
+        niri package to use. When null, programs.niri.package is left alone
+        (on NixOS hosts the niri-flake NixOS module sets it). On non-NixOS
+        hosts, pass a nixGL-wrapped package.
+      '';
+    };
+
+    outputs = mkOption {
+      type = types.attrsOf (types.attrsOf types.anything);
+      default = {
+        "DP-1".scale = 1.0;
+        "eDP-1".scale = 1.2;
+      };
+      example = literalExpression ''
+        {
+          "eDP-1" = { scale = 1.25; position = { x = 0; y = 0; }; };
+          "DP-1" = { scale = 1.0; mode = { width = 3440; height = 1440; refresh = 100.0; }; };
+        }
+      '';
+      description = ''
+        Per-monitor settings, passed through to programs.niri.settings.outputs.
+        Setting this replaces the defaults entirely. Run `niri msg outputs`
+        to list connector names.
+      '';
+    };
   };
 
-  config = mkIf (cfg.enable && !isDarwin && hasNiri) (
-    optionalAttrs hasNiri {
+  config = mkIf (cfg.enable && !isDarwin) (
+    {
+      # Fail loudly instead of silently skipping when niri-flake's home module
+      # isn't imported (standalone home-manager on non-NixOS).
+      assertions = [
+        {
+          assertion = hasNiri;
+          message = "wheat.niri.enable requires niri-flake's home module (imports = [ inputs.niri.homeModules.niri ]).";
+        }
+      ];
+    }
+    // optionalAttrs hasNiri {
+      programs.niri.package = mkIf (cfg.package != null) cfg.package;
+
       programs.niri.settings = {
         input = {
           keyboard = {
-            xkb = { };
+            xkb = {
+              options = "caps:escape";
+            };
             numlock = true;
+            
           };
           touchpad = {
             tap = true;
@@ -39,12 +88,8 @@ in
           trackpoint = { };
         };
 
-        outputs."DP-1" = {
-          scale = 1.0;
-        };
-        outputs."eDP-1" = {
-          scale = 1.2;
-        };
+        outputs = cfg.outputs;
+
         layout = {
           gaps = 16;
           center-focused-column = "never";
@@ -72,12 +117,23 @@ in
             enable = false;
           };
         };
-
-        spawn-at-startup = [
-          { command = [ "noctalia" ]; }
-          { command = [ "xwayland-satellite" ]; }
-          { command = [ "kitty" ]; }
-        ];
+        spawn-at-startup =
+          optional config.targets.genericLinux.enable {
+            command = [
+              "sh" "-c"
+              "systemctl --user import-environment WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP && systemctl --user start niri-session.target"
+            ];
+          }
+          ++ [
+            { command = [ "noctalia" ]; }
+            { command = [ "xwayland-satellite" ]; }
+            { command = [ "kitty" ]; }
+          ];
+        # spawn-at-startup = [
+        #   { command = [ "noctalia" ]; }
+        #   { command = [ "xwayland-satellite" ]; }
+        #   { command = [ "kitty" ]; }
+        # ];
 
         hotkey-overlay = {
           skip-at-startup = true;
